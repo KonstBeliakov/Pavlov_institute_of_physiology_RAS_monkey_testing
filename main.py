@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import ttk
 import tkinter.messagebox as mb
+from tkinter import *
 
 
 class Window(tk.Tk):
@@ -21,8 +23,21 @@ class Window(tk.Tk):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.label = tk.Label(self, text='Это окно для настройки параметров тестирования')
-        self.btn = tk.Button(self, text="Запустить тестирование",
+        notebook = ttk.Notebook()
+        notebook.pack(expand=True, fill=BOTH)
+        frame_text = ['Информация', 'Настройки тестирования А', 'Настройки тестирования B', 'Настройки тестирования C']
+        frame = [ttk.Frame(notebook) for _ in range(4)]
+
+        for i in range(len(frame)):
+            frame[i].pack(fill=BOTH, expand=True)
+
+        test_image = PhotoImage(file="test.png")
+
+        for i in range(len(frame)):
+            notebook.add(frame[i], text=frame_text[i], image=test_image, compound=LEFT)
+
+        self.label = tk.Label(frame[1], text='Это окно для настройки параметров тестирования')
+        self.btn = tk.Button(frame[1], text="Запустить тестирование",
                              command=self.open_about)
         self.label.pack()
         self.btn.pack(padx=50, pady=20)
