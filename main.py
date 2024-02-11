@@ -25,16 +25,16 @@ class App(tk.Tk):
         super().__init__()
         notebook = ttk.Notebook()
         notebook.pack(expand=True, fill=BOTH)
-        frame_text = ['Информация', 'Настройки тестирования А', 'Настройки тестирования B', 'Настройки тестирования C']
-        frame = [ttk.Frame(notebook) for _ in range(4)]
+        frame_text = ['Информация о приложении', 'Настройки тестирования А', 'Настройки тестирования B', 'Настройки тестирования C']
+        frame = [ttk.Frame(notebook) for _ in range(2)]
 
         for i in range(len(frame)):
             frame[i].pack(fill=BOTH, expand=True)
 
-        test_image = PhotoImage(file="test.png")
+        self.test_image = [PhotoImage(file="info.png"), PhotoImage(file="settings.png")]
 
         for i in range(len(frame)):
-            notebook.add(frame[i], text=frame_text[i], image=test_image, compound=LEFT)
+            notebook.add(frame[i], text=frame_text[i], image=self.test_image[i], compound=LEFT)
 
         self.label = tk.Label(frame[1], text='Это окно для настройки параметров тестирования')
         self.btn = tk.Button(frame[1], text="Запустить тестирование",
