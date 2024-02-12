@@ -7,6 +7,8 @@ from monkey_window import Monkey_window
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.window = None
+        self.started = False
         notebook = ttk.Notebook()
         notebook.pack(expand=True, fill=BOTH)
         frame_text = ['Информация о приложении', 'Настройки тестирования А', 'Настройки тестирования B',
@@ -16,7 +18,8 @@ class App(tk.Tk):
         for i in range(len(frame)):
             frame[i].pack(fill=BOTH, expand=True)
 
-        self.test_image = [PhotoImage(file="info.png"), PhotoImage(file="settings.png"), PhotoImage(file="settings.png"), PhotoImage(file="settings.png"),
+        self.test_image = [PhotoImage(file="info.png"), PhotoImage(file="settings.png"),
+                           PhotoImage(file="settings.png"), PhotoImage(file="settings.png"),
                            PhotoImage(file="run.png")]
 
         for i in range(len(frame)):
@@ -26,5 +29,11 @@ class App(tk.Tk):
         self.btn.pack(padx=50, pady=20)
 
     def open_about(self):
-        window = Monkey_window()
-        window.grab_set()
+        if not self.started:
+            self.btn.configure(text="Завершить тестирование")
+            self.started = True
+            self.window = Monkey_window()
+            self.window.mainloop()
+        else:
+            self.btn.configure(text="Запустить тестирование")
+            self.started = False
