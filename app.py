@@ -49,5 +49,6 @@ class App(tk.Tk):
             self.window = Monkey_window()
             self.window.mainloop()
         else:
+            self.window.destroy()
             self.btn.configure(text="Запустить тестирование")
             self.started = False

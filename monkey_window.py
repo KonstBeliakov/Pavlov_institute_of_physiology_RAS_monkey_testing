@@ -19,10 +19,6 @@ class Monkey_window(tk.Toplevel):
         self.picture_to_remember = None
         self.attributes("-fullscreen", True)
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
-        self.label = tk.Label(self, text="Это окно для тестирования обезьяны")
-        self.button = tk.Button(self, text="Закрыть", command=self.destroy)
-        self.label.grid(row=1, column=1)
-        self.button.grid(row=2, column=1)
         self.img = PhotoImage(file='settings2.png')
         self.image = tk.Label(self, image=self.img)
         self.image.grid(row=3, column=1)
