@@ -9,6 +9,8 @@ import settings
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.btn_confirm = None
+        self.error_label = None
         self.t = None
         self.delay_label = None
         self.delay_entry = [Entry(), Entry(), Entry()]
@@ -52,10 +54,14 @@ class App(tk.Tk):
         for i in range(3):
             self.t[i].set(settings.delay[i])
         self.delay_entry = [Entry(self.frame[frame_number], text=self.t[i]) for i in range(3)]
-        
+
         for i in range(3):
             self.delay_label[i].grid(row=i, column=0)
             self.delay_entry[i].grid(row=i, column=1)
+
+        self.btn_confirm = tk.Button(self.frame[frame_number], text='Сохранить настройки', command=self.save_settings)
+        self.btn_confirm.grid(row=3, column=0)
+        self.error_label = Label(self.frame[frame_number], text='Должно быть введено вещественное число')
 
     def run_frame_init(self):
         frame_number = 1
@@ -73,31 +79,11 @@ class App(tk.Tk):
             self.btn.configure(text="Запустить тестирование")
             self.started = False
 
-if __name__ == '__main__':
-    from tkinter import *
-
-
-    def show_entry_fields():
-        print("First Name: %s\nLast Name: %s" % (e1.get(), e2.get()))
-
-
-    master = Tk()
-    Label(master, text="First Name").grid(row=0)
-    Label(master, text="Last Name").grid(row=1)
-
-    v = IntVar()
-    e1 = Entry(master, text=v)
-    e2 = Entry(master)
-    v.set(100)
-
-    e1.grid(row=0, column=1)
-    e2.grid(row=1, column=1)
-
-    Button(master, text='Quit', command=master.quit).grid(row=3, column=0,
-
-                                                          sticky=W, pady=4)
-    Button(master, text='Show', command=show_entry_fields).grid(row=3,
-
-                                                                column=1, sticky=W, pady=4)
-
-    mainloop()
+    def save_settings(self):
+        try:
+            settings.delay = [float(i.get()) for i in self.delay_entry]
+            print(settings.delay)
+        except:
+            self.error_label.grid(row=3, column=1)
+        else:
+            self.error_label.grid_forget()

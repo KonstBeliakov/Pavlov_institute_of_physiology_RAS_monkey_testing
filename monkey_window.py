@@ -8,6 +8,8 @@ import threading
 from random import choice, shuffle
 import os
 
+import settings
+
 directory = "images"
 files = os.listdir(directory)
 
@@ -22,9 +24,7 @@ class Monkey_window(tk.Toplevel):
         self.image = tk.Label(self, image=self.img)
         self.image.grid(row=3, column=1)
 
-        self.delay1 = 2
-        self.delay2 = 2
-        self.delay3 = 2
+        self.load_settings()
         self.picture_to_remember = choice(files)
 
         self.img1, self.img2 = None, None
@@ -38,9 +38,13 @@ class Monkey_window(tk.Toplevel):
         if mb.askyesno(message=message, parent=self):
             self.destroy()
 
+    def load_settings(self):
+        self.delay1, self.delay2, self.delay3 = settings.delay
+
     def update(self):
         while True:
             time.sleep(self.delay1)
+
             self.image.grid_forget()
 
             time.sleep(self.delay2)
