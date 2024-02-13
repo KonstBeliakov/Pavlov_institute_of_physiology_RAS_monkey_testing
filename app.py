@@ -14,6 +14,10 @@ from export_settings_window import ExportSettingsWindow
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.run_frame = None
+        self.run_frame_top = None
+        self.frame_log_top = None
+        self.frame_log = None
         self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
             self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number,\
             self.entry_session_number, self.label_session_number, self.choose_yes_sound,\
@@ -115,25 +119,29 @@ class App(tk.Tk):
 
     def run_frame_init(self):
         frame_number = 1
-        self.choose_experiment_label = Label(self.frame[frame_number], text='Тип эксперимента')
+
+        self.run_frame_top = LabelFrame(self.frame[frame_number], text='Настройки запуска')
+        self.run_frame_top.grid(row=0, column=0)
+        self.run_frame = Frame(self.run_frame_top)
+        self.run_frame.pack()
+
+        self.choose_experiment_label = Label(self.run_frame, text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
 
-        self.choose_experiment_combobox = ttk.Combobox(self.frame[frame_number], values=['Запоминание картинки'])
+        self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
-        self.timer_ask_label = Label(self.frame[frame_number], text='Обнулить глобальный таймер эксперимента')
+        self.timer_ask_label = Label(self.run_frame, text='Обнулить глобальный таймер эксперимента')
         self.timer_ask_label.grid(row=2, column=0)
 
         self.timer_radio_buttons = IntVar()
         self.timer_radio_buttons.set(0)
-        self.radio_button_yes = Radiobutton(self.frame[frame_number], text="Да", variable=self.timer_radio_buttons,
-                                            value=1)
-        self.radio_button_no = Radiobutton(self.frame[frame_number], text="Нет", variable=self.timer_radio_buttons,
-                                           value=0)
+        self.radio_button_yes = Radiobutton(self.run_frame, text="Да", variable=self.timer_radio_buttons, value=1)
+        self.radio_button_no = Radiobutton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
         self.radio_button_yes.grid(row=3, column=0)
         self.radio_button_no.grid(row=3, column=1)
 
-        self.btn = tk.Button(self.frame[frame_number], text="Запустить тестирование", command=self.open_about)
+        self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=4, column=0)
 
     def open_export_settings_window(self):
@@ -182,10 +190,14 @@ class App(tk.Tk):
             self.error_label.grid(row=9, column=0)
 
     def update_log(self):
-        self.log_label = [[tk.Label(self.frame[1], text='') for _ in range(len(self.window.log[0]))] for _ in range(11)]
+        self.frame_log_top = LabelFrame(self.frame[1], text='Результаты последних 10 тестов')
+        self.frame_log_top.grid(row=0, column=1)
+
+        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(self.window.log[0]))] for _ in range(11)]
+
         for i in range(len(self.log_label)):
             for j in range(len(self.log_label[i])):
-                self.log_label[i][j].grid(row=i, column=1 + j)
+                self.log_label[i][j].grid(row=i, column=j)
 
         for j, text in enumerate(self.window.log[0]):
             self.log_label[0][j].configure(text=text)
