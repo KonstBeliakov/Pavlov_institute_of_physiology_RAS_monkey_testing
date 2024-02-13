@@ -47,20 +47,20 @@ class App(tk.Tk):
     def settings_frame_init(self):
         frame_number = 0
         delay_text = ['Время отображения целевого изображения', 'Задержка перед появлением тестовых изображений',
-                      'Время для ответа (выбора одного из тестовых изображений)']
+                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами']
 
         self.delay_label = [Label(self.frame[frame_number], text=i) for i in delay_text]
-        self.t = [IntVar() for i in range(3)]
-        for i in range(3):
+        self.t = [IntVar() for i in range(4)]
+        for i in range(4):
             self.t[i].set(settings.delay[i])
-        self.delay_entry = [Entry(self.frame[frame_number], text=self.t[i]) for i in range(3)]
+        self.delay_entry = [Entry(self.frame[frame_number], text=self.t[i]) for i in range(4)]
 
-        for i in range(3):
+        for i in range(4):
             self.delay_label[i].grid(row=i, column=0)
             self.delay_entry[i].grid(row=i, column=1)
 
         self.btn_confirm = tk.Button(self.frame[frame_number], text='Сохранить настройки', command=self.save_settings)
-        self.btn_confirm.grid(row=3, column=0)
+        self.btn_confirm.grid(row=4, column=0)
         self.error_label = Label(self.frame[frame_number], text='Должно быть введено вещественное число')
 
     def run_frame_init(self):
@@ -84,6 +84,6 @@ class App(tk.Tk):
             settings.delay = [float(i.get()) for i in self.delay_entry]
             print(settings.delay)
         except:
-            self.error_label.grid(row=3, column=1)
+            self.error_label.grid(row=4, column=1)
         else:
             self.error_label.grid_forget()
