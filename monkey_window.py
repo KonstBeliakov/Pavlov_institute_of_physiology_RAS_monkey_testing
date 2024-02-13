@@ -32,8 +32,8 @@ class Monkey_window(tk.Toplevel):
 
         self.picture_to_remember = choice(files)
 
-        self.img1, self.img2 = None, None
-        self.image1, self.image2 = None, None
+        self.img = [None, None]
+        self.image = [None, None]
 
         self.load_settings()
 
@@ -52,12 +52,10 @@ class Monkey_window(tk.Toplevel):
 
     def image_pressed(self, number):
         self.log.append([datetime.now(), number, self.right_image])
-        print(self.log[-1])
 
     def update(self):
         for i in range(self.session_number):
             for j in range(self.repeat_number):
-                print(i, j, '\t', self.delay, self.repeat_number, self.session_number, settings.repeat_number, settings.session_number)
                 self.picture_to_remember = choice(files)
                 self.img = PhotoImage(file=f'images/{self.picture_to_remember}')
                 self.main_image = tk.Label(self, image=self.img)
@@ -75,22 +73,18 @@ class Monkey_window(tk.Toplevel):
                 shuffle(file)
                 self.right_image = file.index(self.picture_to_remember)
 
-                self.img1 = PhotoImage(file=f'images/{file[0]}')
-                self.image1 = tk.Label(self, image=self.img1)
-                self.image1.grid(row=3, column=0)
-                self.image1.bind('<Button-1>', lambda event: self.image_pressed(0))
-                self.image1.bind('<Button-2>', lambda event: self.image_pressed(0))
+                self.img = [PhotoImage(file=f'images/{file[i]}') for i in range(2)]
+                self.image = [tk.Label(self, image=self.img[i]) for i in range(2)]
 
-                self.img2 = PhotoImage(file=f'images/{file[1]}')
-                self.image2 = tk.Label(self, image=self.img2)
-                self.image2.grid(row=3, column=1)
-                self.image2.bind('<Button-1>', lambda event: self.image_pressed(1))
-                self.image2.bind('<Button-2>', lambda event: self.image_pressed(1))
+                for k in range(2):
+                    self.image[k].grid(row=3, column=k)
+                    self.image[k].bind('<Button-1>', lambda event: self.image_pressed(k))
+                    self.image[k].bind('<Button-2>', lambda event: self.image_pressed(k))
 
                 time.sleep(self.delay[2])
 
-                self.image1.grid_forget()
-                self.image2.grid_forget()
+                for k in self.image:
+                    k.grid_forget()
 
                 time.sleep(self.delay[3])
 

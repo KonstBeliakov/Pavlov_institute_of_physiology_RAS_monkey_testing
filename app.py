@@ -14,37 +14,20 @@ from export_settings_window import ExportSettingsWindow
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.import_settings_window = None
-        self.export_settings_window = None
-        self.intVar_repeat_number = None
-        self.intVar_session_number = None
-        self.entry_repeat_number = None
-        self.label_repeat_number = None
-        self.entry_session_number = None
-        self.label_session_number = None
-        self.choose_yes_sound = None
-        self.label_choose_no_sound = None
-        self.label_choose_yes_sound = None
-        self.choose_no_sound = None
-        self.btn_import_settings = None
-        self.btn_export_settings = None
-        self.timer_ask_label = None
-        self.choose_experiment_label = None
-        self.choose_experiment_combobox = None
-        self.radio_button_no = None
-        self.radio_button_yes = None
-        self.timer_radio_buttons = None
-        self.update_thread = None
-        self.log_label = []
-        self.btn_confirm = None
-        self.error_label = None
-        self.delay_entry_IntVar = None
-        self.delay_label = None
-        self.delay_entry = [Entry(), Entry(), Entry()]
-        self.info_label = None
-        self.btn = None
-        self.window = None
+        self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
+            self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number,\
+            self.entry_session_number, self.label_session_number, self.choose_yes_sound,\
+            self.label_choose_no_sound, self.label_choose_yes_sound, self.choose_no_sound,\
+            self.btn_import_settings, self.btn_export_settings, self.timer_ask_label,\
+            self.choose_experiment_label, self.choose_experiment_combobox, self.radio_button_no,\
+            self.radio_button_yes, self.timer_radio_buttons, self.update_thread,\
+            self.btn_confirm, self.error_label, self.delay_entry_IntVar,\
+            self.delay_label, self.info_label, self.btn,\
+            self.window = [None] * 28
+
         self.started = False
+        self.log_label = []
+        self.delay_entry = [Entry(), Entry(), Entry()]
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
