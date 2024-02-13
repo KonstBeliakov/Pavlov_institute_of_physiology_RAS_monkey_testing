@@ -77,13 +77,14 @@ class App(tk.Tk):
     def settings_frame_init(self):
         frame_number = 0
         delay_text = ['Время отображения целевого изображения', 'Задержка перед появлением тестовых изображений',
-                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами']
+                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами',
+                      'Задержка между сессиями']
 
         self.delay_label = [Label(self.frame[frame_number], text=i) for i in delay_text]
-        self.delay_entry_IntVar = [IntVar() for _ in range(4)]
-        for i in range(4):
+        self.delay_entry_IntVar = [IntVar() for _ in range(5)]
+        for i in range(5):
             self.delay_entry_IntVar[i].set(settings.delay[i])
-        self.delay_entry = [Entry(self.frame[frame_number], text=self.delay_entry_IntVar[i]) for i in range(4)]
+        self.delay_entry = [Entry(self.frame[frame_number], text=self.delay_entry_IntVar[i]) for i in range(5)]
 
         self.label_session_number = Label(self.frame[frame_number], text='Количество сессий')
         self.label_session_number.grid(row=0, column=0)
@@ -99,29 +100,29 @@ class App(tk.Tk):
         self.entry_repeat_number = Entry(self.frame[frame_number], text=self.intVar_repeat_number)
         self.entry_repeat_number.grid(row=1, column=1)
 
-        for i in range(4):
+        for i in range(5):
             self.delay_label[i].grid(row=i + 2, column=0)
             self.delay_entry[i].grid(row=i + 2, column=1)
         self.label_choose_yes_sound = Label(self.frame[frame_number],
                                             text='Путь до файла позитивного звукового подкрепления')
-        self.label_choose_yes_sound.grid(row=6, column=0)
+        self.label_choose_yes_sound.grid(row=7, column=0)
         self.choose_yes_sound = Entry(self.frame[frame_number])
-        self.choose_yes_sound.grid(row=6, column=1)
+        self.choose_yes_sound.grid(row=7, column=1)
 
         self.label_choose_no_sound = Label(self.frame[frame_number],
                                            text='Путь до файла негативного звукового подкрепления')
-        self.label_choose_no_sound.grid(row=7, column=0)
+        self.label_choose_no_sound.grid(row=8, column=0)
         self.choose_no_sound = Entry(self.frame[frame_number])
-        self.choose_no_sound.grid(row=7, column=1)
+        self.choose_no_sound.grid(row=8, column=1)
 
         self.btn_confirm = tk.Button(self.frame[frame_number], text='Применить', command=self.save_settings)
-        self.btn_confirm.grid(row=8, column=0)
+        self.btn_confirm.grid(row=9, column=0)
         self.btn_import_settings = tk.Button(self.frame[frame_number], text='Импортировать настройки',
                                              command=self.save_settings)
-        self.btn_import_settings.grid(row=8, column=1)
+        self.btn_import_settings.grid(row=9, column=1)
         self.btn_export_settings = tk.Button(self.frame[frame_number], text='Экспортировать настройки',
                                              command=self.save_settings)
-        self.btn_export_settings.grid(row=8, column=2)
+        self.btn_export_settings.grid(row=9, column=2)
         self.error_label = Label(self.frame[frame_number],
                                  text='Ошибка: в поля времени должны быть введены вещественные числа')
 

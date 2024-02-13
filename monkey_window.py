@@ -18,6 +18,8 @@ files = os.listdir(directory)
 class Monkey_window(tk.Toplevel):
     def __init__(self):
         super().__init__()
+        self.repeat_number = None
+        self.session_number = None
         self.log = [['время', 'ответ', 'правильный ответ']]
         self.right_image = None
         self.delay = None
@@ -45,45 +47,51 @@ class Monkey_window(tk.Toplevel):
 
     def load_settings(self):
         self.delay = settings.delay
+        self.session_number = settings.session_number
+        self.repeat_number = settings.repeat_number
 
     def image_pressed(self, number):
         self.log.append([datetime.now(), number, self.right_image])
         print(self.log[-1])
 
     def update(self):
-        while True:
-            time.sleep(self.delay[0])
+        for i in range(self.session_number):
+            for j in range(self.repeat_number):
+                print(i, j, '\t', self.delay, self.repeat_number, self.session_number, settings.repeat_number, settings.session_number)
+                self.picture_to_remember = choice(files)
+                self.img = PhotoImage(file=f'images/{self.picture_to_remember}')
+                self.main_image = tk.Label(self, image=self.img)
+                self.main_image.grid(row=3, column=1)
 
-            self.main_image.grid_forget()
+                time.sleep(self.delay[0])
 
-            time.sleep(self.delay[1])
+                self.main_image.grid_forget()
 
-            temp = files.copy()
-            temp.remove(self.picture_to_remember)
-            file = [self.picture_to_remember, choice(temp)]
-            shuffle(file)
-            self.right_image = file.index(self.picture_to_remember)
+                time.sleep(self.delay[1])
 
-            self.img1 = PhotoImage(file=f'images/{file[0]}')
-            self.image1 = tk.Label(self, image=self.img1)
-            self.image1.grid(row=3, column=0)
-            self.image1.bind('<Button-1>', lambda event: self.image_pressed(0))
-            self.image1.bind('<Button-2>', lambda event: self.image_pressed(0))
+                temp = files.copy()
+                temp.remove(self.picture_to_remember)
+                file = [self.picture_to_remember, choice(temp)]
+                shuffle(file)
+                self.right_image = file.index(self.picture_to_remember)
 
-            self.img2 = PhotoImage(file=f'images/{file[1]}')
-            self.image2 = tk.Label(self, image=self.img2)
-            self.image2.grid(row=3, column=1)
-            self.image2.bind('<Button-1>', lambda event: self.image_pressed(1))
-            self.image2.bind('<Button-2>', lambda event: self.image_pressed(1))
+                self.img1 = PhotoImage(file=f'images/{file[0]}')
+                self.image1 = tk.Label(self, image=self.img1)
+                self.image1.grid(row=3, column=0)
+                self.image1.bind('<Button-1>', lambda event: self.image_pressed(0))
+                self.image1.bind('<Button-2>', lambda event: self.image_pressed(0))
 
-            time.sleep(self.delay[2])
+                self.img2 = PhotoImage(file=f'images/{file[1]}')
+                self.image2 = tk.Label(self, image=self.img2)
+                self.image2.grid(row=3, column=1)
+                self.image2.bind('<Button-1>', lambda event: self.image_pressed(1))
+                self.image2.bind('<Button-2>', lambda event: self.image_pressed(1))
 
-            self.image1.grid_forget()
-            self.image2.grid_forget()
+                time.sleep(self.delay[2])
 
-            time.sleep(self.delay[3])
+                self.image1.grid_forget()
+                self.image2.grid_forget()
 
-            self.picture_to_remember = choice(files)
-            self.img = PhotoImage(file=f'images/{self.picture_to_remember}')
-            self.main_image = tk.Label(self, image=self.img)
-            self.main_image.grid(row=3, column=1)
+                time.sleep(self.delay[3])
+
+            time.sleep(self.delay[4])
