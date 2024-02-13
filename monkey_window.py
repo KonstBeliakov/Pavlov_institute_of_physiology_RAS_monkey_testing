@@ -25,8 +25,8 @@ class Monkey_window(tk.Toplevel):
         # self.attributes("-fullscreen", True)
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
         self.img = PhotoImage(file='settings2.png')
-        self.image = tk.Label(self, image=self.img)
-        self.image.grid(row=3, column=1)
+        self.main_image = tk.Label(self, image=self.img)
+        self.main_image.grid(row=3, column=1)
 
         self.picture_to_remember = choice(files)
 
@@ -54,7 +54,7 @@ class Monkey_window(tk.Toplevel):
         while True:
             time.sleep(self.delay[0])
 
-            self.image.grid_forget()
+            self.main_image.grid_forget()
 
             time.sleep(self.delay[1])
 
@@ -85,5 +85,5 @@ class Monkey_window(tk.Toplevel):
 
             self.picture_to_remember = choice(files)
             self.img = PhotoImage(file=f'images/{self.picture_to_remember}')
-            self.image = tk.Label(self, image=self.img)
-            self.image.grid(row=3, column=1)
+            self.main_image = tk.Label(self, image=self.img)
+            self.main_image.grid(row=3, column=1)

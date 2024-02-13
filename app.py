@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import *
 from monkey_window import Monkey_window
 import threading
+import tkinter.messagebox as mb
 
 import settings
 
@@ -36,10 +37,13 @@ class App(tk.Tk):
         self.delay_entry_IntVar = None
         self.delay_label = None
         self.delay_entry = [Entry(), Entry(), Entry()]
-        self.label = None
+        self.info_label = None
         self.btn = None
         self.window = None
         self.started = False
+
+        self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
+
         notebook = ttk.Notebook()
         notebook.pack(expand=True, fill=BOTH)
         frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении']
@@ -57,14 +61,18 @@ class App(tk.Tk):
         self.settings_frame_init()
         self.run_frame_init()
 
-        self.label.pack()
+    def confirm_delete(self):
+        message = "Вы уверены, что хотите закрыть это окно?"
+        if mb.askyesno(message=message, parent=self):
+            self.destroy()
 
     def info_frame_init(self):
         frame_number = 2
-        self.label = Label(self.frame[frame_number],
-                           text="Настроить параметры запуска можно в одной из вкладок настроек, после чего "
-                                "тестирование запускается кнопкой во вкладке \"Запуск эксперимента\"\nДанные полученные в "
-                                "результате тестирования будут записаны в текстовый файл data.txt")
+        self.info_label = Label(self.frame[frame_number],
+                                text="Настроить параметры запуска можно в одной из вкладок настроек, после чего "
+                                     "тестирование запускается кнопкой во вкладке \"Запуск эксперимента\"\nДанные полученные в "
+                                     "результате тестирования будут записаны в текстовый файл data.txt")
+        self.info_label.pack()
 
     def settings_frame_init(self):
         frame_number = 0
@@ -157,27 +165,25 @@ class App(tk.Tk):
 
     def save_settings(self):
         self.error_label.grid_forget()
+        error_text = ''
         try:
             settings.delay = [float(i.get()) for i in self.delay_entry]
         except:
-            self.error_label.configure(
-                text='Ошибка: в поля для ввода времени задержек должны быть введены вещественные числа')
-            self.error_label.grid(row=9, column=0)
+            error_text = 'Ошибка: в поля для ввода времени задержек должны быть введены вещественные числа'
 
         try:
             settings.session_number = int(self.entry_session_number.get())
         except:
-            self.error_label.configure(
-                text='Ошибка: количество сессий должно быть целым числом')
-            self.error_label.grid(row=9, column=0)
+            error_text = 'Ошибка: количество сессий должно быть целым числом'
 
         try:
             settings.repeat_number = int(self.entry_repeat_number.get())
         except:
-            self.error_label.configure(
-                text='Ошибка: количество тестов в сессии должно быть целым числом')
-            self.error_label.grid(row=9, column=0)
+            error_text = 'Ошибка: количество тестов в сессии должно быть целым числом'
 
+        if error_text:
+            self.error_label.configure(text=error_text)
+            self.error_label.grid(row=9, column=0)
 
     def update_log(self):
         while True:
