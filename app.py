@@ -182,10 +182,16 @@ class App(tk.Tk):
             self.error_label.grid(row=9, column=0)
 
     def update_log(self):
+        self.log_label = [[tk.Label(self.frame[1], text='') for _ in range(len(self.window.log[0]))] for _ in range(11)]
+        for i in range(len(self.log_label)):
+            for j in range(len(self.log_label[i])):
+                self.log_label[i][j].grid(row=i, column=1 + j)
+
+        for j, text in enumerate(self.window.log[0]):
+            self.log_label[0][j].configure(text=text)
+        time.sleep(1)
         while True:
-            self.log_label = [[tk.Label(self.frame[1], text=text, fg='#0f0' if line[-1] == line[-2] else '#f00')
-                               for text in line] for line in self.window.log[-10:]]
-            for i in range(len(self.log_label)):
-                for j in range(len(self.log_label[i])):
-                    self.log_label[i][j].grid(row=i, column=1 + j)
+            for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 1):]):
+                for j, text in enumerate(line):
+                    self.log_label[i + 1][j].configure(text=text, fg='#0f0' if line[-1] == line[-2] else '#f00')
             time.sleep(1)
