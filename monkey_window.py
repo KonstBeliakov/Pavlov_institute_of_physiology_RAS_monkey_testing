@@ -47,11 +47,6 @@ class Monkey_window(tk.Toplevel):
         self.delay = settings.delay
 
     def image_pressed(self, number):
-        print(number, self.right_image)
-        if number == self.right_image:
-            print('right answer')
-        else:
-            print('wrong answer')
         self.log.append([datetime.now(), number, self.right_image])
         print(self.log[-1])
 
