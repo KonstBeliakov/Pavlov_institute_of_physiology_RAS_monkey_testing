@@ -11,6 +11,12 @@ import settings
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.choose_yes_sound = None
+        self.label_choose_no_sound = None
+        self.label_choose_yes_sound = None
+        self.choose_no_sound = None
+        self.btn_import_settings = None
+        self.btn_export_settings = None
         self.timer_ask_label = None
         self.choose_experiment_label = None
         self.choose_experiment_combobox = None
@@ -68,20 +74,37 @@ class App(tk.Tk):
         for i in range(4):
             self.delay_label[i].grid(row=i, column=0)
             self.delay_entry[i].grid(row=i, column=1)
+        self.label_choose_yes_sound = Label(self.frame[frame_number],
+                                            text='Путь до файла позитивного звукового подкрепления')
+        self.label_choose_yes_sound.grid(row=4, column=0)
+        self.choose_yes_sound = Entry(self.frame[frame_number])
+        self.choose_yes_sound.grid(row=4, column=1)
 
-        self.btn_confirm = tk.Button(self.frame[frame_number], text='Сохранить настройки', command=self.save_settings)
-        self.btn_confirm.grid(row=4, column=0)
+        self.label_choose_no_sound = Label(self.frame[frame_number],
+                                            text='Путь до файла негативного звукового подкрепления')
+        self.label_choose_no_sound.grid(row=5, column=0)
+        self.choose_no_sound = Entry(self.frame[frame_number])
+        self.choose_no_sound.grid(row=5, column=1)
+
+        self.btn_confirm = tk.Button(self.frame[frame_number], text='Применить', command=self.save_settings)
+        self.btn_confirm.grid(row=6, column=0)
+        self.btn_import_settings = tk.Button(self.frame[frame_number], text='Импортировать настройки',
+                                             command=self.save_settings)
+        self.btn_import_settings.grid(row=6, column=1)
+        self.btn_export_settings = tk.Button(self.frame[frame_number], text='Экспортировать настройки',
+                                             command=self.save_settings)
+        self.btn_export_settings.grid(row=6, column=2)
         self.error_label = Label(self.frame[frame_number], text='Должно быть введено вещественное число')
 
     def run_frame_init(self):
         frame_number = 1
-        self.choose_experiment_label = Label(self.frame[frame_number], text='Выберите тип эксперимента из списка доступных')
+        self.choose_experiment_label = Label(self.frame[frame_number], text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
 
         self.choose_experiment_combobox = ttk.Combobox(self.frame[frame_number], values=['Запоминание картинки'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
-        self.timer_ask_label = Label(self.frame[frame_number], text='Обнулить глобальный таймер эксперимента?')
+        self.timer_ask_label = Label(self.frame[frame_number], text='Обнулить глобальный таймер эксперимента')
         self.timer_ask_label.grid(row=2, column=0)
 
         self.timer_radio_buttons = IntVar()
@@ -114,7 +137,7 @@ class App(tk.Tk):
             settings.delay = [float(i.get()) for i in self.delay_entry]
             print(settings.delay)
         except:
-            self.error_label.grid(row=4, column=1)
+            self.error_label.grid(row=5, column=0)
         else:
             self.error_label.grid_forget()
 
