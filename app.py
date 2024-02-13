@@ -9,6 +9,7 @@ import settings
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.log_label = []
         self.btn_confirm = None
         self.error_label = None
         self.t = None
@@ -66,13 +67,14 @@ class App(tk.Tk):
     def run_frame_init(self):
         frame_number = 1
         self.btn = tk.Button(self.frame[frame_number], text="Запустить тестирование", command=self.open_about)
-        self.btn.pack(padx=50, pady=20)
+        self.btn.grid(row=0, column=0)
 
     def open_about(self):
         if not self.started:
             self.btn.configure(text="Завершить тестирование")
             self.started = True
             self.window = Monkey_window()
+            self.update_log()
             self.window.mainloop()
         else:
             self.window.destroy()
@@ -87,3 +89,10 @@ class App(tk.Tk):
             self.error_label.grid(row=4, column=1)
         else:
             self.error_label.grid_forget()
+
+    def update_log(self):
+        self.log_label = [[tk.Label(self.frame[1], text=text) for text in line] for line in self.window.log]
+        for i in range(len(self.log_label)):
+            for j in range(len(self.log_label[i])):
+                self.log_label[i][j].grid(row=i, column=1 + j)
+        self.after(1000, self.update_log)

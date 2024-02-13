@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 import tkinter as tk
 import tkinter.messagebox as mb
@@ -17,6 +18,7 @@ files = os.listdir(directory)
 class Monkey_window(tk.Toplevel):
     def __init__(self):
         super().__init__()
+        self.log = [['время', 'ответ', 'правильный ответ']]
         self.right_image = None
         self.delay = None
         self.picture_to_remember = None
@@ -50,14 +52,8 @@ class Monkey_window(tk.Toplevel):
             print('right answer')
         else:
             print('wrong answer')
-
-    def first_image_pressed(self, event):
-        print('first_image_pressed')
-        self.image_pressed(0)
-
-    def second_image_pressed(self, event):
-        print('second_image_pressed')
-        self.image_pressed(1)
+        self.log.append([datetime.now(), number, self.right_image])
+        print(self.log[-1])
 
     def update(self):
         while True:
@@ -76,14 +72,14 @@ class Monkey_window(tk.Toplevel):
             self.img1 = PhotoImage(file=f'images/{file[0]}')
             self.image1 = tk.Label(self, image=self.img1)
             self.image1.grid(row=3, column=0)
-            self.image1.bind('<Button-1>', self.first_image_pressed)
-            self.image1.bind('<Button-2>', self.first_image_pressed)
+            self.image1.bind('<Button-1>', lambda event: self.image_pressed(0))
+            self.image1.bind('<Button-2>', lambda event: self.image_pressed(0))
 
             self.img2 = PhotoImage(file=f'images/{file[1]}')
             self.image2 = tk.Label(self, image=self.img2)
             self.image2.grid(row=3, column=1)
-            self.image2.bind('<Button-1>', self.second_image_pressed)
-            self.image2.bind('<Button-2>', self.second_image_pressed)
+            self.image2.bind('<Button-1>', lambda event: self.image_pressed(1))
+            self.image2.bind('<Button-2>', lambda event: self.image_pressed(1))
 
             time.sleep(self.delay[2])
 
