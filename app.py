@@ -91,7 +91,8 @@ class App(tk.Tk):
             self.error_label.grid_forget()
 
     def update_log(self):
-        self.log_label = [[tk.Label(self.frame[1], text=text) for text in line] for line in self.window.log]
+        self.log_label = [[tk.Label(self.frame[1], text=text, fg='#0f0' if line[-1] == line[-2] else '#f00')
+                           for text in line] for line in self.window.log[-10:]]
         for i in range(len(self.log_label)):
             for j in range(len(self.log_label[i])):
                 self.log_label[i][j].grid(row=i, column=1 + j)
