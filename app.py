@@ -7,11 +7,15 @@ import threading
 import tkinter.messagebox as mb
 
 import settings
+from import_settings_window import ImportSettingsWindow
+from export_settings_window import ExportSettingsWindow
 
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.import_settings_window = None
+        self.export_settings_window = None
         self.intVar_repeat_number = None
         self.intVar_session_number = None
         self.entry_repeat_number = None
@@ -118,10 +122,10 @@ class App(tk.Tk):
         self.btn_confirm = tk.Button(self.frame[frame_number], text='Применить', command=self.save_settings)
         self.btn_confirm.grid(row=9, column=0)
         self.btn_import_settings = tk.Button(self.frame[frame_number], text='Импортировать настройки',
-                                             command=self.save_settings)
+                                             command=self.open_import_settings_window)
         self.btn_import_settings.grid(row=9, column=1)
         self.btn_export_settings = tk.Button(self.frame[frame_number], text='Экспортировать настройки',
-                                             command=self.save_settings)
+                                             command=self.open_export_settings_window)
         self.btn_export_settings.grid(row=9, column=2)
         self.error_label = Label(self.frame[frame_number],
                                  text='Ошибка: в поля времени должны быть введены вещественные числа')
@@ -148,6 +152,14 @@ class App(tk.Tk):
 
         self.btn = tk.Button(self.frame[frame_number], text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=4, column=0)
+
+    def open_export_settings_window(self):
+        self.export_settings_window = ExportSettingsWindow()
+        self.export_settings_window.mainloop()
+
+    def open_import_settings_window(self):
+        self.import_settings_window = ImportSettingsWindow()
+        self.import_settings_window.mainloop()
 
     def open_about(self):
         if not self.started:
