@@ -31,9 +31,7 @@ class TryAgainWindow(tk.Toplevel):
 
     def confirm(self):
         try:
-            print('saving...', end='')
             self.parent.save_experiment_data(self.entry.get())
-            print('done')
         except:
             self.failed_label.pack()
         else:
