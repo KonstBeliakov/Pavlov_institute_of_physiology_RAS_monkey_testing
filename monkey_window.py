@@ -20,7 +20,8 @@ class Monkey_window(tk.Toplevel):
         super().__init__()
         self.repeat_number = None
         self.session_number = None
-        self.log = [['время', 'ответ', 'правильный ответ']]
+        self.log = [['Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+        self.test_start = None
         self.right_image = None
         self.delay = None
         self.picture_to_remember = None
@@ -51,7 +52,10 @@ class Monkey_window(tk.Toplevel):
         self.repeat_number = settings.repeat_number
 
     def image_pressed(self, number):
-        self.log.append([datetime.now(), number, self.right_image])
+        print(number)
+        self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
+                         round(time.perf_counter() - self.test_start, 3),
+                         number, self.right_image])
 
     def update(self):
         for i in range(self.session_number):
@@ -78,8 +82,13 @@ class Monkey_window(tk.Toplevel):
 
                 for k in range(2):
                     self.image[k].grid(row=3, column=k)
-                    self.image[k].bind('<Button-1>', lambda event: self.image_pressed(k))
-                    self.image[k].bind('<Button-2>', lambda event: self.image_pressed(k))
+                self.image[0].bind('<Button-1>', lambda event: self.image_pressed(0))
+                self.image[0].bind('<Button-2>', lambda event: self.image_pressed(0))
+
+                self.image[1].bind('<Button-1>', lambda event: self.image_pressed(1))
+                self.image[1].bind('<Button-2>', lambda event: self.image_pressed(1))
+
+                self.test_start = time.perf_counter()
 
                 time.sleep(self.delay[2])
 

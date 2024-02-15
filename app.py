@@ -129,6 +129,8 @@ class App(tk.Tk):
 
     def open_about(self):
         if not self.started:
+            if self.timer_radio_buttons or not settings.experiment_start:
+                settings.experiment_start = time.perf_counter()
             self.btn.configure(text="Завершить тестирование")
             self.started = True
             self.window = Monkey_window()
@@ -174,6 +176,5 @@ class App(tk.Tk):
 
     def save_experiment_data(self):
         filename = self.output_file_entry.get() if self.output_file_entry.get() else 'data.xlsx'
-        df = pd.DataFrame({name: [str(line[i]) for line in self.window.log] for i, name in enumerate(self.window.log[0])})
+        df = pd.DataFrame({name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
         df.to_excel(filename)
-        pass
