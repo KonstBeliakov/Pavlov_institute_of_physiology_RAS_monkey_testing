@@ -11,11 +11,12 @@ import settings
 from import_settings_window import ImportSettingsWindow
 from export_settings_window import ExportSettingsWindow
 from experiment_settings_window import ExperimentSettingsWindow
-
+from try_again_window import TryAgainWindow
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.try_again_window = None
         self.output_file_entry = None
         self.output_file_label = None
         self.label_start_sound = None
@@ -140,15 +141,18 @@ class App(tk.Tk):
 
             self.window.mainloop()
         else:
-            try:
-                self.save_experiment_data()
-            except Exception as err:
-                print(f'При сохранении данных произошла ошибка: {err}')
-            else:
-                print('Данные эксперимента сохранены успешно')
             self.window.destroy()
             self.btn.configure(text="Запустить тестирование")
             self.started = False
+            try:
+                self.save_experiment_data(self.output_file_entry.get())
+            except Exception as err:
+                print(f'При сохранении данных произошла ошибка: {err}')
+                self.try_again_window = TryAgainWindow(self)
+                self.try_again_window.mainloop()
+            else:
+                print('Данные эксперимента сохранены успешно')
+
 
     def update_log(self):
         self.frame_log_top = LabelFrame(self.frame[1], text='Результаты последних 10 тестов')
@@ -174,7 +178,6 @@ class App(tk.Tk):
         self.experiment_settings_window = ExperimentSettingsWindow()
         self.experiment_settings_window.mainloop()
 
-    def save_experiment_data(self):
-        filename = self.output_file_entry.get() if self.output_file_entry.get() else 'data.xlsx'
+    def save_experiment_data(self, path):
         df = pd.DataFrame({name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
-        df.to_excel(filename)
+        df.to_excel(path)
