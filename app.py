@@ -9,16 +9,16 @@ import tkinter.messagebox as mb
 import settings
 from import_settings_window import ImportSettingsWindow
 from export_settings_window import ExportSettingsWindow
+from experiment_settings_window import ExperimentSettingsWindow
 
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.run_frame = None
-        self.run_frame_top = None
-        self.frame_log_top = None
-        self.frame_log = None
-        self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
+        self.title('Основное окно')
+        self.experiment_settings_window, self.btn_settings, self.run_frame,\
+            self.run_frame_top, self.frame_log_top, self.frame_log,\
+            self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
             self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number,\
             self.entry_session_number, self.label_session_number, self.choose_yes_sound,\
             self.label_choose_no_sound, self.label_choose_yes_sound, self.choose_no_sound,\
@@ -27,7 +27,7 @@ class App(tk.Tk):
             self.radio_button_yes, self.timer_radio_buttons, self.update_thread,\
             self.btn_confirm, self.error_label, self.delay_entry_IntVar,\
             self.delay_label, self.info_label, self.btn,\
-            self.window = [None] * 28
+            self.window = [None] * 34
 
         self.started = False
         self.log_label = []
@@ -67,33 +67,7 @@ class App(tk.Tk):
 
     def settings_frame_init(self):
         frame_number = 0
-        delay_text = ['Время отображения целевого изображения', 'Задержка перед появлением тестовых изображений',
-                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами',
-                      'Задержка между сессиями']
 
-        self.delay_label = [Label(self.frame[frame_number], text=i) for i in delay_text]
-        self.delay_entry_IntVar = [IntVar() for _ in range(5)]
-        for i in range(5):
-            self.delay_entry_IntVar[i].set(settings.delay[i])
-        self.delay_entry = [Entry(self.frame[frame_number], text=self.delay_entry_IntVar[i]) for i in range(5)]
-
-        self.label_session_number = Label(self.frame[frame_number], text='Количество сессий')
-        self.label_session_number.grid(row=0, column=0)
-
-        self.intVar_session_number = StringVar(self.frame[frame_number], '1')
-        self.entry_session_number = Entry(self.frame[frame_number], text=self.intVar_session_number)
-        self.entry_session_number.grid(row=0, column=1)
-
-        self.label_repeat_number = Label(self.frame[frame_number], text='Количество тестов в сессии')
-        self.label_repeat_number.grid(row=1, column=0)
-
-        self.intVar_repeat_number = StringVar(self.frame[frame_number], '5')
-        self.entry_repeat_number = Entry(self.frame[frame_number], text=self.intVar_repeat_number)
-        self.entry_repeat_number.grid(row=1, column=1)
-
-        for i in range(5):
-            self.delay_label[i].grid(row=i + 2, column=0)
-            self.delay_entry[i].grid(row=i + 2, column=1)
         self.label_choose_yes_sound = Label(self.frame[frame_number],
                                             text='Путь до файла позитивного звукового подкрепления')
         self.label_choose_yes_sound.grid(row=7, column=0)
@@ -105,17 +79,6 @@ class App(tk.Tk):
         self.label_choose_no_sound.grid(row=8, column=0)
         self.choose_no_sound = Entry(self.frame[frame_number])
         self.choose_no_sound.grid(row=8, column=1)
-
-        self.btn_confirm = tk.Button(self.frame[frame_number], text='Применить', command=self.save_settings)
-        self.btn_confirm.grid(row=9, column=0)
-        self.btn_import_settings = tk.Button(self.frame[frame_number], text='Импортировать настройки',
-                                             command=self.open_import_settings_window)
-        self.btn_import_settings.grid(row=9, column=1)
-        self.btn_export_settings = tk.Button(self.frame[frame_number], text='Экспортировать настройки',
-                                             command=self.open_export_settings_window)
-        self.btn_export_settings.grid(row=9, column=2)
-        self.error_label = Label(self.frame[frame_number],
-                                 text='Ошибка: в поля времени должны быть введены вещественные числа')
 
     def run_frame_init(self):
         frame_number = 1
@@ -131,6 +94,9 @@ class App(tk.Tk):
         self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
+        self.btn_settings = tk.Button(self.run_frame, text='Настроить эксперимент', command=self.experiment_settings)
+        self.btn_settings.grid(row=1, column=1)
+
         self.timer_ask_label = Label(self.run_frame, text='Обнулить глобальный таймер эксперимента')
         self.timer_ask_label.grid(row=2, column=0)
 
@@ -143,14 +109,6 @@ class App(tk.Tk):
 
         self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=4, column=0)
-
-    def open_export_settings_window(self):
-        self.export_settings_window = ExportSettingsWindow()
-        self.export_settings_window.mainloop()
-
-    def open_import_settings_window(self):
-        self.import_settings_window = ImportSettingsWindow()
-        self.import_settings_window.mainloop()
 
     def open_about(self):
         if not self.started:
@@ -166,28 +124,6 @@ class App(tk.Tk):
             self.window.destroy()
             self.btn.configure(text="Запустить тестирование")
             self.started = False
-
-    def save_settings(self):
-        self.error_label.grid_forget()
-        error_text = ''
-        try:
-            settings.delay = [float(i.get()) for i in self.delay_entry]
-        except:
-            error_text = 'Ошибка: в поля для ввода времени задержек должны быть введены вещественные числа'
-
-        try:
-            settings.session_number = int(self.entry_session_number.get())
-        except:
-            error_text = 'Ошибка: количество сессий должно быть целым числом'
-
-        try:
-            settings.repeat_number = int(self.entry_repeat_number.get())
-        except:
-            error_text = 'Ошибка: количество тестов в сессии должно быть целым числом'
-
-        if error_text:
-            self.error_label.configure(text=error_text)
-            self.error_label.grid(row=9, column=0)
 
     def update_log(self):
         self.frame_log_top = LabelFrame(self.frame[1], text='Результаты последних 10 тестов')
@@ -207,3 +143,7 @@ class App(tk.Tk):
                 for j, text in enumerate(line):
                     self.log_label[i + 1][j].configure(text=text, fg='#0f0' if line[-1] == line[-2] else '#f00')
             time.sleep(1)
+
+    def experiment_settings(self):
+        self.experiment_settings_window = ExperimentSettingsWindow()
+        self.experiment_settings_window.mainloop()
