@@ -22,16 +22,22 @@ class TryAgainWindow(tk.Toplevel):
         self.button_confirm = tk.Button(self.frame, text='Сохранить', command=self.confirm)
         self.button_cansel = tk.Button(self.frame, text='Не сохранять данные эксперимента', command=self.cansel)
 
+        self.failed_label = tk.Label(self, text='Не удалось сохранить: попробуйте еще раз', fg='#f00')
+
         self.label2.grid(row=0, column=0)
         self.entry.grid(row=0, column=1)
         self.button_confirm.grid(row=1, column=0)
         self.button_cansel.grid(row=1, column=1)
 
     def confirm(self):
-        print('saving...', end='')
-        self.parent.save_experiment_data(self.entry.get())
-        print('done')
-        self.destroy()
+        try:
+            print('saving...', end='')
+            self.parent.save_experiment_data(self.entry.get())
+            print('done')
+        except:
+            self.failed_label.pack()
+        else:
+            self.destroy()
 
     def cansel(self):
         self.destroy()

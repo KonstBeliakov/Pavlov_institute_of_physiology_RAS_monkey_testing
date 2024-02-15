@@ -41,6 +41,15 @@ class ExperimentSettingsWindow(tk.Toplevel):
             self.delay_label[i].grid(row=i + 2, column=0)
             self.delay_entry[i].grid(row=i + 2, column=1)
 
+        self.restart_label = tk.Label(self.settingsFrame, text='Переходить к следующему тесту после ответа')
+        self.restart_label.grid(row=7, column=0)
+        self.restart_radiobuttons = tk.IntVar()
+        self.restart_radiobuttons.set(0)
+        self.radio_button_yes = tk.Radiobutton(self.settingsFrame, text="Да", variable=self.restart_radiobuttons, value=1)
+        self.radio_button_no = tk.Radiobutton(self.settingsFrame, text="Нет", variable=self.restart_radiobuttons, value=0)
+        self.radio_button_yes.grid(row=8, column=0)
+        self.radio_button_no.grid(row=8, column=1)
+
         self.buttonFrame = tk.Frame(self)
         self.buttonFrame.grid(row=1, column=0)
 
@@ -77,6 +86,9 @@ class ExperimentSettingsWindow(tk.Toplevel):
         if error_text:
             self.error_label.configure(text=error_text)
             self.error_label.grid(row=9, column=0)
+        else:
+            settings.restart_after_answer = bool(self.restart_radiobuttons.get())
+            self.destroy()
 
     def cansel(self):
         self.destroy()

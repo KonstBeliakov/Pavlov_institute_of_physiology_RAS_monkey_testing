@@ -13,6 +13,7 @@ from export_settings_window import ExportSettingsWindow
 from experiment_settings_window import ExperimentSettingsWindow
 from try_again_window import TryAgainWindow
 
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -103,7 +104,8 @@ class App(tk.Tk):
         self.choose_experiment_label = Label(self.run_frame, text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
 
-        self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки'])
+        self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки',
+                                                                               'Запоминание порядка появления'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
         self.btn_settings = tk.Button(self.run_frame, text='Настроить эксперимент', command=self.experiment_settings)
@@ -118,10 +120,10 @@ class App(tk.Tk):
         self.radio_button_no = Radiobutton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
         self.radio_button_yes.grid(row=3, column=0)
         self.radio_button_no.grid(row=3, column=1)
-        
+
         self.output_file_label = Label(self.run_frame, text='Файл записи результатов эксперимента')
         self.output_file_label.grid(row=4, column=0)
-        
+
         self.output_file_entry = Entry(self.run_frame)
         self.output_file_entry.grid(row=4, column=1)
 
@@ -153,7 +155,6 @@ class App(tk.Tk):
             else:
                 print('Данные эксперимента сохранены успешно')
 
-
     def update_log(self):
         self.frame_log_top = LabelFrame(self.frame[1], text='Результаты последних 10 тестов')
         self.frame_log_top.grid(row=0, column=1)
@@ -179,5 +180,6 @@ class App(tk.Tk):
         self.experiment_settings_window.mainloop()
 
     def save_experiment_data(self, path):
-        df = pd.DataFrame({name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
+        df = pd.DataFrame(
+            {name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
         df.to_excel(path)

@@ -18,6 +18,7 @@ files = os.listdir(directory)
 class Monkey_window(tk.Toplevel):
     def __init__(self):
         super().__init__()
+        self.pressed = None
         self.repeat_number = None
         self.session_number = None
         self.log = [['Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
@@ -52,10 +53,11 @@ class Monkey_window(tk.Toplevel):
         self.repeat_number = settings.repeat_number
 
     def image_pressed(self, number):
-        print(number)
-        self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
-                         round(time.perf_counter() - self.test_start, 3),
-                         number, self.right_image])
+        if not self.pressed:
+            self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
+                            round(time.perf_counter() - self.test_start, 3),
+                            number, self.right_image])
+        self.pressed = True
 
     def update(self):
         for i in range(self.session_number):
@@ -70,7 +72,7 @@ class Monkey_window(tk.Toplevel):
                 self.main_image.grid_forget()
 
                 time.sleep(self.delay[1])
-
+                self.pressed = False
                 temp = files.copy()
                 temp.remove(self.picture_to_remember)
                 file = [self.picture_to_remember, choice(temp)]
@@ -90,8 +92,18 @@ class Monkey_window(tk.Toplevel):
 
                 self.test_start = time.perf_counter()
 
-                time.sleep(self.delay[2])
-
+                if not settings.restart_after_answer:
+                    time.sleep(self.delay[2])
+                else:
+                    t = time.perf_counter()
+                    while time.perf_counter() - t < self.delay[2]:
+                        if self.pressed:
+                            break
+                        time.sleep(0.05)
+                
+                if not self.pressed:
+                    self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
+                                     None, None, self.right_image])
                 for k in self.image:
                     k.grid_forget()
 
