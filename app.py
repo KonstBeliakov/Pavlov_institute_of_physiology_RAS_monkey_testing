@@ -5,6 +5,7 @@ from tkinter import *
 from monkey_window import Monkey_window
 import threading
 import tkinter.messagebox as mb
+import pandas as pd
 
 import settings
 from import_settings_window import ImportSettingsWindow
@@ -137,6 +138,12 @@ class App(tk.Tk):
 
             self.window.mainloop()
         else:
+            try:
+                self.save_experiment_data()
+            except Exception as err:
+                print(f'При сохранении данных произошла ошибка: {err}')
+            else:
+                print('Данные эксперимента сохранены успешно')
             self.window.destroy()
             self.btn.configure(text="Запустить тестирование")
             self.started = False
@@ -164,3 +171,9 @@ class App(tk.Tk):
     def experiment_settings(self):
         self.experiment_settings_window = ExperimentSettingsWindow()
         self.experiment_settings_window.mainloop()
+
+    def save_experiment_data(self):
+        filename = self.output_file_entry.get() if self.output_file_entry.get() else 'data.xlsx'
+        df = pd.DataFrame({name: [str(line[i]) for line in self.window.log] for i, name in enumerate(self.window.log[0])})
+        df.to_excel(filename)
+        pass
