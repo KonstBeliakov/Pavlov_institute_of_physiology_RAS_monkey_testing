@@ -15,18 +15,22 @@ from experiment_settings_window import ExperimentSettingsWindow
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.output_file_entry = None
+        self.output_file_label = None
+        self.label_start_sound = None
+        self.choose_start_sound = None
         self.title('Основное окно')
-        self.experiment_settings_window, self.btn_settings, self.run_frame,\
-            self.run_frame_top, self.frame_log_top, self.frame_log,\
+        self.experiment_settings_window, self.btn_settings, self.run_frame, \
+            self.run_frame_top, self.frame_log_top, self.frame_log, \
             self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
-            self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number,\
-            self.entry_session_number, self.label_session_number, self.choose_yes_sound,\
-            self.label_choose_no_sound, self.label_choose_yes_sound, self.choose_no_sound,\
-            self.btn_import_settings, self.btn_export_settings, self.timer_ask_label,\
-            self.choose_experiment_label, self.choose_experiment_combobox, self.radio_button_no,\
-            self.radio_button_yes, self.timer_radio_buttons, self.update_thread,\
-            self.btn_confirm, self.error_label, self.delay_entry_IntVar,\
-            self.delay_label, self.info_label, self.btn,\
+            self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number, \
+            self.entry_session_number, self.label_session_number, self.choose_yes_sound, \
+            self.label_choose_no_sound, self.label_choose_yes_sound, self.choose_no_sound, \
+            self.btn_import_settings, self.btn_export_settings, self.timer_ask_label, \
+            self.choose_experiment_label, self.choose_experiment_combobox, self.radio_button_no, \
+            self.radio_button_yes, self.timer_radio_buttons, self.update_thread, \
+            self.btn_confirm, self.error_label, self.delay_entry_IntVar, \
+            self.delay_label, self.info_label, self.btn, \
             self.window = [None] * 34
 
         self.started = False
@@ -68,17 +72,23 @@ class App(tk.Tk):
     def settings_frame_init(self):
         frame_number = 0
 
+        self.label_start_sound = Label(self.frame[frame_number],
+                                       text='Путь до файла звука воспроизводящегося в начале эксперимента')
+        self.label_start_sound.grid(row=0, column=0)
+        self.choose_start_sound = Entry(self.frame[frame_number])
+        self.choose_start_sound.grid(row=0, column=1)
+
         self.label_choose_yes_sound = Label(self.frame[frame_number],
                                             text='Путь до файла позитивного звукового подкрепления')
-        self.label_choose_yes_sound.grid(row=7, column=0)
+        self.label_choose_yes_sound.grid(row=1, column=0)
         self.choose_yes_sound = Entry(self.frame[frame_number])
-        self.choose_yes_sound.grid(row=7, column=1)
+        self.choose_yes_sound.grid(row=1, column=1)
 
         self.label_choose_no_sound = Label(self.frame[frame_number],
                                            text='Путь до файла негативного звукового подкрепления')
-        self.label_choose_no_sound.grid(row=8, column=0)
+        self.label_choose_no_sound.grid(row=2, column=0)
         self.choose_no_sound = Entry(self.frame[frame_number])
-        self.choose_no_sound.grid(row=8, column=1)
+        self.choose_no_sound.grid(row=2, column=1)
 
     def run_frame_init(self):
         frame_number = 1
@@ -106,9 +116,15 @@ class App(tk.Tk):
         self.radio_button_no = Radiobutton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
         self.radio_button_yes.grid(row=3, column=0)
         self.radio_button_no.grid(row=3, column=1)
+        
+        self.output_file_label = Label(self.run_frame, text='Файл записи результатов эксперимента')
+        self.output_file_label.grid(row=4, column=0)
+        
+        self.output_file_entry = Entry(self.run_frame)
+        self.output_file_entry.grid(row=4, column=1)
 
         self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
-        self.btn.grid(row=4, column=0)
+        self.btn.grid(row=5, column=0)
 
     def open_about(self):
         if not self.started:
@@ -129,7 +145,8 @@ class App(tk.Tk):
         self.frame_log_top = LabelFrame(self.frame[1], text='Результаты последних 10 тестов')
         self.frame_log_top.grid(row=0, column=1)
 
-        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(self.window.log[0]))] for _ in range(11)]
+        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(self.window.log[0]))] for _ in
+                          range(11)]
 
         for i in range(len(self.log_label)):
             for j in range(len(self.log_label[i])):
