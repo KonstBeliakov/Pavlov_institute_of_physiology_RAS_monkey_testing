@@ -12,7 +12,7 @@ import os
 import settings
 
 directory = "images"
-files = os.listdir(directory)
+files = os.listdir(directory)  # images name list
 
 
 class Monkey_window(tk.Toplevel):
@@ -74,7 +74,9 @@ class Monkey_window(tk.Toplevel):
                 time.sleep(self.delay[1])
                 self.pressed = False
                 temp = files.copy()
+                # remove the extra image so that 2 identical ones are not displayed
                 temp.remove(self.picture_to_remember)
+                # names of the files that we will display on the screen
                 file = [self.picture_to_remember, choice(temp)]
                 shuffle(file)
                 self.right_image = file.index(self.picture_to_remember)

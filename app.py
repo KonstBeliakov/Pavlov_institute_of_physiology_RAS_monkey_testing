@@ -172,7 +172,13 @@ class App(tk.Tk):
         while True:
             for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 1):]):
                 for j, text in enumerate(line):
-                    self.log_label[i + 1][j].configure(text=text, fg='#0f0' if line[-1] == line[-2] else '#f00')
+                    if line[-1] == line[-2]:
+                        color = '#0f0'
+                    elif line[-2] == line[-3] == None:
+                        color = '#f0f'
+                    else:
+                        color = '#f00'
+                    self.log_label[i + 1][j].configure(text=str(text), fg=color)
             time.sleep(1)
 
     def experiment_settings(self):
