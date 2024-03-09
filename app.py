@@ -174,7 +174,7 @@ class App(tk.Tk):
                 for j, text in enumerate(line):
                     if line[-1] == line[-2]:
                         color = '#0f0'
-                    elif line[-2] == line[-3] == None:
+                    elif line[-2] == line[-3] is None:
                         color = '#f0f'
                     else:
                         color = '#f00'
