@@ -21,7 +21,8 @@ class Monkey_window(tk.Toplevel):
         self.pressed = None
         self.repeat_number = None
         self.session_number = None
-        self.log = [['Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+        self.experiment_number = 1
         self.test_start = None
         self.right_image = None
         self.delay = None
@@ -54,7 +55,7 @@ class Monkey_window(tk.Toplevel):
 
     def image_pressed(self, number):
         if not self.pressed:
-            self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
+            self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
                             round(time.perf_counter() - self.test_start, 3),
                             number, self.right_image])
         self.pressed = True
@@ -104,11 +105,12 @@ class Monkey_window(tk.Toplevel):
                         time.sleep(0.05)
                 
                 if not self.pressed:
-                    self.log.append([round(time.perf_counter() - settings.experiment_start, 3),
+                    self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
                                      None, None, self.right_image])
                 for k in self.image:
                     k.grid_forget()
 
                 time.sleep(self.delay[3])
+                self.experiment_number += 1
 
             time.sleep(self.delay[4])

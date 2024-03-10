@@ -10,6 +10,8 @@ class MonkeyWindow2(tk.Toplevel):
     def __init__(self):
         super().__init__()
 
+        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+
         self.title('Experiment window')
         self.geometry('800x800')
 
@@ -33,12 +35,10 @@ class MonkeyWindow2(tk.Toplevel):
             if i != self.right_image:
                 self.canvas.itemconfig(self.image[i], state='hidden')
 
-        # fix later
-        # exec('\n'.join([f'''self.canvas.tag_bind(self.image[{i}], '<Button-1>', lambda event: self.object_click_event({i}))'''
-        #               for i in range(image_number)]))
+        self.experiment_number = 1
+        self.test_start = perf_counter()
+        self.pressed = False
 
-        # for i in range(image_number):
-        #    self.canvas.tag_bind(self.image[i], '<Button-1>', lambda event: self.object_click_event(i))
         self.bind()
 
         self.barrier = self.canvas.create_rectangle((self.canvas_size[0] - settings.barrier_width) // 2, 0,
@@ -53,10 +53,10 @@ class MonkeyWindow2(tk.Toplevel):
         self.t1.start()
 
     def object_click_event(self, x: int):
-        if self.right_image == x:
-            print('right image pressed')
-        else:
-            print(f'wrong image pressed {x} right:{self.right_image}')
+        self.log.append([self.experiment_number, round(perf_counter() - settings.experiment_start, 3),
+                         round(perf_counter() - self.test_start, 3),
+                         x, self.right_image])
+        self.pressed = True
 
     def update(self):
         for i in range(settings.repeat_number2):
@@ -82,6 +82,11 @@ class MonkeyWindow2(tk.Toplevel):
                     self.canvas.itemconfig(self.image[i], state='normal')
                 else:
                     self.canvas.itemconfig(self.image[i], state='hidden')
+            self.test_start = perf_counter()
+            if not self.pressed:
+                self.log.append([self.experiment_number, round(perf_counter() - settings.experiment_start, 3),
+                                 None, None, self.right_image])
+            self.experiment_number += 1
         self.destroy()
 
     def is_image_behind_barrier(self, n: int):

@@ -9,6 +9,7 @@ class ExperimentSettingsWindow2(SettingsWindow):
         super().__init__(experiment_type=2)
         self.title('Настройки эксперимента')
 
+
         self.settingsFrame = Frame(self)
         self.settingsFrame.grid(column=0, row=0)
 
