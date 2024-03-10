@@ -12,5 +12,6 @@ barrier_width = 100
 barrier_color = 'red'
 barrier_dist = 150
 image_number = 5
-session_delay2 = 5.0
+session_delay2 = 1.0
 straight_movement = True
+repeat_number2 = 3

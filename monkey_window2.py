@@ -59,7 +59,7 @@ class MonkeyWindow2(tk.Toplevel):
             print(f'wrong image pressed {x} right:{self.right_image}')
 
     def update(self):
-        while True:
+        for i in range(settings.repeat_number2):
             next_experiment = False
             while not next_experiment:
                 next_experiment = True
@@ -74,12 +74,22 @@ class MonkeyWindow2(tk.Toplevel):
 
                 sleep(0.05)
             sleep(settings.session_delay2)
+            self.right_image = randrange(settings.image_number)
+            for i in range(settings.image_number):
+                pos = self.canvas.coords(self.image[i])
+                self.canvas.move(self.image[i], self.image_position[i][0] - pos[0], self.image_position[i][1] - pos[1])
+                if self.right_image == i:
+                    self.canvas.itemconfig(self.image[i], state='normal')
+                else:
+                    self.canvas.itemconfig(self.image[i], state='hidden')
+        self.destroy()
 
     def is_image_behind_barrier(self, n: int):
         img_pos = [self.canvas.coords(self.image[n])[0] - self.image_size // 2,
                    self.canvas.coords(self.image[n])[1] + self.image_size // 2]
         barrier_pos = ((self.canvas_size[0] - settings.barrier_width) // 2, 0,
-                       settings.barrier_width + (self.canvas_size[0] - settings.barrier_width) // 2, self.canvas_size[1])
+                       settings.barrier_width + (self.canvas_size[0] - settings.barrier_width) // 2,
+                       self.canvas_size[1])
         t = [img_pos, [img_pos[0] + self.image_size, img_pos[1]], [img_pos[0], img_pos[1] + self.image_size],
              [img_pos[0] + self.image_size, img_pos[1] + self.image_size]]
         t2 = 0

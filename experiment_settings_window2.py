@@ -16,7 +16,7 @@ class ExperimentSettingsWindow2(SettingsWindow):
                                                           'Максимальная скорость изображения',
                                                           'Ширина барьера', 'Цвет барьера', 'Количество изображений',
                                                           'Расстояние до барьера', 'Прямое движение',
-                                                                         'Задержка между экспериментами']]
+                                                           'Задержка между экспериментами', 'Число повторений']]
 
         self.min_speed_entry = Entry(self.settingsFrame)
         self.min_speed_entry.grid(column=1, row=0)
@@ -46,6 +46,9 @@ class ExperimentSettingsWindow2(SettingsWindow):
 
         self.session_delay_entry = Entry(self.settingsFrame)
         self.session_delay_entry.grid(column=1, row=7)
+
+        self.repeat_entry = Entry(self.settingsFrame)
+        self.repeat_entry.grid(column=1, row=8)
 
         for i, label in enumerate(self.labels):
             label.grid(column=0, row=i)
@@ -118,6 +121,16 @@ class ExperimentSettingsWindow2(SettingsWindow):
         if not error_text and float(self.session_delay_entry.get()) < 0:
             error_text = 'Задержка между экспериментами должна быть положительной'
 
+        if not error_text and not self.repeat_entry.get():
+            error_text = 'Количество повторений не задано'
+        if not error_text:
+            try:
+                int(self.repeat_entry.get())
+            except:
+                error_text = 'Количество повторений должно быть целым числом'
+        if not error_text and int(self.repeat_entry.get()) < 0:
+            error_text = 'Количество повторений должно быть положительным'
+
         if error_text:
             self.error_label.configure(text=error_text)
             self.error_label.pack()
@@ -130,6 +143,7 @@ class ExperimentSettingsWindow2(SettingsWindow):
             settings.barrier_dist = int(self.barrier_dist_entry.get())
             settings.straight_movement = self.straight_movement == 'Да'
             settings.session_delay2 = float(self.session_delay_entry.get())
+            settings.repeat_number2 = int(self.repeat_entry.get())
             self.destroy()
 
 
