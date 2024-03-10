@@ -3,11 +3,12 @@ import tkinter as tk
 import settings
 from export_settings_window import ExportSettingsWindow
 from import_settings_window import ImportSettingsWindow
+from settings_window import SettingsWindow
 
 
-class ExperimentSettingsWindow(tk.Toplevel):
+class ExperimentSettingsWindow(SettingsWindow):
     def __init__(self):
-        super().__init__()
+        super().__init__(experiment_type=1)
         self.title('Настройки эксперимента')
         self.export_settings_window = None
         self.import_settings_window = None
@@ -50,21 +51,6 @@ class ExperimentSettingsWindow(tk.Toplevel):
         self.radio_button_yes.grid(row=8, column=0)
         self.radio_button_no.grid(row=8, column=1)
 
-        self.buttonFrame = tk.Frame(self)
-        self.buttonFrame.grid(row=1, column=0)
-
-        self.btn_confirm = tk.Button(self.buttonFrame, text='Применить', command=self.save_settings)
-        self.btn_confirm.grid(row=0, column=0)
-        self.btn_confirm = tk.Button(self.buttonFrame, text='Отмена', command=self.cansel)
-        self.btn_confirm.grid(row=0, column=1)
-        self.btn_import_settings = tk.Button(self.buttonFrame, text='Импортировать настройки',
-                                             command=self.open_import_settings_window)
-        self.btn_import_settings.grid(row=0, column=2)
-        self.btn_export_settings = tk.Button(self.buttonFrame, text='Экспортировать настройки',
-                                             command=self.open_export_settings_window)
-        self.btn_export_settings.grid(row=0, column=3)
-        self.error_label = tk.Label(self.buttonFrame, text='Ошибка: в поля времени должны быть введены вещественные числа')
-
     def save_settings(self):
         self.error_label.grid_forget()
         error_text = ''
@@ -89,17 +75,6 @@ class ExperimentSettingsWindow(tk.Toplevel):
         else:
             settings.restart_after_answer = bool(self.restart_radiobuttons.get())
             self.destroy()
-
-    def cansel(self):
-        self.destroy()
-
-    def open_export_settings_window(self):
-        self.export_settings_window = ExportSettingsWindow()
-        self.export_settings_window.mainloop()
-
-    def open_import_settings_window(self):
-        self.import_settings_window = ImportSettingsWindow()
-        self.import_settings_window.mainloop()
 
 
 if __name__ == '__main__':

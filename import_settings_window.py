@@ -5,7 +5,9 @@ import settings
 
 
 class ImportSettingsWindow(tk.Toplevel):
-    def __init__(self):
+    def __init__(self, experiment_type):
+        self.experiment_type = experiment_type
+
         super().__init__()
 
         self.title('Импортировать настройки')

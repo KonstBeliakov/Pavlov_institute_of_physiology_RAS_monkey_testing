@@ -6,8 +6,8 @@ experiment_start = None
 restart_after_answer = False
 
 # Second type experiment settings
-image_min_speed = 10
-image_max_speed = 50
+image_min_speed = 50
+image_max_speed = 75
 barrier_width = 100
 barrier_color = 'red'
 image_number = 5
