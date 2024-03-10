@@ -10,4 +10,7 @@ image_min_speed = 50
 image_max_speed = 75
 barrier_width = 100
 barrier_color = 'red'
+barrier_dist = 150
 image_number = 5
+session_delay2 = 5.0
+straight_movement = True

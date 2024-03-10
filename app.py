@@ -195,3 +195,8 @@ class App(tk.Tk):
         df = pd.DataFrame(
             {name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
         df.to_excel(path)
+
+
+if __name__ == '__main__':
+    app = App()
+    app.mainloop()
