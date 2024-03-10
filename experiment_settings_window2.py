@@ -4,7 +4,7 @@ from settings_window import SettingsWindow
 import settings
 
 
-class ExperimentSettingsWindow(SettingsWindow):
+class ExperimentSettingsWindow2(SettingsWindow):
     def __init__(self):
         super().__init__(experiment_type=2)
         self.title('Настройки эксперимента')
@@ -94,5 +94,5 @@ class ExperimentSettingsWindow(SettingsWindow):
 
 if __name__ == '__main__':
     window = Tk()
-    settings_window = ExperimentSettingsWindow()
+    settings_window = ExperimentSettingsWindow2()
     settings_window.mainloop()

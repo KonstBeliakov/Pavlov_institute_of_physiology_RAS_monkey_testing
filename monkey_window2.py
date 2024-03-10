@@ -7,10 +7,9 @@ from random import randint, randrange
 
 
 class MonkeyWindow2(tk.Toplevel):
-    def __init__(self, parent):
+    def __init__(self):
         super().__init__()
 
-        self.parent = parent
         self.title('Experiment window')
         self.geometry('800x800')
 
