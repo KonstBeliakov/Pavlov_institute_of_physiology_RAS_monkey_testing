@@ -1,8 +1,6 @@
 import tkinter as tk
 
 import settings
-from export_settings_window import ExportSettingsWindow
-from import_settings_window import ImportSettingsWindow
 from settings_window import SettingsWindow
 
 
@@ -55,24 +53,27 @@ class ExperimentSettingsWindow(SettingsWindow):
         self.error_label.grid_forget()
         error_text = ''
         try:
-            settings.delay = [float(i.get()) for i in self.delay_entry]
+            [float(i.get()) for i in self.delay_entry]
         except:
             error_text = 'Ошибка: в поля для ввода времени задержек должны быть введены вещественные числа'
 
         try:
-            settings.session_number = int(self.entry_session_number.get())
+            int(self.entry_session_number.get())
         except:
             error_text = 'Ошибка: количество сессий должно быть целым числом'
 
         try:
-            settings.repeat_number = int(self.entry_repeat_number.get())
+            int(self.entry_repeat_number.get())
         except:
             error_text = 'Ошибка: количество тестов в сессии должно быть целым числом'
 
         if error_text:
             self.error_label.configure(text=error_text)
-            self.error_label.grid(row=9, column=0)
+            self.error_label.pack()
         else:
+            settings.delay = [float(i.get()) for i in self.delay_entry]
+            settings.session_number = int(self.entry_session_number.get())
+            settings.repeat_number = int(self.entry_repeat_number.get())
             settings.restart_after_answer = bool(self.restart_radiobuttons.get())
             self.destroy()
 

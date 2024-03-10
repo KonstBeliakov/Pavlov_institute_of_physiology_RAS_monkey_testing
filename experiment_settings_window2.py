@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from settings_window import SettingsWindow
+import settings
 
 
 class ExperimentSettingsWindow(SettingsWindow):
@@ -83,7 +84,11 @@ class ExperimentSettingsWindow(SettingsWindow):
             self.error_label.configure(text=error_text)
             self.error_label.pack()
         else:
-            # saving settings
+            settings.image_min_speed = int(self.min_speed_entry.get())
+            settings.image_max_speed = int(self.max_speed_entry.get())
+            settings.barrier_color = self.barrier_color_combobox.get()
+            settings.barrier_width = int(self.barrier_width_entry.get())
+            settings.image_number = int(self.image_number_entry.get())
             self.destroy()
 
 
