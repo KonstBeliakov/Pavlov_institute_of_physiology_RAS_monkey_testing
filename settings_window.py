@@ -23,9 +23,11 @@ class SettingsWindow(Toplevel):
         self.btn_import_settings.grid(row=0, column=2)
         self.btn_export_settings = tk.Button(self.buttonFrame, text='Экспортировать настройки',
                                              command=self.open_export_settings_window)
+        self.errorFrame = Frame(self)
+        self.errorFrame.grid(row=2, column=0)
+
         self.btn_export_settings.grid(row=0, column=3)
-        self.error_label = tk.Label(self.buttonFrame,
-                                    text='Ошибка: в поля времени должны быть введены вещественные числа')
+        self.error_label = tk.Label(self.errorFrame, text='Ошибка!', fg='#f00')
 
     def save_settings(self):
         pass
