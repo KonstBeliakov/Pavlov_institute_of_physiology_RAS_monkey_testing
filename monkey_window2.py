@@ -21,6 +21,7 @@ class MonkeyWindow2(tk.Toplevel):
         t = (self.canvas_size[1] - settings.image_number * self.image_size) // (settings.image_number + 1)
         x_pos = (self.canvas_size[0] - settings.barrier_width) // 2 - self.image_size - settings.barrier_dist
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
+        self.final_image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
         print(self.image_position)
         self.canvas = Canvas(self, bg="white", width=self.canvas_size[0], height=self.canvas_size[1])
         self.canvas.pack(anchor=CENTER, expand=1)
@@ -78,15 +79,13 @@ class MonkeyWindow2(tk.Toplevel):
             for i in range(settings.image_number):
                 pos = self.canvas.coords(self.image[i])
                 self.canvas.move(self.image[i], self.image_position[i][0] - pos[0], self.image_position[i][1] - pos[1])
-                if self.right_image == i:
-                    self.canvas.itemconfig(self.image[i], state='normal')
-                else:
-                    self.canvas.itemconfig(self.image[i], state='hidden')
+                self.canvas.itemconfig(self.image[i], state='normal' if self.right_image == i else 'hidden')
             self.test_start = perf_counter()
             if not self.pressed:
                 self.log.append([self.experiment_number, round(perf_counter() - settings.experiment_start, 3),
                                  None, None, self.right_image])
             self.experiment_number += 1
+            self.pressed = False
         self.destroy()
 
     def is_image_behind_barrier(self, n: int):

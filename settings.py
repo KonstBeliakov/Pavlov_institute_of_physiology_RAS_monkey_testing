@@ -15,3 +15,9 @@ image_number = 5
 session_delay2 = 1.0
 straight_movement = True
 repeat_number2 = 3
+
+# Experiment 3 settings
+image_number3 = 4
+shuffle_images = True
+image_size3 = 128
+delay3 = [1.0, 1.0, 1.0, 0.5]

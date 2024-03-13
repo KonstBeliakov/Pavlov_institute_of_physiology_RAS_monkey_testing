@@ -28,7 +28,8 @@ class ExperimentSettingsWindow2(SettingsWindow):
         self.barrier_width_entry = Entry(self.settingsFrame)
         self.barrier_width_entry.grid(column=1, row=2)
 
-        self.barrier_color_combobox = ttk.Combobox(self.settingsFrame, values=sorted(['red', 'green', 'blue', 'black']))
+        self.barrier_color_combobox = ttk.Combobox(self.settingsFrame, values=sorted(['red', 'green', 'blue', 'black',
+                                                                                      'white', 'yellow', 'magenta', 'cyan']))
         self.barrier_color_combobox.grid(column=1, row=3)
 
         self.image_number_entry = Entry(self.settingsFrame)
