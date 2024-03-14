@@ -44,7 +44,8 @@ class ExperimentSettingsWindow3(SettingsWindow):
                                                min_value=0, value_type=float)
         for i in range(4, 6):
             if not error_text:
-                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1, min_value=1)
+                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1, min_value=1,
+                                               max_value=10)
         if not error_text and int(self.entries[4].get()) > int(self.entries[5].get()):
             error_text = 'Минимальное количество изображений не может быть больше максимального количества изображений'
 
