@@ -21,42 +21,42 @@ class MonkeyWindow2(tk.Toplevel):
         t1.start()
 
     def update(self):
-        self.image_numbers = random.sample(list(range(len(files))), settings.image_number3)
+        self.image_numbers = random.sample(list(range(len(files))), settings.min_image_number)
         self.right_image = random.choice(self.image_numbers)
 
         table_size_x = self.canvas_size[0] // (settings.image_size3 + 5)
         table_size_y = self.canvas_size[1] // (settings.image_size3 + 5)
 
         self.image_position = random.sample(list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
-                                            settings.image_number3)
+                                            settings.min_image_number)
 
         if settings.shuffle_images:
             self.image_position2 = random.sample(
                 list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
-                settings.image_number3)
+                settings.min_image_number)
         else:
             self.image_position2 = self.image_position
 
         self.texture = [tk.PhotoImage(file=f'images/{files[self.image_numbers[i]]}') for i in
-                        range(settings.image_number3)]
+                        range(settings.min_image_number)]
         self.image = [self.canvas.create_image(settings.image_size3 // 2 + self.image_position[i][0] * (settings.image_size3 + 5),
                                                settings.image_size3 // 2 + self.image_position[i][1] * (settings.image_size3 + 5),
-                                               image=self.texture[i]) for i in range(settings.image_number3)]
+                                               image=self.texture[i]) for i in range(settings.min_image_number)]
         self.canvas.itemconfig(self.image[self.right_image], state='hidden')
 
         sleep(settings.delay3[0])
 
-        for i in range(settings.image_number3):
+        for i in range(settings.min_image_number):
             self.canvas.itemconfig(self.image[i], state='hidden')
 
         sleep(settings.delay[1])
 
-        for i in range(settings.image_number3):
+        for i in range(settings.min_image_number):
             self.canvas.itemconfig(self.image[i], state='normal')
 
         print('move images')
 
-        for i in range(settings.image_number3):
+        for i in range(settings.min_image_number):
             self.canvas.move(self.image[i],
                              (self.image_position2[i][0] - self.image_position[i][0]) * (settings.image_size3 + 5),
                              (self.image_position2[i][1] - self.image_position[i][1]) * (settings.image_size3 + 5))
