@@ -22,3 +22,4 @@ max_image_number = 4
 shuffle_images = True
 image_size3 = 128
 delay3 = [1.0, 1.0, 1.0, 0.5]
+stop_after_error = True

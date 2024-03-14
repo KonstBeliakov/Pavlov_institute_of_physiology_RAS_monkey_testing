@@ -12,11 +12,12 @@ class ExperimentSettingsWindow3(SettingsWindow):
 
         self.settingsFrame = tk.Frame(self)
         self.settingsFrame.grid(column=0, row=0)
-        self.shuffle = 'Да'
+        self.shuffle = tk.StringVar(value='Да')
+        self.stop_after_error = tk.StringVar(value='Да')
 
         self.label_text = ['Время запоминания изображений', 'Задержка перед ответом', 'Время на ответ',
                 'Задержка между экспериментами', 'Минимальное количество изображений',
-                'Максимальное количество изображений', 'Перемешивать изображения']
+                'Максимальное количество изображений', 'Перемешивать изображения', 'Начинать заново после ошибки']
         self.labels = [tk.Label(self.settingsFrame, text=t) for t in self.label_text]
         for i, label in enumerate(self.labels):
             label.grid(column=0, row=i)
@@ -27,9 +28,13 @@ class ExperimentSettingsWindow3(SettingsWindow):
 
         self.btn_yes = ttk.Radiobutton(self.settingsFrame, text='Да', value='Да', variable=self.shuffle)
         self.btn_yes.grid(column=1, row=6)
-
         self.btn_no = ttk.Radiobutton(self.settingsFrame, text='Нет', value='Нет', variable=self.shuffle)
         self.btn_no.grid(column=2, row=6)
+
+        self.btn_yes2 = ttk.Radiobutton(self.settingsFrame, text='Да', value='Да', variable=self.stop_after_error)
+        self.btn_yes2.grid(column=1, row=7)
+        self.btn_no2 = ttk.Radiobutton(self.settingsFrame, text='Нет', value='Нет', variable=self.stop_after_error)
+        self.btn_no2.grid(column=2, row=7)
 
     def save_settings(self):
         error_text = ''
@@ -51,8 +56,8 @@ class ExperimentSettingsWindow3(SettingsWindow):
             settings.min_image_number = int(self.entries[4].get())
             settings.max_image_number = int(self.entries[5].get())
             settings.shuffle_images = (self.shuffle == 'Да')
+            settings.stop_after_error = (self.stop_after_error == 'Да')
             self.destroy()
-
 
 
 if __name__ == '__main__':
