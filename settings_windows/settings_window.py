@@ -43,6 +43,10 @@ class SettingsWindow(Toplevel):
         self.import_settings_window = ImportSettingsWindow(self.experiment_type)
         self.import_settings_window.mainloop()
 
+    def show_error(self, error_text):
+        self.error_label.configure(text=error_text)
+        self.error_label.pack()
+
 
 if __name__ == '__main__':
     window = Tk()

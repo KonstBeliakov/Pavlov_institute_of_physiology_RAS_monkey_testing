@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from settings_windows.settings_window import SettingsWindow
-#from settings_windows.temp import a
 import settings
+from utils import entry_value_check
 
 
 class ExperimentSettingsWindow2(SettingsWindow):
@@ -56,47 +56,34 @@ class ExperimentSettingsWindow2(SettingsWindow):
         for i, label in enumerate(self.labels):
             label.grid(column=0, row=i)
 
-    def int_value_check(self, value, name, declension=1, min_value=None, max_value=None):
-        if not value:
-            return f'{name} не указан{["", "о", "а"][declension]}'
-        try:
-            int(value)
-        except:
-            return f'{name} долж{["ен", "но", "на"][declension]} быть целым числом'
-        if min_value is not None and min_value > int(value):
-            return f'{name} не может быть меньше {min_value}'
-        if max_value is not None and max_value < int(value):
-            return f'{name} не может быть больше {max_value}'
-
     def save_settings(self):
-        error_text = self.int_value_check(self.min_speed_entry.get(),
+        error_text = entry_value_check(self.min_speed_entry.get(),
                                           'Минимальное значение скорости', declension=1, min_value=0)
         if not error_text:
-            error_text = self.int_value_check(self.max_speed_entry.get(),
+            error_text = entry_value_check(self.max_speed_entry.get(),
                                               'Максимальное значение скорости', declension=1, min_value=0)
 
         if not error_text and int(self.min_speed_entry.get()) > int(self.max_speed_entry.get()):
             error_text = 'Максимальное значение скорости должно быть больше минимального'
 
         if not error_text:
-            error_text = self.int_value_check(self.barrier_width_entry.get(),
+            error_text = entry_value_check(self.barrier_width_entry.get(),
                                               'Ширина барьера', declension=2, min_value=0)
         if not error_text:
-            error_text = self.int_value_check(self.image_number_entry.get(),
+            error_text = entry_value_check(self.image_number_entry.get(),
                                               'Количество изображений', declension=1, min_value=1, max_value=10)
         if not error_text:
-            error_text = self.int_value_check(self.barrier_dist_entry.get(),
+            error_text = entry_value_check(self.barrier_dist_entry.get(),
                                               'Расстояние до барьера', declension=1, min_value=0)
         if not error_text:
-            error_text = self.int_value_check(self.session_delay_entry.get(),
+            error_text = entry_value_check(self.session_delay_entry.get(),
                                               'Задержка между экспериментами', declension=2, min_value=0)
         if not error_text:
-            error_text = self.int_value_check(self.repeat_entry.get(),
+            error_text = entry_value_check(self.repeat_entry.get(),
                                               'Количество повторений', declension=1, min_value=0)
 
         if error_text:
-            self.error_label.configure(text=error_text)
-            self.error_label.pack()
+            self.show_error(error_text)
         else:
             settings.image_min_speed = int(self.min_speed_entry.get())
             settings.image_max_speed = int(self.max_speed_entry.get())
@@ -111,7 +98,6 @@ class ExperimentSettingsWindow2(SettingsWindow):
 
 
 if __name__ == '__main__':
-    #print(a)
     window = Tk()
     settings_window = ExperimentSettingsWindow2()
     settings_window.mainloop()

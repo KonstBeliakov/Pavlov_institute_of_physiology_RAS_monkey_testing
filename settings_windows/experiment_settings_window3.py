@@ -3,6 +3,7 @@ from tkinter import ttk
 
 import settings
 from settings_windows.settings_window import SettingsWindow
+from utils import entry_value_check
 
 
 class ExperimentSettingsWindow3(SettingsWindow):
@@ -13,10 +14,10 @@ class ExperimentSettingsWindow3(SettingsWindow):
         self.settingsFrame.grid(column=0, row=0)
         self.shuffle = 'Да'
 
-        text = ['Время запоминания изображений', 'Задержка перед ответом', 'Время на ответ',
+        self.label_text = ['Время запоминания изображений', 'Задержка перед ответом', 'Время на ответ',
                 'Задержка между экспериментами', 'Минимальное количество изображений',
                 'Максимальное количество изображений', 'Перемешивать изображения']
-        self.labels = [tk.Label(self.settingsFrame, text=t) for t in text]
+        self.labels = [tk.Label(self.settingsFrame, text=t) for t in self.label_text]
         for i, label in enumerate(self.labels):
             label.grid(column=0, row=i)
 
@@ -31,7 +32,27 @@ class ExperimentSettingsWindow3(SettingsWindow):
         self.btn_no.grid(column=2, row=6)
 
     def save_settings(self):
-        pass
+        error_text = ''
+        for i in range(4):
+            if not error_text:
+                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1,
+                                               min_value=0, value_type=float)
+        for i in range(4, 6):
+            if not error_text:
+                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1, min_value=1)
+        if not error_text and int(self.entries[4].get()) > int(self.entries[5].get()):
+            error_text = 'Минимальное количество изображений не может быть больше максимального количества изображений'
+
+        if error_text:
+            self.show_error(error_text)
+        else:
+            for i in range(4):
+                settings.delay3[i] = float(self.entries[i].get())
+            settings.min_image_number = int(self.entries[4].get())
+            settings.max_image_number = int(self.entries[5].get())
+            settings.shuffle_images = (self.shuffle == 'Да')
+            self.destroy()
+
 
 
 if __name__ == '__main__':
