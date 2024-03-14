@@ -1,10 +1,16 @@
 import time
 import tkinter as tk
 from tkinter import ttk
+import mss
+import mss.tools
+
 from tkinter import *
 import threading
 import tkinter.messagebox as mb
 import pandas as pd
+
+from PIL import Image
+from PIL import ImageTk
 
 import settings
 from try_again_window import TryAgainWindow
@@ -135,6 +141,9 @@ class App(tk.Tk):
         self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=5, column=0)
 
+        self.second_screen_canvas = Canvas(self.frame[frame_number])
+        self.second_screen_canvas.grid(row=0, column=2)
+
     def open_about(self):
         if not self.started:
             if self.timer_radio_buttons or not settings.experiment_start:
@@ -151,6 +160,8 @@ class App(tk.Tk):
 
             self.update_thread = threading.Thread(target=self.update_log)
             self.update_thread.start()
+            self.update_second_screen_thread = threading.Thread(target=self.second_screen_update)
+            self.update_second_screen_thread.start()
 
             self.window.mainloop()
         else:
@@ -191,6 +202,29 @@ class App(tk.Tk):
                         color = '#f00'
                     self.log_label[i + 1][j].configure(text=str(text), fg=color)
             time.sleep(1)
+
+    def second_screen_update(self):
+        python_image = tk.PhotoImage(file="settings.png")
+        monitor_number = 2
+        with mss.mss() as sct:
+            mon = sct.monitors[monitor_number]
+            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * 0.1), int(mon['height'] * 0.1),
+                                                                   image=python_image)
+            monitor = {
+                "top": mon["top"],
+                "left": mon["left"],
+                "width": mon["width"],
+                "height": mon["height"],
+                "mon": monitor_number,
+            }
+        while True:
+            with mss.mss() as sct:
+                sct_img = sct.grab(monitor)
+                img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
+                img2 = img.resize((int(img.size[0] * 0.2), int(img.size[1] * 0.2)))
+                img3 = ImageTk.PhotoImage(img2)
+
+                self.second_screen_canvas.itemconfigure(self.canvas_image, image=img3)
 
     def experiment_settings(self):
         match self.choose_experiment_combobox.get():
