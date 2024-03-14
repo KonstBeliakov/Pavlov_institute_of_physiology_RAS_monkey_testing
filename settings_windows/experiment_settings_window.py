@@ -10,38 +10,33 @@ class ExperimentSettingsWindow(SettingsWindow):
         self.title('Настройки эксперимента')
         self.export_settings_window = None
         self.import_settings_window = None
-        delay_text = ['Время отображения целевого изображения', 'Задержка перед появлением тестовых изображений',
-                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами',
-                      'Задержка между сессиями']
+
         self.settingsFrame = tk.Frame(self)
         self.settingsFrame.grid(row=0, column=0)
 
-        self.delay_label = [tk.Label(self.settingsFrame, text=i) for i in delay_text]
-        self.delay_entry_IntVar = [tk.IntVar() for _ in range(5)]
-        for i in range(5):
-            self.delay_entry_IntVar[i].set(settings.delay[i])
-        self.delay_entry = [tk.Entry(self.settingsFrame, text=self.delay_entry_IntVar[i]) for i in range(5)]
-
-        self.label_session_number = tk.Label(self.settingsFrame, text='Количество сессий')
-        self.label_session_number.grid(row=0, column=0)
+        label_text = ['Количество сессий','Количество тестов в сессии', 'Время отображения целевого изображения',
+                      'Задержка перед появлением тестовых изображений',
+                      'Время для ответа (выбора одного из тестовых изображений)', 'Задержка между тестами',
+                      'Задержка между сессиями', 'Переходить к следующему тесту после ответа']
+        self.labels = [tk.Label(self.settingsFrame, text=i) for i in label_text]
+        for i, label in enumerate(self.labels):
+            label.grid(column=0, row=i)
 
         self.intVar_session_number = tk.StringVar(self.settingsFrame, '1')
         self.entry_session_number = tk.Entry(self.settingsFrame, text=self.intVar_session_number)
         self.entry_session_number.grid(row=0, column=1)
 
-        self.label_repeat_number = tk.Label(self.settingsFrame, text='Количество тестов в сессии')
-        self.label_repeat_number.grid(row=1, column=0)
-
         self.intVar_repeat_number = tk.StringVar(self, '5')
         self.entry_repeat_number = tk.Entry(self.settingsFrame, text=self.intVar_repeat_number)
         self.entry_repeat_number.grid(row=1, column=1)
 
+        self.delay_entry_IntVar = [tk.IntVar() for _ in range(5)]
         for i in range(5):
-            self.delay_label[i].grid(row=i + 2, column=0)
+            self.delay_entry_IntVar[i].set(settings.delay[i])
+        self.delay_entry = [tk.Entry(self.settingsFrame, text=self.delay_entry_IntVar[i]) for i in range(5)]
+        for i in range(5):
             self.delay_entry[i].grid(row=i + 2, column=1)
 
-        self.restart_label = tk.Label(self.settingsFrame, text='Переходить к следующему тесту после ответа')
-        self.restart_label.grid(row=7, column=0)
         self.restart_radiobuttons = tk.IntVar()
         self.restart_radiobuttons.set(0)
         self.radio_button_yes = tk.Radiobutton(self.settingsFrame, text="Да", variable=self.restart_radiobuttons, value=1)

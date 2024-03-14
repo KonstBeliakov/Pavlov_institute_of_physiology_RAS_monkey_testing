@@ -85,23 +85,14 @@ class App(tk.Tk):
     def settings_frame_init(self):
         frame_number = 0
 
-        self.label_start_sound = Label(self.frame[frame_number],
-                                       text='Путь до файла звука воспроизводящегося в начале эксперимента')
-        self.label_start_sound.grid(row=0, column=0)
-        self.choose_start_sound = Entry(self.frame[frame_number])
-        self.choose_start_sound.grid(row=0, column=1)
-
-        self.label_choose_yes_sound = Label(self.frame[frame_number],
-                                            text='Путь до файла позитивного звукового подкрепления')
-        self.label_choose_yes_sound.grid(row=1, column=0)
-        self.choose_yes_sound = Entry(self.frame[frame_number])
-        self.choose_yes_sound.grid(row=1, column=1)
-
-        self.label_choose_no_sound = Label(self.frame[frame_number],
-                                           text='Путь до файла негативного звукового подкрепления')
-        self.label_choose_no_sound.grid(row=2, column=0)
-        self.choose_no_sound = Entry(self.frame[frame_number])
-        self.choose_no_sound.grid(row=2, column=1)
+        sound_label_text = ['Путь до файла звука воспроизводящегося в начале эксперимента',
+                            'Путь до файла позитивного звукового подкрепления',
+                            'Путь до файла негативного звукового подкрепления']
+        self.sound_label = [Label(self.frame[frame_number], text=t) for t in sound_label_text]
+        self.sound_entry = [Entry(self.frame[frame_number]) for _ in range(3)]
+        for i in range(3):
+            self.sound_label[i].grid(row=i, column=0)
+            self.sound_entry[i].grid(row=i, column=1)
 
     def run_frame_init(self):
         frame_number = 1
