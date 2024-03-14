@@ -9,7 +9,7 @@ directory = "images"
 files = os.listdir(directory)  # images name list
 
 
-class MonkeyWindow2(tk.Toplevel):
+class MonkeyWindow3(tk.Toplevel):
     def __init__(self):
         super().__init__()
         self.title('Experiment window')

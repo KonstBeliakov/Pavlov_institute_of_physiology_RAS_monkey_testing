@@ -15,7 +15,7 @@ directory = "images"
 files = os.listdir(directory)  # images name list
 
 
-class Monkey_window(tk.Toplevel):
+class MonkeyWindow(tk.Toplevel):
     def __init__(self):
         super().__init__()
         self.pressed = None

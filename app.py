@@ -2,16 +2,20 @@ import time
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-from monkey_windows.monkey_window import Monkey_window
 import threading
 import tkinter.messagebox as mb
 import pandas as pd
 
 import settings
+from try_again_window import TryAgainWindow
+
 from settings_windows.experiment_settings_window2 import ExperimentSettingsWindow2
 from settings_windows.experiment_settings_window import ExperimentSettingsWindow
-from try_again_window import TryAgainWindow
+from settings_windows.experiment_settings_window3 import ExperimentSettingsWindow3
+
+from monkey_windows.monkey_window import MonkeyWindow
 from monkey_windows.monkey_window2 import MonkeyWindow2
+from monkey_windows.monkey_window3 import MonkeyWindow3
 
 
 class App(tk.Tk):
@@ -105,7 +109,8 @@ class App(tk.Tk):
         self.choose_experiment_label.grid(row=0, column=0)
 
         self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки',
-                                                                               'Экстраполяция движения'])
+                                                                               'Экстраполяция движения',
+                                                                               'Новая картинка'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
         self.btn_settings = tk.Button(self.run_frame, text='Настроить эксперимент', command=self.experiment_settings)
@@ -136,10 +141,13 @@ class App(tk.Tk):
                 settings.experiment_start = time.perf_counter()
             self.btn.configure(text="Завершить тестирование")
             self.started = True
-            if self.choose_experiment_combobox.get() == 'Экстраполяция движения':
-                self.window = MonkeyWindow2()
-            else:
-                self.window = Monkey_window()
+            match self.choose_experiment_combobox.get():
+                case 'Запоминание картинки':
+                    self.window = MonkeyWindow()
+                case 'Экстраполяция движения':
+                    self.window = MonkeyWindow2()
+                case 'Новая картинка':
+                    self.window = MonkeyWindow3()
 
             self.update_thread = threading.Thread(target=self.update_log)
             self.update_thread.start()
@@ -185,10 +193,13 @@ class App(tk.Tk):
             time.sleep(1)
 
     def experiment_settings(self):
-        if self.choose_experiment_combobox.get() == 'Экстраполяция движения':
-            self.experiment_settings_window = ExperimentSettingsWindow2()
-        else:
-            self.experiment_settings_window = ExperimentSettingsWindow()
+        match self.choose_experiment_combobox.get():
+            case 'Запоминание картинки':
+                self.experiment_settings_window = ExperimentSettingsWindow()
+            case 'Экстраполяция движения':
+                self.experiment_settings_window = ExperimentSettingsWindow2()
+            case 'Новая картинка':
+                self.experiment_settings_window = ExperimentSettingsWindow3()
         self.experiment_settings_window.mainloop()
 
     def save_experiment_data(self, path):
