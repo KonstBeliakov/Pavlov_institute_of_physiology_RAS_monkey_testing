@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from settings_window import SettingsWindow
+from settings_windows.settings_window import SettingsWindow
+#from settings_windows.temp import a
 import settings
 
 
@@ -110,6 +111,7 @@ class ExperimentSettingsWindow2(SettingsWindow):
 
 
 if __name__ == '__main__':
+    #print(a)
     window = Tk()
     settings_window = ExperimentSettingsWindow2()
     settings_window.mainloop()

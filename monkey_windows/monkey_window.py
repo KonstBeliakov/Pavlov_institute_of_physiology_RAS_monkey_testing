@@ -29,7 +29,7 @@ class Monkey_window(tk.Toplevel):
         self.picture_to_remember = None
         # self.attributes("-fullscreen", True)
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
-        self.img = PhotoImage(file='settings2.png')
+        self.img = PhotoImage(file='settings.png')
         self.main_image = tk.Label(self, image=self.img)
         self.main_image.grid(row=3, column=1)
 

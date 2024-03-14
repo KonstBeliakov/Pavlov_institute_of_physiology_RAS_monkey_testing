@@ -1,7 +1,7 @@
 import tkinter as tk
 
 import settings
-from settings_window import SettingsWindow
+from settings_windows.settings_window import SettingsWindow
 
 
 class ExperimentSettingsWindow(SettingsWindow):

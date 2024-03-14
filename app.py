@@ -2,16 +2,16 @@ import time
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
-from monkey_window import Monkey_window
+from monkey_windows.monkey_window import Monkey_window
 import threading
 import tkinter.messagebox as mb
 import pandas as pd
 
 import settings
-from experiment_settings_window2 import ExperimentSettingsWindow2
-from experiment_settings_window import ExperimentSettingsWindow
+from settings_windows.experiment_settings_window2 import ExperimentSettingsWindow2
+from settings_windows.experiment_settings_window import ExperimentSettingsWindow
 from try_again_window import TryAgainWindow
-from monkey_window2 import MonkeyWindow2
+from monkey_windows.monkey_window2 import MonkeyWindow2
 
 
 class App(tk.Tk):

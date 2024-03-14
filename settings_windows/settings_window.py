@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import *
 
-from export_settings_window import ExportSettingsWindow
-from import_settings_window import ImportSettingsWindow
+from settings_windows.export_settings_window import ExportSettingsWindow
+from settings_windows.import_settings_window import ImportSettingsWindow
 
 
 class SettingsWindow(Toplevel):
