@@ -87,12 +87,21 @@ class App(tk.Tk):
 
         sound_label_text = ['Путь до файла звука воспроизводящегося в начале эксперимента',
                             'Путь до файла позитивного звукового подкрепления',
-                            'Путь до файла негативного звукового подкрепления']
-        self.sound_label = [Label(self.frame[frame_number], text=t) for t in sound_label_text]
+                            'Путь до файла негативного звукового подкрепления',
+                            '', 'Радиус круга отображающегося после нажатия', 'Цвет круга', 'Толщина линии круга',
+                            'Время отображения круга']
+
+        self.settings_frame_labels = [Label(self.frame[frame_number], text=t) for t in sound_label_text]
+        for i, label in enumerate(self.settings_frame_labels):
+            label.grid(row=i, column=0)
+
         self.sound_entry = [Entry(self.frame[frame_number]) for _ in range(3)]
         for i in range(3):
-            self.sound_label[i].grid(row=i, column=0)
             self.sound_entry[i].grid(row=i, column=1)
+
+        self.click_settings_entry = [Entry(self.frame[frame_number]) for _ in range(4)]
+        for i in range(4):
+            self.click_settings_entry[i].grid(row=i + 4, column=1)
 
     def run_frame_init(self):
         frame_number = 1
@@ -234,5 +243,6 @@ class App(tk.Tk):
 
 
 if __name__ == '__main__':
+    print('start...')
     app = App()
     app.mainloop()
