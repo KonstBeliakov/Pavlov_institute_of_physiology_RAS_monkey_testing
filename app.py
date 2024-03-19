@@ -19,7 +19,7 @@ from settings_windows.experiment_settings_window2 import ExperimentSettingsWindo
 from settings_windows.experiment_settings_window import ExperimentSettingsWindow
 from settings_windows.experiment_settings_window3 import ExperimentSettingsWindow3
 
-from monkey_windows.monkey_window import MonkeyWindow
+from monkey_windows.monkey_window1 import MonkeyWindow1
 from monkey_windows.monkey_window2 import MonkeyWindow2
 from monkey_windows.monkey_window3 import MonkeyWindow3
 
@@ -143,7 +143,7 @@ class App(tk.Tk):
             self.started = True
             match self.choose_experiment_combobox.get():
                 case 'Запоминание картинки':
-                    self.window = MonkeyWindow()
+                    self.window = MonkeyWindow1()
                 case 'Экстраполяция движения':
                     self.window = MonkeyWindow2()
                 case 'Новая картинка':

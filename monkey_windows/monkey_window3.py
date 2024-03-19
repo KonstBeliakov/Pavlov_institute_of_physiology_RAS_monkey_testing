@@ -4,21 +4,19 @@ import threading
 from time import perf_counter, sleep
 import os
 import settings
+from monkey_windows.monkey_window import MonkeyWindow
 
 directory = "images"
 files = os.listdir(directory)  # images name list
 
 
-class MonkeyWindow3(tk.Toplevel):
+class MonkeyWindow3(MonkeyWindow):
     def __init__(self):
         super().__init__()
         self.test_start = None
         self.title('Experiment window')
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
         self.experiment_number = 1
-        self.canvas_size = [500, 500]
-        self.canvas = tk.Canvas(self, height=self.canvas_size[1], width=self.canvas_size[0])
-        self.canvas.pack()
 
         self.stop = False
 

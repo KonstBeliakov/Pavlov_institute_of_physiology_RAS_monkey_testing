@@ -4,9 +4,10 @@ from time import sleep, perf_counter
 from tkinter import *
 import settings
 from random import randint, randrange
+from monkey_windows.monkey_window import MonkeyWindow
 
 
-class MonkeyWindow2(tk.Toplevel):
+class MonkeyWindow2(MonkeyWindow):
     def __init__(self):
         super().__init__()
 
@@ -16,15 +17,13 @@ class MonkeyWindow2(tk.Toplevel):
         self.geometry('800x800')
 
         self.image_speed = randint(settings.image_min_speed, settings.image_max_speed)
-        self.canvas_size = [500, 500]
+
         self.image_size = 32
         t = (self.canvas_size[1] - settings.image_number * self.image_size) // (settings.image_number + 1)
         x_pos = (self.canvas_size[0] - settings.barrier_width) // 2 - self.image_size - settings.barrier_dist
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
         self.final_image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
         print(self.image_position)
-        self.canvas = Canvas(self, bg="white", width=self.canvas_size[0], height=self.canvas_size[1])
-        self.canvas.pack(anchor=CENTER, expand=1)
 
         self.python_image = PhotoImage(file="settings.png")
 

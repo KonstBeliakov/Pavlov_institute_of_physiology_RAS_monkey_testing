@@ -1,3 +1,9 @@
+# click parametres
+mouse_click_circle_radius = 20
+click_circle_color = '#f00'
+click_circle_width = 5
+click_circle_time = 1.0
+
 # First type experiment settings
 delay = [1.0, 1.0, 1.0, 0.0, 5.0]
 session_number = 1
