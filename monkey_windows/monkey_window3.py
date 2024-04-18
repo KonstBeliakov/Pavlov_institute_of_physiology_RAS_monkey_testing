@@ -4,6 +4,7 @@ import threading
 from time import perf_counter, sleep
 import os
 import settings
+import utils
 from monkey_windows.monkey_window import MonkeyWindow
 
 directory = "images"
@@ -126,6 +127,11 @@ class MonkeyWindow3(MonkeyWindow):
         if settings.stop_after_error and (number != len(self.image) - 1):
             self.stop = True
             print(number, len(self.image) - 1, 'stopped')
+
+        if number == len(self.image) - 1:
+            utils.play_right_answer_sound()
+        else:
+            utils.play_wrong_answer_sound()
 
 
 if __name__ == '__main__':

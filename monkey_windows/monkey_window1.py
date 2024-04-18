@@ -9,6 +9,7 @@ from random import choice, shuffle
 import os
 from monkey_windows.monkey_window import MonkeyWindow
 import settings
+import utils
 
 directory = "images"
 temp_image_file = 'settings.png'
@@ -59,6 +60,10 @@ class MonkeyWindow1(MonkeyWindow):
             self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
                             round(time.perf_counter() - self.test_start, 3),
                             number, self.right_image])
+            if number == self.right_image:
+                utils.play_right_answer_sound()
+            else:
+                utils.play_wrong_answer_sound()
         self.pressed = True
 
     def update(self):

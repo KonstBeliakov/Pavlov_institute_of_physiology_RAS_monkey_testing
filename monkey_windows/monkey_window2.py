@@ -4,6 +4,7 @@ from time import sleep, perf_counter
 from tkinter import *
 import settings
 from random import randint, randrange
+import utils
 from monkey_windows.monkey_window import MonkeyWindow
 
 
@@ -56,6 +57,10 @@ class MonkeyWindow2(MonkeyWindow):
         self.log.append([self.experiment_number, round(perf_counter() - settings.experiment_start, 3),
                          round(perf_counter() - self.test_start, 3),
                          x, self.right_image])
+        if x == self.right_image:
+            utils.play_right_answer_sound()
+        else:
+            utils.play_wrong_answer_sound()
         self.pressed = True
 
     def update(self):

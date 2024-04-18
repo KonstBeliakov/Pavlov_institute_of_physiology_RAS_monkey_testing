@@ -1,3 +1,8 @@
+
+# sounds
+right_answer_sound = 'sounds/right_answer_sound.mp3'
+wrong_answer_sound = 'sounds/wrong_answer_sound.wav'
+
 # click parametres
 mouse_click_circle_radius = 20
 click_circle_color = '#f00'
