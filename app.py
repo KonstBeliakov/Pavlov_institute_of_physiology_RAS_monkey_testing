@@ -14,7 +14,8 @@ from PIL import ImageTk
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+from tkinterhtml import HtmlFrame
+from tkhtmlview import HTMLLabel
 import settings
 from try_again_window import TryAgainWindow
 
@@ -79,11 +80,9 @@ class App(tk.Tk):
 
     def info_frame_init(self):
         frame_number = 2
-        self.info_label = Label(self.frame[frame_number],
-                                text="Настроить параметры запуска можно в одной из вкладок настроек, после чего "
-                                     "тестирование запускается кнопкой во вкладке \"Запуск эксперимента\"\nДанные полученные в "
-                                     "результате тестирования будут записаны в текстовый файл data.txt")
-        self.info_label.pack()
+        with open('info_frame_text.html', 'r', encoding='utf-8') as file:
+            self.info_label = HTMLLabel(self.frame[frame_number], html=file.read())
+        self.info_label.pack(fill="both", expand=True)
 
     def settings_frame_init(self):
         frame_number = 0
