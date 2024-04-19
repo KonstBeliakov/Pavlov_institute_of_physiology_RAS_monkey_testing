@@ -12,6 +12,9 @@ import pandas as pd
 from PIL import Image
 from PIL import ImageTk
 
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 import settings
 from try_again_window import TryAgainWindow
 
@@ -144,6 +147,18 @@ class App(tk.Tk):
         self.second_screen_canvas = Canvas(self.frame[frame_number])
         self.second_screen_canvas.grid(row=0, column=2)
 
+        self.figure = plt.Figure(figsize=(5, 5))  # , facecolor='yellow')
+        self.graph_canvas = FigureCanvasTkAgg(self.figure, self.frame[frame_number])
+        self.graph_canvas.get_tk_widget().grid(row=1, column=0)
+        self.figure_subplot = self.figure.add_subplot(1, 1, 1)
+
+        self.draw_graph([0, 1, 2], [5, 3, 7])
+
+    def draw_graph(self, x, y):
+        self.figure_subplot.clear()
+        self.figure_subplot.plot(x, y)
+        self.graph_canvas.draw()
+
     def open_about(self):
         if not self.started:
             if self.timer_radio_buttons or not settings.experiment_start:
@@ -201,6 +216,14 @@ class App(tk.Tk):
                     else:
                         color = '#f00'
                     self.log_label[i + 1][j].configure(text=str(text), fg=color)
+
+            graph_data = [0]
+            for i, line in enumerate(self.window.log):
+                if line[-1] == line[-2]:
+                    graph_data.append(graph_data[-1] + 1)
+                else:
+                    graph_data.append(graph_data[-1] - 1)
+            self.draw_graph(list(range(len(graph_data))), graph_data)
             time.sleep(1)
 
     def second_screen_update(self):
