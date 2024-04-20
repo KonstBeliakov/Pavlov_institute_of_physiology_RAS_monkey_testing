@@ -14,9 +14,9 @@ from PIL import ImageTk
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from tkinterhtml import HtmlFrame
 from tkhtmlview import HTMLLabel
 import settings
+import utils
 from try_again_window import TryAgainWindow
 
 from settings_windows.experiment_settings_window2 import ExperimentSettingsWindow2
@@ -171,6 +171,8 @@ class App(tk.Tk):
                     self.window = MonkeyWindow2()
                 case 'Новая картинка':
                     self.window = MonkeyWindow3()
+            if self.choose_experiment_combobox.get():
+                utils.play_sound(settings.experiment_start_sound)
 
             self.update_thread = threading.Thread(target=self.update_log)
             self.update_thread.start()

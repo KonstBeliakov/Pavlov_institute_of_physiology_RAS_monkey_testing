@@ -1,5 +1,6 @@
 
 # sounds
+experiment_start_sound = 'sounds/start.mp3'
 right_answer_sound = 'sounds/right_answer_sound.mp3'
 wrong_answer_sound = 'sounds/wrong_answer_sound.wav'
 

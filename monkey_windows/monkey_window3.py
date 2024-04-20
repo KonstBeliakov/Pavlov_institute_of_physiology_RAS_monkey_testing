@@ -30,11 +30,13 @@ class MonkeyWindow3(MonkeyWindow):
             table_size_y = self.canvas_size[1] // (settings.image_size3 + 5)
 
             self.image_numbers = random.sample(list(range(len(files))), settings.max_image_number)
-            self.texture = [tk.PhotoImage(file=f'images/{files[self.image_numbers[i]]}') for i in range(settings.max_image_number)]
+            self.texture = [tk.PhotoImage(file=f'{directory}/{files[self.image_numbers[i]]}') for i in
+                            range(settings.max_image_number)]
             self.stop = False
             for image_number in range(settings.min_image_number + 1, settings.max_image_number + 1):
-                self.image_position = random.sample(list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
-                                                    image_number)
+                self.image_position = random.sample(
+                    list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
+                    image_number)
 
                 if settings.shuffle_images:
                     self.image_position2 = random.sample(
@@ -43,11 +45,11 @@ class MonkeyWindow3(MonkeyWindow):
                 else:
                     self.image_position2 = self.image_position
 
-
                 self.image = [
-                    self.canvas.create_image(settings.image_size3 // 2 + self.image_position[i][0] * (settings.image_size3 + 5),
-                                             settings.image_size3 // 2 + self.image_position[i][1] * (settings.image_size3 + 5),
-                                             image=self.texture[i]) for i in range(image_number)]
+                    self.canvas.create_image(
+                        settings.image_size3 // 2 + self.image_position[i][0] * (settings.image_size3 + 5),
+                        settings.image_size3 // 2 + self.image_position[i][1] * (settings.image_size3 + 5),
+                        image=self.texture[i]) for i in range(image_number)]
                 self.canvas.itemconfig(self.image[-1], state='hidden')
 
                 sleep(settings.delay3[0])
@@ -66,8 +68,10 @@ class MonkeyWindow3(MonkeyWindow):
 
                 for i in range(len(self.image)):
                     self.canvas.move(self.image[i],
-                                     (self.image_position2[i][0] - self.image_position[i][0]) * (settings.image_size3 + 5),
-                                     (self.image_position2[i][1] - self.image_position[i][1]) * (settings.image_size3 + 5))
+                                     (self.image_position2[i][0] - self.image_position[i][0]) * (
+                                                 settings.image_size3 + 5),
+                                     (self.image_position2[i][1] - self.image_position[i][1]) * (
+                                                 settings.image_size3 + 5))
                 print('done')
 
                 self.test_start = perf_counter()
@@ -91,33 +95,12 @@ class MonkeyWindow3(MonkeyWindow):
 
             self.experiment_number += 1
 
+    def bind_image(self, x):
+        self.canvas.tag_bind(self.image[x], '<Button-1>', lambda event: self.image_pressed(x))
+
     def bind(self):
-        # doesn't work for some reason
-        #self.f = [lambda event: self.image_pressed(i) for i in range(len(self.image))]
-
-        #for i in range(len(self.image)):
-        #    self.canvas.tag_bind(self.image[i], '<Button-1>', self.f[i])#lambda event: self.image_pressed(i))
-
-        if len(self.image) > 0:
-            self.canvas.tag_bind(self.image[0], '<Button-1>', lambda event: self.image_pressed(0))
-        if len(self.image) > 1:
-            self.canvas.tag_bind(self.image[1], '<Button-1>', lambda event: self.image_pressed(1))
-        if len(self.image) > 2:
-            self.canvas.tag_bind(self.image[2], '<Button-1>', lambda event: self.image_pressed(2))
-        if len(self.image) > 3:
-            self.canvas.tag_bind(self.image[3], '<Button-1>', lambda event: self.image_pressed(3))
-        if len(self.image) > 4:
-            self.canvas.tag_bind(self.image[4], '<Button-1>', lambda event: self.image_pressed(4))
-        if len(self.image) > 5:
-            self.canvas.tag_bind(self.image[5], '<Button-1>', lambda event: self.image_pressed(5))
-        if len(self.image) > 6:
-            self.canvas.tag_bind(self.image[6], '<Button-1>', lambda event: self.image_pressed(6))
-        if len(self.image) > 7:
-            self.canvas.tag_bind(self.image[7], '<Button-1>', lambda event: self.image_pressed(7))
-        if len(self.image) > 8:
-            self.canvas.tag_bind(self.image[8], '<Button-1>', lambda event: self.image_pressed(8))
-        if len(self.image) > 9:
-            self.canvas.tag_bind(self.image[9], '<Button-1>', lambda event: self.image_pressed(9))
+        for i in range(len(self.image)):
+            self.bind_image(i)
 
     def image_pressed(self, number):
         self.log.append([self.experiment_number, round(perf_counter() - settings.experiment_start, 3),
@@ -129,9 +112,9 @@ class MonkeyWindow3(MonkeyWindow):
             print(number, len(self.image) - 1, 'stopped')
 
         if number == len(self.image) - 1:
-            utils.play_right_answer_sound()
+            utils.play_sound(settings.right_answer_sound)
         else:
-            utils.play_wrong_answer_sound()
+            utils.play_sound(settings.wrong_answer_sound)
 
 
 if __name__ == '__main__':

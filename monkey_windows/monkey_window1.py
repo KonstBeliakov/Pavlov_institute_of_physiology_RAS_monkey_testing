@@ -1,5 +1,4 @@
 import time
-import tkinter as tk
 import tkinter.messagebox as mb
 
 from PIL.ImageTk import PhotoImage
@@ -61,9 +60,9 @@ class MonkeyWindow1(MonkeyWindow):
                             round(time.perf_counter() - self.test_start, 3),
                             number, self.right_image])
             if number == self.right_image:
-                utils.play_right_answer_sound()
+                utils.play_sound(settings.right_answer_sound)
             else:
-                utils.play_wrong_answer_sound()
+                utils.play_sound(settings.wrong_answer_sound)
         self.pressed = True
 
     def update(self):

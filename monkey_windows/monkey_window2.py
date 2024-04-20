@@ -1,4 +1,3 @@
-import tkinter as tk
 import threading
 from time import sleep, perf_counter
 from tkinter import *
@@ -43,7 +42,8 @@ class MonkeyWindow2(MonkeyWindow):
         self.bind()
 
         self.barrier = self.canvas.create_rectangle((self.canvas_size[0] - settings.barrier_width) // 2, 0,
-                                                    settings.barrier_width + (self.canvas_size[0] - settings.barrier_width) // 2,
+                                                    settings.barrier_width + (
+                                                                self.canvas_size[0] - settings.barrier_width) // 2,
                                                     self.canvas_size[1], fill=settings.barrier_color)
 
         self.time = []
@@ -58,9 +58,9 @@ class MonkeyWindow2(MonkeyWindow):
                          round(perf_counter() - self.test_start, 3),
                          x, self.right_image])
         if x == self.right_image:
-            utils.play_right_answer_sound()
+            utils.play_sound(settings.right_answer_sound)
         else:
-            utils.play_wrong_answer_sound()
+            utils.play_sound(settings.wrong_answer_sound)
         self.pressed = True
 
     def update(self):
@@ -105,30 +105,12 @@ class MonkeyWindow2(MonkeyWindow):
             t2 += (barrier_pos[0] < i[0] < barrier_pos[2] and barrier_pos[1] < i[1] < barrier_pos[3])
         return t2 == 4
 
+    def bind_image(self, x):
+        self.canvas.tag_bind(self.image[x], '<Button-1>', lambda event: self.object_click_event(x))
+
     def bind(self):
-        # for i in range(image_number):
-        #        self.canvas.tag_bind(self.image[i], '<Button-1>', lambda event: self.object_click_event(i))
-        # doesn't work somehow
-        if settings.image_number > 0:
-            self.canvas.tag_bind(self.image[0], '<Button-1>', lambda event: self.object_click_event(0))
-        if settings.image_number > 1:
-            self.canvas.tag_bind(self.image[1], '<Button-1>', lambda event: self.object_click_event(1))
-        if settings.image_number > 2:
-            self.canvas.tag_bind(self.image[2], '<Button-1>', lambda event: self.object_click_event(2))
-        if settings.image_number > 3:
-            self.canvas.tag_bind(self.image[3], '<Button-1>', lambda event: self.object_click_event(3))
-        if settings.image_number > 4:
-            self.canvas.tag_bind(self.image[4], '<Button-1>', lambda event: self.object_click_event(4))
-        if settings.image_number > 5:
-            self.canvas.tag_bind(self.image[5], '<Button-1>', lambda event: self.object_click_event(5))
-        if settings.image_number > 6:
-            self.canvas.tag_bind(self.image[6], '<Button-1>', lambda event: self.object_click_event(6))
-        if settings.image_number > 7:
-            self.canvas.tag_bind(self.image[7], '<Button-1>', lambda event: self.object_click_event(7))
-        if settings.image_number > 8:
-            self.canvas.tag_bind(self.image[8], '<Button-1>', lambda event: self.object_click_event(8))
-        if settings.image_number > 9:
-            self.canvas.tag_bind(self.image[9], '<Button-1>', lambda event: self.object_click_event(9))
+        for i in range(settings.image_number):
+            self.bind_image(i)
 
 
 if __name__ == '__main__':
