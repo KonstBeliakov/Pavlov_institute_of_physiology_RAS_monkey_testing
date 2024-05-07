@@ -21,7 +21,9 @@ class MonkeyWindow(tk.Toplevel):
         center = (event.x, event.y)
         radius = settings.mouse_click_circle_radius
         click_circle = self.canvas.create_oval(center[0] - radius, center[1] - radius,
-                                center[0] + radius, center[1] + radius, width=5, outline='#f00', fill='')
+                                               center[0] + radius, center[1] + radius,
+                                               width=settings.click_circle_width, outline=settings.click_circle_color,
+                                               fill='')
         self.canvas.itemconfig(click_circle, state='normal')
         t1 = threading.Thread(target=lambda: self.hide(click_circle))
         t1.start()

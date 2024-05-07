@@ -87,13 +87,14 @@ class App(tk.Tk):
     def settings_frame_init(self):
         frame_number = 0
 
-        sound_label_text = ['Путь до файла звука воспроизводящегося в начале эксперимента',
-                            'Путь до файла позитивного звукового подкрепления',
-                            'Путь до файла негативного звукового подкрепления',
-                            '', 'Радиус круга отображающегося после нажатия', 'Цвет круга', 'Толщина линии круга',
-                            'Время отображения круга']
+        self.basic_settings_labels = ['Путь до файла звука воспроизводящегося в начале эксперимента',
+                                      'Путь до файла позитивного звукового подкрепления',
+                                      'Путь до файла негативного звукового подкрепления',
+                                      '', 'Радиус круга отображающегося после нажатия', 'Цвет круга',
+                                      'Толщина линии круга',
+                                      'Время отображения круга']
 
-        self.settings_frame_labels = [Label(self.frame[frame_number], text=t) for t in sound_label_text]
+        self.settings_frame_labels = [Label(self.frame[frame_number], text=t) for t in self.basic_settings_labels]
         for i, label in enumerate(self.settings_frame_labels):
             label.grid(row=i, column=0)
 
@@ -104,6 +105,37 @@ class App(tk.Tk):
         self.click_settings_entry = [Entry(self.frame[frame_number]) for _ in range(4)]
         for i in range(4):
             self.click_settings_entry[i].grid(row=i + 4, column=1)
+
+        self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
+        self.button_apply.grid(row=len(self.basic_settings_labels), column=0)
+
+        self.error_label = tk.Label(self.frame[frame_number], text='Ошибка!', fg='#f00')
+        self.error_label.grid(row=len(self.basic_settings_labels) + 1, column=0)
+
+    def apply_basic_settings(self):
+        error_text = utils.entry_value_check(self.click_settings_entry[0].get(),
+                                             self.basic_settings_labels[4], declension=0, min_value=0)
+        if not error_text:
+            error_text = utils.entry_value_check(self.click_settings_entry[2].get(),
+                                                 self.basic_settings_labels[6], declension=2, min_value=0)
+        if not error_text:
+            error_text = utils.entry_value_check(self.click_settings_entry[3].get(),
+                                                 self.basic_settings_labels[7], declension=1, min_value=0)
+        if error_text:
+            self.show_error(error_text)
+        else:
+            self.show_error('')
+            settings.experiment_start_sound = self.sound_entry[0].get()
+            settings.right_answer_sound = self.sound_entry[1].get()
+            settings.wrong_answer_sound = self.sound_entry[2].get()
+
+            settings.mouse_click_circle_radius = float(self.click_settings_entry[0].get())
+            settings.click_circle_color = self.click_settings_entry[1].get()
+            settings.click_circle_width = float(self.click_settings_entry[2].get())
+            settings.click_circle_time = float(self.click_settings_entry[3].get())
+
+    def show_error(self, text):
+        self.error_label.configure(text=text)
 
     def run_frame_init(self):
         frame_number = 1
@@ -232,8 +264,9 @@ class App(tk.Tk):
         monitor_number = 2
         with mss.mss() as sct:
             mon = sct.monitors[monitor_number]
-            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * 0.1), int(mon['height'] * 0.1),
-                                                                   image=python_image)
+            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * 0.1),
+                                                                       int(mon['height'] * 0.1),
+                                                                       image=python_image)
             monitor = {
                 "top": mon["top"],
                 "left": mon["left"],
