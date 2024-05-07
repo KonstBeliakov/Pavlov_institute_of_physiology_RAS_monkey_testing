@@ -112,9 +112,9 @@ class MonkeyWindow3(MonkeyWindow):
             print(number, len(self.image) - 1, 'stopped')
 
         if number == len(self.image) - 1:
-            utils.play_sound(settings.right_answer_sound)
+            utils.right_answer()
         else:
-            utils.play_sound(settings.wrong_answer_sound)
+            utils.wrong_answer()
 
 
 if __name__ == '__main__':

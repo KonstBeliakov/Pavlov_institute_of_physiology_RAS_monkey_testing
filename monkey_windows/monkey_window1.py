@@ -60,9 +60,9 @@ class MonkeyWindow1(MonkeyWindow):
                             round(time.perf_counter() - self.test_start, 3),
                             number, self.right_image])
             if number == self.right_image:
-                utils.play_sound(settings.right_answer_sound)
+                utils.right_answer()
             else:
-                utils.play_sound(settings.wrong_answer_sound)
+                utils.wrong_answer()
         self.pressed = True
 
     def update(self):

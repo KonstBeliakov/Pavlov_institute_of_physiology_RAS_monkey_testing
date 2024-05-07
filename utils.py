@@ -1,5 +1,12 @@
-import pygame
+import time
 
+import pygame
+import serial
+import threading
+
+import settings
+
+ser = serial.Serial('COM3', 9600)
 pygame.init()
 
 
@@ -20,6 +27,51 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
         return f'{name} не может быть больше {max_value}'
 
 
+def right_answer():
+    play_sound(settings.right_answer_sound)
+    positive_reinforcement()
+
+
+def wrong_answer():
+    play_sound(settings.wrong_answer_sound)
+
+
 def play_sound(sound):
     pygame.mixer.music.load(sound)
     pygame.mixer.music.play(0)
+
+
+def positive_reinforcement():
+    ser.write(bytes([1]))
+
+
+def disable_anser_entry():
+    ser.write(bytes([2]))
+
+
+def anable_answer_entry():
+    ser.write(bytes([4]))
+
+
+def read_usb():
+    while True:
+        print(f'received usb message: {ser.readline()}')
+        time.sleep(.1)
+
+
+if __name__ == '__main__':
+    t1 = threading.Thread(target=read_usb, daemon=True)
+    t1.start()
+
+    time.sleep(1)
+    disable_anser_entry()
+    time.sleep(1)
+    anable_answer_entry()
+    time.sleep(1)
+    disable_anser_entry()
+    time.sleep(1)
+    anable_answer_entry()
+    time.sleep(1)
+
+    print('end')
+    ser.close()
