@@ -28,12 +28,19 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
 
 
 def right_answer():
-    play_sound(settings.right_answer_sound)
+    if settings.using_sound:
+        play_sound(settings.right_answer_sound)
     positive_reinforcement()
 
 
 def wrong_answer():
-    play_sound(settings.wrong_answer_sound)
+    if settings.using_sound:
+        play_sound(settings.wrong_answer_sound)
+
+
+def experiment_start():
+    if settings.using_sound:
+        play_sound(settings.experiment_start_sound)
 
 
 def play_sound(sound):

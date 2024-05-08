@@ -86,6 +86,22 @@ class App(tk.Tk):
 
     def settings_frame_init(self):
         frame_number = 0
+        self.basic_settings_radio_button_frame = Frame(self.frame[frame_number])
+        self.basic_settings_radio_button_frame.grid(column=0, row=0)
+
+        self.sounds_in_experiments_label = Label(self.basic_settings_radio_button_frame,
+                                                 text='Использовать звуковое подкрепление')
+        self.sounds_in_experiments_label.grid(column=0, row=0)
+        self.sounds_in_experiments = tk.StringVar(value='Да')
+        self.sound_btn_yes = ttk.Radiobutton(self.basic_settings_radio_button_frame, text='Да', value='Да',
+                                             variable=self.sounds_in_experiments)
+        self.sound_btn_yes.grid(column=1, row=0)
+        self.btn_no = ttk.Radiobutton(self.basic_settings_radio_button_frame, text='Нет', value='Нет',
+                                      variable=self.sounds_in_experiments)
+        self.btn_no.grid(column=2, row=0)
+
+        self.basic_settings_label_frame = Frame(self.frame[frame_number])
+        self.basic_settings_label_frame.grid(column=0, row=1)
 
         self.basic_settings_labels = ['Путь до файла звука воспроизводящегося в начале эксперимента',
                                       'Путь до файла позитивного звукового подкрепления',
@@ -94,23 +110,23 @@ class App(tk.Tk):
                                       'Толщина линии круга',
                                       'Время отображения круга']
 
-        self.settings_frame_labels = [Label(self.frame[frame_number], text=t) for t in self.basic_settings_labels]
+        self.settings_frame_labels = [Label(self.basic_settings_label_frame, text=t) for t in self.basic_settings_labels]
         for i, label in enumerate(self.settings_frame_labels):
             label.grid(row=i, column=0)
 
-        self.sound_entry = [Entry(self.frame[frame_number]) for _ in range(3)]
+        self.sound_entry = [Entry(self.basic_settings_label_frame) for _ in range(3)]
         for i in range(3):
             self.sound_entry[i].grid(row=i, column=1)
 
-        self.click_settings_entry = [Entry(self.frame[frame_number]) for _ in range(4)]
+        self.click_settings_entry = [Entry(self.basic_settings_label_frame) for _ in range(4)]
         for i in range(4):
             self.click_settings_entry[i].grid(row=i + 4, column=1)
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
-        self.button_apply.grid(row=len(self.basic_settings_labels), column=0)
+        self.button_apply.grid(row=2, column=0)
 
-        self.error_label = tk.Label(self.frame[frame_number], text='Ошибка!', fg='#f00')
-        self.error_label.grid(row=len(self.basic_settings_labels) + 1, column=0)
+        self.error_label = tk.Label(self.frame[frame_number], text='Настройки не применены', fg='#f00')
+        self.error_label.grid(row=3, column=0)
 
     def apply_basic_settings(self):
         error_text = utils.entry_value_check(self.click_settings_entry[0].get(),
@@ -121,10 +137,14 @@ class App(tk.Tk):
         if not error_text:
             error_text = utils.entry_value_check(self.click_settings_entry[3].get(),
                                                  self.basic_settings_labels[7], declension=1, min_value=0)
+
         if error_text:
             self.show_error(error_text)
         else:
             self.show_error('')
+            settings.using_sound = self.sounds_in_experiments == 'Да'
+            print(settings.using_sound)
+
             settings.experiment_start_sound = self.sound_entry[0].get()
             settings.right_answer_sound = self.sound_entry[1].get()
             settings.wrong_answer_sound = self.sound_entry[2].get()
@@ -204,7 +224,7 @@ class App(tk.Tk):
                 case 'Новая картинка':
                     self.window = MonkeyWindow3()
             if self.choose_experiment_combobox.get():
-                utils.play_sound(settings.experiment_start_sound)
+                utils.experiment_start()
 
             self.update_thread = threading.Thread(target=self.update_log)
             self.update_thread.start()
