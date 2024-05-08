@@ -59,7 +59,7 @@ class App(tk.Tk):
         notebook = ttk.Notebook()
         notebook.pack(expand=True, fill=BOTH)
         frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении']
-        self.frame = [ttk.Frame(notebook) for _ in range(3)]
+        self.frame = [ttk.Frame(notebook) for _ in range(len(frame_text))]
 
         for i in range(len(self.frame)):
             self.frame[i].pack(fill=BOTH, expand=True)
@@ -103,24 +103,32 @@ class App(tk.Tk):
         self.basic_settings_label_frame = Frame(self.frame[frame_number])
         self.basic_settings_label_frame.grid(column=0, row=1)
 
+
         self.basic_settings_labels = ['Путь до файла звука воспроизводящегося в начале эксперимента',
                                       'Путь до файла позитивного звукового подкрепления',
                                       'Путь до файла негативного звукового подкрепления',
                                       '', 'Радиус круга отображающегося после нажатия', 'Цвет круга',
                                       'Толщина линии круга',
                                       'Время отображения круга']
-
         self.settings_frame_labels = [Label(self.basic_settings_label_frame, text=t) for t in self.basic_settings_labels]
         for i, label in enumerate(self.settings_frame_labels):
             label.grid(row=i, column=0)
 
+
         self.sound_entry = [Entry(self.basic_settings_label_frame) for _ in range(3)]
+        self.sound_entry[0].insert(0, settings.experiment_start_sound)
+        self.sound_entry[1].insert(0, settings.right_answer_sound)
+        self.sound_entry[2].insert(0, settings.wrong_answer_sound)
         for i in range(3):
             self.sound_entry[i].grid(row=i, column=1)
 
+
         self.click_settings_entry = [Entry(self.basic_settings_label_frame) for _ in range(4)]
-        for i in range(4):
+        for i, value in  enumerate([settings.mouse_click_circle_radius, settings.click_circle_color,
+                                    settings.click_circle_width, settings.click_circle_time]):
+            self.click_settings_entry[i].insert(0, value)
             self.click_settings_entry[i].grid(row=i + 4, column=1)
+
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=2, column=0)
@@ -136,7 +144,8 @@ class App(tk.Tk):
                                                  self.basic_settings_labels[6], declension=2, min_value=0)
         if not error_text:
             error_text = utils.entry_value_check(self.click_settings_entry[3].get(),
-                                                 self.basic_settings_labels[7], declension=1, min_value=0)
+                                                 self.basic_settings_labels[7], declension=1, min_value=0,
+                                                 value_type=float)
 
         if error_text:
             self.show_error(error_text)
