@@ -31,24 +31,7 @@ from monkey_windows.monkey_window3 import MonkeyWindow3
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.try_again_window = None
-        self.output_file_entry = None
-        self.output_file_label = None
-        self.label_start_sound = None
-        self.choose_start_sound = None
         self.title('Основное окно')
-        self.experiment_settings_window, self.btn_settings, self.run_frame, \
-            self.run_frame_top, self.frame_log_top, self.frame_log, \
-            self.import_settings_window, self.export_settings_window, self.intVar_repeat_number, \
-            self.intVar_session_number, self.entry_repeat_number, self.label_repeat_number, \
-            self.entry_session_number, self.label_session_number, self.choose_yes_sound, \
-            self.label_choose_no_sound, self.label_choose_yes_sound, self.choose_no_sound, \
-            self.btn_import_settings, self.btn_export_settings, self.timer_ask_label, \
-            self.choose_experiment_label, self.choose_experiment_combobox, self.radio_button_no, \
-            self.radio_button_yes, self.timer_radio_buttons, self.update_thread, \
-            self.btn_confirm, self.error_label, self.delay_entry_IntVar, \
-            self.delay_label, self.info_label, self.btn, \
-            self.window = [None] * 34
 
         self.started = False
         self.log_label = []
@@ -108,8 +91,8 @@ class App(tk.Tk):
                                       'Путь до файла позитивного звукового подкрепления',
                                       'Путь до файла негативного звукового подкрепления',
                                       '', 'Радиус круга отображающегося после нажатия', 'Цвет круга',
-                                      'Толщина линии круга',
-                                      'Время отображения круга']
+                                      'Толщина линии круга', 'Время отображения круга', '',
+                                      'Размер копии второго монитора']
         self.settings_frame_labels = [Label(self.basic_settings_label_frame, text=t) for t in self.basic_settings_labels]
         for i, label in enumerate(self.settings_frame_labels):
             label.grid(row=i, column=0)
@@ -129,6 +112,9 @@ class App(tk.Tk):
             self.click_settings_entry[i].insert(0, value)
             self.click_settings_entry[i].grid(row=i + 4, column=1)
 
+        self.monitor_copy_size_entry = Entry(self.basic_settings_label_frame)
+        self.monitor_copy_size_entry.insert(0, str(settings.monitor_copy_size))
+        self.monitor_copy_size_entry.grid(row=9, column=1)
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=2, column=0)
@@ -143,9 +129,11 @@ class App(tk.Tk):
             error_text = utils.entry_value_check(self.click_settings_entry[2].get(),
                                                  self.basic_settings_labels[6], declension=2, min_value=0)
         if not error_text:
-            error_text = utils.entry_value_check(self.click_settings_entry[3].get(),
-                                                 self.basic_settings_labels[7], declension=1, min_value=0,
-                                                 value_type=float)
+            error_text = utils.entry_value_check(self.click_settings_entry[3].get(), self.basic_settings_labels[7],
+                                                 declension=1, min_value=0, value_type=float)
+        if not error_text:
+            error_text = utils.entry_value_check(self.monitor_copy_size_entry.get(), self.basic_settings_labels[9],
+                                                 declension=0, min_value=0, value_type=float)
 
         if error_text:
             self.show_error(error_text)
@@ -162,6 +150,7 @@ class App(tk.Tk):
             settings.click_circle_color = self.click_settings_entry[1].get()
             settings.click_circle_width = float(self.click_settings_entry[2].get())
             settings.click_circle_time = float(self.click_settings_entry[3].get())
+            settings.monitor_copy_size = float(self.monitor_copy_size_entry.get())
 
     def show_error(self, text):
         self.error_label.configure(text=text)
@@ -293,8 +282,8 @@ class App(tk.Tk):
         monitor_number = 2
         with mss.mss() as sct:
             mon = sct.monitors[monitor_number]
-            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * 0.1),
-                                                                       int(mon['height'] * 0.1),
+            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * settings.monitor_copy_size),
+                                                                       int(mon['height'] * settings.monitor_copy_size),
                                                                        image=python_image)
             monitor = {
                 "top": mon["top"],
@@ -307,7 +296,8 @@ class App(tk.Tk):
             with mss.mss() as sct:
                 sct_img = sct.grab(monitor)
                 img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
-                img2 = img.resize((int(img.size[0] * 0.2), int(img.size[1] * 0.2)))
+                img2 = img.resize((int(img.size[0] * 2 * settings.monitor_copy_size),
+                                   int(img.size[1] * 2 * settings.monitor_copy_size)))
                 img3 = ImageTk.PhotoImage(img2)
 
                 self.second_screen_canvas.itemconfigure(self.canvas_image, image=img3)
