@@ -92,7 +92,7 @@ class App(tk.Tk):
                                       'Путь до файла негативного звукового подкрепления',
                                       '', 'Радиус круга отображающегося после нажатия', 'Цвет круга',
                                       'Толщина линии круга', 'Время отображения круга', '',
-                                      'Размер копии второго монитора']
+                                      'Размер копии второго монитора', 'Цвет фона экспериментального окна']
         self.settings_frame_labels = [Label(self.basic_settings_label_frame, text=t) for t in self.basic_settings_labels]
         for i, label in enumerate(self.settings_frame_labels):
             label.grid(row=i, column=0)
@@ -115,6 +115,10 @@ class App(tk.Tk):
         self.monitor_copy_size_entry = Entry(self.basic_settings_label_frame)
         self.monitor_copy_size_entry.insert(0, str(settings.monitor_copy_size))
         self.monitor_copy_size_entry.grid(row=9, column=1)
+
+        self.bg_color_entry = Entry(self.basic_settings_label_frame)
+        self.bg_color_entry.insert(0, str(settings.bg_color))
+        self.bg_color_entry.grid(row=10, column=1)
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=2, column=0)
@@ -139,8 +143,7 @@ class App(tk.Tk):
             self.show_error(error_text)
         else:
             self.show_error('')
-            settings.using_sound = self.sounds_in_experiments == 'Да'
-            print(settings.using_sound)
+            settings.using_sound = (self.sounds_in_experiments.get() == 'Да')
 
             settings.experiment_start_sound = self.sound_entry[0].get()
             settings.right_answer_sound = self.sound_entry[1].get()
@@ -151,6 +154,7 @@ class App(tk.Tk):
             settings.click_circle_width = float(self.click_settings_entry[2].get())
             settings.click_circle_time = float(self.click_settings_entry[3].get())
             settings.monitor_copy_size = float(self.monitor_copy_size_entry.get())
+            settings.bg_color = self.bg_color_entry.get()
 
     def show_error(self, text):
         self.error_label.configure(text=text)

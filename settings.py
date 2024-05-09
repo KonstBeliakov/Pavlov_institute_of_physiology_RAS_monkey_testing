@@ -1,3 +1,5 @@
+bg_color = '#fff'
+
 monitor_copy_size = 0.05
 
 # sounds
