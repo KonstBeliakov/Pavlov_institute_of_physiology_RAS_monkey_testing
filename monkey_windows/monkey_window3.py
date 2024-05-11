@@ -26,8 +26,8 @@ class MonkeyWindow3(MonkeyWindow):
 
     def update(self):
         while True:
-            table_size_x = self.canvas_size[0] // (settings.image_size3 + 5)
-            table_size_y = self.canvas_size[1] // (settings.image_size3 + 5)
+            table_size_x = int(self.canvas_size[0] // (settings.image_size3 + 5))
+            table_size_y = int(self.canvas_size[1] // (settings.image_size3 + 5))
 
             self.image_numbers = random.sample(list(range(len(files))), settings.max_image_number)
             self.texture = [tk.PhotoImage(file=f'{directory}/{files[self.image_numbers[i]]}') for i in
@@ -62,7 +62,6 @@ class MonkeyWindow3(MonkeyWindow):
                 for i in range(image_number):
                     self.canvas.itemconfig(self.image[i], state='normal')
 
-                print('move images...', end='')
                 self.pressed = False
                 self.bind()
 
@@ -72,14 +71,12 @@ class MonkeyWindow3(MonkeyWindow):
                                                  settings.image_size3 + 5),
                                      (self.image_position2[i][1] - self.image_position[i][1]) * (
                                                  settings.image_size3 + 5))
-                print('done')
 
                 self.test_start = perf_counter()
 
                 while (perf_counter() - self.test_start) < settings.delay3[2]:
                     sleep(0.1)
                     if self.stop:
-                        print('stop')
                         break
                 if self.stop:
                     break

@@ -32,6 +32,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Основное окно')
+        self.geometry(f'+{-1000}+{50}')
 
         self.started = False
         self.log_label = []

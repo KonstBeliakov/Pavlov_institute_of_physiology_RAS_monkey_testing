@@ -7,9 +7,11 @@ import threading
 class MonkeyWindow(tk.Toplevel):
     def __init__(self):
         super().__init__()
-        self.canvas_size = [500, 500]
+        self.canvas_size = [self.winfo_screenwidth() // 1.1, self.winfo_screenheight() // 1.1]
         self.canvas = tk.Canvas(self, bg=settings.bg_color, width=self.canvas_size[0], height=self.canvas_size[1])
         self.canvas.pack(anchor=tk.CENTER, expand=1)
+
+        self.attributes("-fullscreen", True)
 
         self.canvas.bind("<Button-1>", self.canvas_pressed)
 

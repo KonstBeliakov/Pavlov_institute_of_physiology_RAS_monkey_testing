@@ -27,7 +27,7 @@ class MonkeyWindow1(MonkeyWindow):
         self.right_image = None
         self.delay = None
         self.picture_to_remember = None
-        # self.attributes("-fullscreen", True)
+
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
         self.img = PhotoImage(file=temp_image_file)
         self.main_image = self.canvas.create_image(self.image_size // 2, self.image_size // 2, image=self.img)
