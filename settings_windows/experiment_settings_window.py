@@ -54,7 +54,6 @@ class ExperimentSettingsWindow(SettingsWindow):
 
         if error_text:
             self.error_label.configure(text=error_text)
-            self.error_label.pack()
         else:
             settings.delay = [float(i.get()) for i in self.entries[2:7]]
             settings.session_number = int(self.entries[0].get())

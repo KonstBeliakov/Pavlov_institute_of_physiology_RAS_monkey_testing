@@ -27,6 +27,8 @@ from monkey_windows.monkey_window1 import MonkeyWindow1
 from monkey_windows.monkey_window2 import MonkeyWindow2
 from monkey_windows.monkey_window3 import MonkeyWindow3
 
+from improved_entry import ImprovedEntry
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -87,39 +89,17 @@ class App(tk.Tk):
         self.basic_settings_label_frame = Frame(self.frame[frame_number])
         self.basic_settings_label_frame.grid(column=0, row=1)
 
-
-        self.basic_settings_labels = ['Путь до файла звука воспроизводящегося в начале эксперимента',
-                                      'Путь до файла позитивного звукового подкрепления',
-                                      'Путь до файла негативного звукового подкрепления',
-                                      '', 'Радиус круга отображающегося после нажатия', 'Цвет круга',
-                                      'Толщина линии круга', 'Время отображения круга', '',
-                                      'Размер копии второго монитора', 'Цвет фона экспериментального окна']
-        self.settings_frame_labels = [Label(self.basic_settings_label_frame, text=t) for t in self.basic_settings_labels]
-        for i, label in enumerate(self.settings_frame_labels):
-            label.grid(row=i, column=0)
-
-
-        self.sound_entry = [Entry(self.basic_settings_label_frame) for _ in range(3)]
-        self.sound_entry[0].insert(0, settings.experiment_start_sound)
-        self.sound_entry[1].insert(0, settings.right_answer_sound)
-        self.sound_entry[2].insert(0, settings.wrong_answer_sound)
-        for i in range(3):
-            self.sound_entry[i].grid(row=i, column=1)
-
-
-        self.click_settings_entry = [Entry(self.basic_settings_label_frame) for _ in range(4)]
-        for i, value in  enumerate([settings.mouse_click_circle_radius, settings.click_circle_color,
-                                    settings.click_circle_width, settings.click_circle_time]):
-            self.click_settings_entry[i].insert(0, value)
-            self.click_settings_entry[i].grid(row=i + 4, column=1)
-
-        self.monitor_copy_size_entry = Entry(self.basic_settings_label_frame)
-        self.monitor_copy_size_entry.insert(0, str(settings.monitor_copy_size))
-        self.monitor_copy_size_entry.grid(row=9, column=1)
-
-        self.bg_color_entry = Entry(self.basic_settings_label_frame)
-        self.bg_color_entry.insert(0, str(settings.bg_color))
-        self.bg_color_entry.grid(row=10, column=1)
+        self.entries = [
+            ImprovedEntry(self.basic_settings_label_frame, 0, 0, 'Путь до файла звука начала эксперимента',          str(settings.experiment_start_sound),    value_type=str),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 1, 'Путь до файла позитивного звукового подкрепления', str(settings.right_answer_sound),        value_type=str),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 2, 'Путь до файла негативного звукового подкрепления', str(settings.wrong_answer_sound),        value_type=str),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 3, 'Радиус круга отображающегося после нажатия',       str(settings.mouse_click_circle_radius), value_type=int,   min_value=0),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 4, 'Цвет круга',                                       str(settings.click_circle_color),        value_type=str),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 5, 'Толщина линии круга',                              str(settings.click_circle_width),        value_type=int,   min_value=0),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 6, 'Время отображения круга',                          str(settings.click_circle_time),         value_type=float, min_value=0),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 7, 'Размер копии второго монитора',                    str(settings.monitor_copy_size),         value_type=float, min_value=0, max_value=0.5),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 8, 'Цвет фона экспериментального окна',                str(settings.bg_color),                  value_type=str)
+        ]
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=2, column=0)
@@ -128,17 +108,12 @@ class App(tk.Tk):
         self.error_label.grid(row=3, column=0)
 
     def apply_basic_settings(self):
-        error_text = utils.entry_value_check(self.click_settings_entry[0].get(),
-                                             self.basic_settings_labels[4], declension=0, min_value=0)
-        if not error_text:
-            error_text = utils.entry_value_check(self.click_settings_entry[2].get(),
-                                                 self.basic_settings_labels[6], declension=2, min_value=0)
-        if not error_text:
-            error_text = utils.entry_value_check(self.click_settings_entry[3].get(), self.basic_settings_labels[7],
-                                                 declension=1, min_value=0, value_type=float)
-        if not error_text:
-            error_text = utils.entry_value_check(self.monitor_copy_size_entry.get(), self.basic_settings_labels[9],
-                                                 declension=0, min_value=0, value_type=float)
+        error_text = ''
+
+        for entry in self.entries:
+            error_text = entry.check_value()
+            if error_text:
+                break
 
         if error_text:
             self.show_error(error_text)
@@ -146,16 +121,16 @@ class App(tk.Tk):
             self.show_error('')
             settings.using_sound = (self.sounds_in_experiments.get() == 'Да')
 
-            settings.experiment_start_sound = self.sound_entry[0].get()
-            settings.right_answer_sound = self.sound_entry[1].get()
-            settings.wrong_answer_sound = self.sound_entry[2].get()
+            settings.experiment_start_sound = self.entries[0].get()
+            settings.right_answer_sound = self.entries[1].get()
+            settings.wrong_answer_sound = self.entries[2].get()
 
-            settings.mouse_click_circle_radius = float(self.click_settings_entry[0].get())
-            settings.click_circle_color = self.click_settings_entry[1].get()
-            settings.click_circle_width = float(self.click_settings_entry[2].get())
-            settings.click_circle_time = float(self.click_settings_entry[3].get())
-            settings.monitor_copy_size = float(self.monitor_copy_size_entry.get())
-            settings.bg_color = self.bg_color_entry.get()
+            settings.mouse_click_circle_radius = float(self.entries[3].get())
+            settings.click_circle_color = self.entries[4].get()
+            settings.click_circle_width = float(self.entries[5].get())
+            settings.click_circle_time = float(self.entries[6].get())
+            settings.monitor_copy_size = float(self.entries[7].get())
+            settings.bg_color = self.entries[8].get()
 
     def show_error(self, text):
         self.error_label.configure(text=text)
