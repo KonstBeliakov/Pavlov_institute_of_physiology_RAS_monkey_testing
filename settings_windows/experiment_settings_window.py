@@ -1,7 +1,6 @@
 import tkinter as tk
 
 import settings
-import utils
 from settings_windows.settings_window import SettingsWindow
 from improved_entry import ImprovedEntry
 

@@ -1,9 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
-
+from improved_entry import ImprovedEntry
 import settings
 from settings_windows.settings_window import SettingsWindow
-from utils import entry_value_check
 
 
 class ExperimentSettingsWindow3(SettingsWindow):
@@ -12,52 +10,35 @@ class ExperimentSettingsWindow3(SettingsWindow):
 
         self.settingsFrame = tk.Frame(self)
         self.settingsFrame.grid(column=0, row=0)
-        self.shuffle = tk.StringVar(value='Да')
-        self.stop_after_error = tk.StringVar(value='Да')
 
-        self.label_text = ['Время запоминания изображений', 'Задержка перед ответом', 'Время на ответ',
-                'Задержка между экспериментами', 'Минимальное количество изображений',
-                'Максимальное количество изображений', 'Перемешивать изображения', 'Начинать заново после ошибки']
-        self.labels = [tk.Label(self.settingsFrame, text=t) for t in self.label_text]
-        for i, label in enumerate(self.labels):
-            label.grid(column=0, row=i)
-
-        self.entries = [tk.Entry(self.settingsFrame) for _ in range(6)]
-        for i, entry in enumerate(self.entries):
-            entry.grid(column=1, row=i)
-
-        self.btn_yes = ttk.Radiobutton(self.settingsFrame, text='Да', value='Да', variable=self.shuffle)
-        self.btn_yes.grid(column=1, row=6)
-        self.btn_no = ttk.Radiobutton(self.settingsFrame, text='Нет', value='Нет', variable=self.shuffle)
-        self.btn_no.grid(column=2, row=6)
-
-        self.btn_yes2 = ttk.Radiobutton(self.settingsFrame, text='Да', value='Да', variable=self.stop_after_error)
-        self.btn_yes2.grid(column=1, row=7)
-        self.btn_no2 = ttk.Radiobutton(self.settingsFrame, text='Нет', value='Нет', variable=self.stop_after_error)
-        self.btn_no2.grid(column=2, row=7)
+        self.entries = [
+            ImprovedEntry(self.settingsFrame, 0, 0, 'Время запоминания изображений',      str(settings.delay3[0]),        value_type=float, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 1, 'Задержка перед ответом',             str(settings.delay3[1]),        value_type=float, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 2, 'Время на ответ',                     str(settings.delay3[2]),        value_type=float, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 3, 'Задержка между экспериментами',      str(settings.delay3[3]),        value_type=float, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 4, 'Минимальное количество изображений', str(settings.min_image_number), value_type=int, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 5, 'Максимальное количество изображений',str(settings.max_image_number), value_type=int, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 6, 'Перемешивать изображения (y/n)',     str(settings.shuffle_images),   value_type=str),
+            ImprovedEntry(self.settingsFrame, 0, 7, 'Начинать заново после ошибки (y/n)', str(settings.stop_after_error), value_type=str)
+        ]
 
     def save_settings(self):
         error_text = ''
-        for i in range(4):
-            if not error_text:
-                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1,
-                                               min_value=0, value_type=float)
-        for i in range(4, 6):
-            if not error_text:
-                error_text = entry_value_check(self.entries[i].get(), self.label_text[i], declension=1, min_value=1,
-                                               max_value=10)
-        if not error_text and int(self.entries[4].get()) > int(self.entries[5].get()):
-            error_text = 'Минимальное количество изображений не может быть больше максимального количества изображений'
+
+        for entry in self.entries:
+            error_text = entry.check_value()
+            if error_text:
+                break
 
         if error_text:
             self.show_error(error_text)
         else:
-            for i in range(4):
+            for i in range(len(settings.delay3)):
                 settings.delay3[i] = float(self.entries[i].get())
             settings.min_image_number = int(self.entries[4].get())
             settings.max_image_number = int(self.entries[5].get())
-            settings.shuffle_images = (self.shuffle == 'Да')
-            settings.stop_after_error = (self.stop_after_error == 'Да')
+            settings.shuffle_images = self.entries[6].get() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
+            settings.stop_after_error = self.entries[7].get() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
             self.destroy()
 
 

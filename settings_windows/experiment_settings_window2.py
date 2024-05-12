@@ -1,8 +1,7 @@
 from tkinter import *
-from tkinter import ttk
 from settings_windows.settings_window import SettingsWindow
 import settings
-from utils import entry_value_check
+from improved_entry import ImprovedEntry
 
 
 class ExperimentSettingsWindow2(SettingsWindow):
@@ -10,94 +9,44 @@ class ExperimentSettingsWindow2(SettingsWindow):
         super().__init__(experiment_type=2)
         self.title('Настройки эксперимента')
 
-
         self.settingsFrame = Frame(self)
         self.settingsFrame.grid(column=0, row=0)
 
-        label_names = ['Минимальная скорость изображения', 'Максимальная скорость изображения', 'Ширина барьера',
-                       'Цвет барьера', 'Количество изображений', 'Расстояние до барьера', 'Прямое движение',
-                       'Задержка между экспериментами', 'Число повторений']
-
-        self.labels = [Label(self.settingsFrame, text=text) for text in label_names]
-
-        self.min_speed_entry = Entry(self.settingsFrame)
-        self.min_speed_entry.grid(column=1, row=0)
-
-        self.max_speed_entry = Entry(self.settingsFrame)
-        self.max_speed_entry.grid(column=1, row=1)
-
-        self.barrier_width_entry = Entry(self.settingsFrame)
-        self.barrier_width_entry.grid(column=1, row=2)
-
-        self.barrier_color_combobox = ttk.Combobox(self.settingsFrame, values=sorted(['red', 'green', 'blue', 'black',
-                                                                                      'white', 'yellow', 'magenta', 'cyan']))
-        self.barrier_color_combobox.grid(column=1, row=3)
-
-        self.image_number_entry = Entry(self.settingsFrame)
-        self.image_number_entry.grid(column=1, row=4)
-
-        self.barrier_dist_entry = Entry(self.settingsFrame)
-        self.barrier_dist_entry.grid(column=1, row=5)
-
-        self.straight_movement = StringVar(value="Да")
-
-        self.btn_yes = ttk.Radiobutton(self.settingsFrame, text='Да', value='Да', variable=self.straight_movement)
-        self.btn_yes.grid(column=1, row=6)
-
-        self.btn_no = ttk.Radiobutton(self.settingsFrame, text='Нет', value='Нет', variable=self.straight_movement)
-        self.btn_no.grid(column=2, row=6)
-
-        self.session_delay_entry = Entry(self.settingsFrame)
-        self.session_delay_entry.grid(column=1, row=7)
-
-        self.repeat_entry = Entry(self.settingsFrame)
-        self.repeat_entry.grid(column=1, row=8)
-
-        for i, label in enumerate(self.labels):
-            label.grid(column=0, row=i)
+        self.entries = [
+            ImprovedEntry(self.settingsFrame, 0, 0, 'Минимальная скорость изображения',  str(settings.image_min_speed),  value_type=int,   min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 1, 'Максимальная скорость изображения', str(settings.image_max_speed),  value_type=int,   min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 2, 'Ширина барьера',                    str(settings.barrier_width),    value_type=int,   min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 3, 'Цвет барьера',                      str(settings.barrier_color),    value_type=str),
+            ImprovedEntry(self.settingsFrame, 0, 4, 'Количество изображений',            str(settings.image_number),     value_type=int,   min_value=1),
+            ImprovedEntry(self.settingsFrame, 0, 5, 'Расстояние до барьера',             str(settings.barrier_dist),     value_type=int,   min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 6, 'Прямое движение (true/false)',      str(settings.straight_movement), value_type=str),
+            ImprovedEntry(self.settingsFrame, 0, 7, 'Задержка между экспериментами',     str(settings.session_delay2),   value_type=float, min_value=0),
+            ImprovedEntry(self.settingsFrame, 0, 7, 'Число повторений',                  str(settings.repeat_number2),   value_type=int,   min_value=1),
+        ]
 
     def save_settings(self):
-        error_text = entry_value_check(self.min_speed_entry.get(),
-                                          'Минимальное значение скорости', declension=1, min_value=0)
-        if not error_text:
-            error_text = entry_value_check(self.max_speed_entry.get(),
-                                              'Максимальное значение скорости', declension=1, min_value=0)
+        error_text = ''
 
-        if not error_text and int(self.min_speed_entry.get()) > int(self.max_speed_entry.get()):
-            error_text = 'Максимальное значение скорости должно быть больше минимального'
-
-        if not error_text:
-            error_text = entry_value_check(self.barrier_width_entry.get(),
-                                              'Ширина барьера', declension=2, min_value=0)
-        if not error_text:
-            error_text = entry_value_check(self.image_number_entry.get(),
-                                              'Количество изображений', declension=1, min_value=1, max_value=10)
-        if not error_text:
-            error_text = entry_value_check(self.barrier_dist_entry.get(),
-                                              'Расстояние до барьера', declension=1, min_value=0)
-        if not error_text:
-            error_text = entry_value_check(self.session_delay_entry.get(),
-                                              'Задержка между экспериментами', declension=2, min_value=0)
-        if not error_text:
-            error_text = entry_value_check(self.repeat_entry.get(),
-                                              'Количество повторений', declension=1, min_value=0)
+        for entry in self.entries:
+            error_text = entry.check_value()
+            if error_text:
+                break
 
         if error_text:
             self.show_error(error_text)
         else:
-            settings.image_min_speed = int(self.min_speed_entry.get())
-            settings.image_max_speed = int(self.max_speed_entry.get())
-            settings.barrier_color = self.barrier_color_combobox.get()
-            settings.barrier_width = int(self.barrier_width_entry.get())
-            settings.image_number = int(self.image_number_entry.get())
-            settings.barrier_dist = int(self.barrier_dist_entry.get())
-            settings.straight_movement = self.straight_movement == 'Да'
-            settings.session_delay2 = float(self.session_delay_entry.get())
-            settings.repeat_number2 = int(self.repeat_entry.get())
+            settings.image_min_speed = int(self.entries[0].get())
+            settings.image_max_speed = int(self.entries[1].get())
+            settings.barrier_width = int(self.entries[2].get())
+            settings.barrier_color = self.entries[3].get()
+            settings.image_number = int(self.entries[4].get())
+            settings.barrier_dist = int(self.entries[5].get())
+            settings.straight_movement = self.entries[6] in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
+            settings.session_delay2 = float(self.entries[7].get())
+            settings.repeat_number2 = int(self.entries[8].get())
             self.destroy()
 
 
 if __name__ == '__main__':
-    window = Tk()
     settings_window = ExperimentSettingsWindow2()
     settings_window.mainloop()
