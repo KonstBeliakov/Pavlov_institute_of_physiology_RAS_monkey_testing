@@ -20,6 +20,9 @@ session_number = 1
 repeat_number = 5
 experiment_start = None
 restart_after_answer = False
+image_size = 100
+distance_between_images = 100
+same_images = False
 
 # Second type experiment settings
 image_min_speed = 50
