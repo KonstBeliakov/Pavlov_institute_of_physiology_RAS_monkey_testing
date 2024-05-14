@@ -19,7 +19,10 @@ class ExperimentSettingsWindow3(SettingsWindow):
             ImprovedEntry(self.settingsFrame, 0, 4, 'Минимальное количество изображений', str(settings.min_image_number), value_type=int, min_value=0),
             ImprovedEntry(self.settingsFrame, 0, 5, 'Максимальное количество изображений',str(settings.max_image_number), value_type=int, min_value=0),
             ImprovedEntry(self.settingsFrame, 0, 6, 'Перемешивать изображения (y/n)',     str(settings.shuffle_images),   value_type=str),
-            ImprovedEntry(self.settingsFrame, 0, 7, 'Начинать заново после ошибки (y/n)', str(settings.stop_after_error), value_type=str)
+            ImprovedEntry(self.settingsFrame, 0, 7, 'Начинать заново после ошибки (y/n)', str(settings.stop_after_error), value_type=str),
+            ImprovedEntry(self.settingsFrame, 0, 8, 'Размер изображения',                 str(settings.image_size3),      value_type=int),
+            ImprovedEntry(self.settingsFrame, 0, 9, 'Количество изображений в сетке (AxB)',
+                          str(f'{settings.grid_size[0]}x{settings.grid_size[1]}'), value_type=str)
         ]
 
     def save_settings(self):
@@ -30,6 +33,16 @@ class ExperimentSettingsWindow3(SettingsWindow):
             if error_text:
                 break
 
+        if not error_text:
+            try:
+                l = self.entries[9].get().split('x')
+                if len(l) != 2:
+                    error_text = 'Размерность сетки должна быть равна 2'
+                elif int(l[0]) < 1 or int(l[1]) < 1:
+                    error_text = 'Размер сетки не может быть меньше 1'
+            except:
+                error_text = 'Не получилось обработать параметр "Количество изображений в сетке (AxB)"'
+
         if error_text:
             self.show_error(error_text)
         else:
@@ -39,6 +52,8 @@ class ExperimentSettingsWindow3(SettingsWindow):
             settings.max_image_number = int(self.entries[5].get())
             settings.shuffle_images = self.entries[6].get() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
             settings.stop_after_error = self.entries[7].get() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
+            settings.image_size3 = int(self.entries[8].get())
+            settings.grid_size = [int(i) for i in self.entries[9].get().split('x')]
             self.destroy()
 
 

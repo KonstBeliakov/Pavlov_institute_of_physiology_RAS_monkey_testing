@@ -21,7 +21,8 @@ class ExperimentSettingsWindow2(SettingsWindow):
             ImprovedEntry(self.settingsFrame, 0, 5, 'Расстояние до барьера',             str(settings.barrier_dist),     value_type=int,   min_value=0),
             ImprovedEntry(self.settingsFrame, 0, 6, 'Прямое движение (true/false)',      str(settings.straight_movement), value_type=str),
             ImprovedEntry(self.settingsFrame, 0, 7, 'Задержка между экспериментами',     str(settings.session_delay2),   value_type=float, min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 7, 'Число повторений',                  str(settings.repeat_number2),   value_type=int,   min_value=1),
+            ImprovedEntry(self.settingsFrame, 0, 8, 'Число повторений',                  str(settings.repeat_number2),   value_type=int,   min_value=1),
+            ImprovedEntry(self.settingsFrame, 0, 9, 'Размер изображения',                str(settings.image_size2),      value_type=int,   min_value=1),
         ]
 
     def save_settings(self):
@@ -44,6 +45,7 @@ class ExperimentSettingsWindow2(SettingsWindow):
             settings.straight_movement = self.entries[6] in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
             settings.session_delay2 = float(self.entries[7].get())
             settings.repeat_number2 = int(self.entries[8].get())
+            settings.image_size2 = int(self.entries[9].get())
             self.destroy()
 
 

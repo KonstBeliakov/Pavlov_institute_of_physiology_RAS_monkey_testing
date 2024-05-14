@@ -34,6 +34,7 @@ image_number = 5
 session_delay2 = 1.0
 straight_movement = True
 repeat_number2 = 3
+image_size2 = 100
 
 # Experiment 3 settings
 min_image_number = 2
@@ -42,3 +43,4 @@ shuffle_images = True
 image_size3 = 128
 delay3 = [1.0, 1.0, 1.0, 0.5]
 stop_after_error = True
+grid_size = [5, 5]

@@ -6,7 +6,11 @@ import threading
 
 import settings
 
-ser = serial.Serial('COM3', 9600)
+try:
+    ser = serial.Serial('COM3', 9600)
+    serial_available = True
+except:
+    serial_available = False
 pygame.init()
 
 
