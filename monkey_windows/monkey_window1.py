@@ -1,6 +1,7 @@
 import time
 import tkinter.messagebox as mb
 
+from PIL import Image
 from PIL.ImageTk import PhotoImage
 
 import threading
@@ -14,10 +15,13 @@ directory = "images"
 temp_image_file = 'settings.png'
 
 
+def open_image(filename: str):
+    return PhotoImage(Image.open(filename).resize((settings.image_size, settings.image_size)))
+
+
 class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
-        self.image_size = 128
         self.pressed = None
         self.repeat_number = None
         self.session_number = None
@@ -26,11 +30,10 @@ class MonkeyWindow1(MonkeyWindow):
         self.test_start = None
         self.right_image = None
         self.delay = None
-        self.picture_to_remember = None
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
         self.img = PhotoImage(file=temp_image_file)
-        self.main_image = self.canvas.create_image(self.image_size // 2, self.image_size // 2, image=self.img)
+        self.main_image = self.canvas.create_image(settings.image_size // 2, settings.image_size // 2, image=self.img)
 
         self.picture_to_remember = choice(files)
 
@@ -38,8 +41,6 @@ class MonkeyWindow1(MonkeyWindow):
         self.image = [None, None]
 
         self.load_settings()
-
-        self.img1, self.img2 = None, None
 
         self.t1 = threading.Thread(target=self.update)
         self.t1.start()
@@ -69,8 +70,10 @@ class MonkeyWindow1(MonkeyWindow):
         for i in range(self.session_number):
             for j in range(self.repeat_number):
                 self.picture_to_remember = choice(files)
-                self.img = PhotoImage(file=f'{directory}/{self.picture_to_remember}')
-                self.main_image = self.canvas.create_image(self.image_size // 2, self.image_size // 2, image=self.img)
+                self.img = open_image(f'{directory}/{self.picture_to_remember}')
+
+                self.main_image = self.canvas.create_image(self.canvas_size[0] // 2, self.canvas_size[1] // 2,
+                                                           image=self.img)
 
                 time.sleep(self.delay[0])
 
@@ -85,9 +88,15 @@ class MonkeyWindow1(MonkeyWindow):
                 shuffle(file)
                 self.right_image = file.index(self.picture_to_remember)
 
-                self.img = [PhotoImage(file=f'{directory}/{file[i]}') for i in range(2)]
-                self.image = [self.canvas.create_image((i + 0.5) * self.image_size, 0.5 * self.image_size, image=img)
-                              for i, img in enumerate(self.img)]
+                self.img = [open_image(f'{directory}/{file[i]}') for i in range(2)]
+
+                dx = (self.canvas_size[0] - settings.image_size * 2 - settings.distance_between_images) // 2
+
+                self.image = [
+                    self.canvas.create_image(dx + settings.image_size // 2, self.canvas_size[1] // 2, image=self.img[0]),
+                    self.canvas.create_image(dx + settings.image_size * 1.5 + settings.distance_between_images,
+                                             self.canvas_size[1] // 2, image=self.img[1]),
+                ]
 
                 self.canvas.tag_bind(self.image[0], '<Button-1>', lambda event: self.image_pressed(0))
                 self.canvas.tag_bind(self.image[1], '<Button-1>', lambda event: self.image_pressed(1))
