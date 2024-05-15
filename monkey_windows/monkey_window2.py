@@ -14,23 +14,23 @@ class MonkeyWindow2(MonkeyWindow):
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
 
         self.title('Experiment window')
-        self.geometry('800x800')
 
         self.image_speed = randint(settings.image_min_speed, settings.image_max_speed)
 
-        self.image_size = 32
+        self.image_size = settings.image_size2
         t = (self.canvas_size[1] - settings.image_number * self.image_size) // (settings.image_number + 1)
         x_pos = (self.canvas_size[0] - settings.barrier_width) // 2 - self.image_size - settings.barrier_dist
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
-        self.final_image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings.image_number)]
         print(self.image_position)
 
-        self.python_image = PhotoImage(file="settings.png")
+        filename = 'test.png'
+        self.python_image = utils.open_image(filename, settings.image_size2)
 
         self.image = [self.canvas.create_image(*self.image_position[i], image=self.python_image) for i in
                       range(settings.image_number)]
+
         self.right_image = randrange(settings.image_number)
-        # self.draw = [i == self.right_image for i in range(image_number)]
+
         for i in range(settings.image_number):
             if i != self.right_image:
                 self.canvas.itemconfig(self.image[i], state='hidden')

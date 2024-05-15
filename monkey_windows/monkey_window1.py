@@ -15,10 +15,6 @@ directory = "images"
 temp_image_file = 'settings.png'
 
 
-def open_image(filename: str):
-    return PhotoImage(Image.open(filename).resize((settings.image_size, settings.image_size)))
-
-
 class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
@@ -58,8 +54,8 @@ class MonkeyWindow1(MonkeyWindow):
     def image_pressed(self, number):
         if not self.pressed:
             self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
-                            round(time.perf_counter() - self.test_start, 3),
-                            number, self.right_image])
+                             round(time.perf_counter() - self.test_start, 3),
+                             number, self.right_image])
             if number == self.right_image:
                 utils.right_answer()
             else:
@@ -70,7 +66,7 @@ class MonkeyWindow1(MonkeyWindow):
         for i in range(self.session_number):
             for j in range(self.repeat_number):
                 self.picture_to_remember = choice(files)
-                self.img = open_image(f'{directory}/{self.picture_to_remember}')
+                self.img = utils.open_image(f'{directory}/{self.picture_to_remember}', settings.image_size)
 
                 self.main_image = self.canvas.create_image(self.canvas_size[0] // 2, self.canvas_size[1] // 2,
                                                            image=self.img)
@@ -88,12 +84,13 @@ class MonkeyWindow1(MonkeyWindow):
                 shuffle(file)
                 self.right_image = file.index(self.picture_to_remember)
 
-                self.img = [open_image(f'{directory}/{file[i]}') for i in range(2)]
+                self.img = [utils.open_image(f'{directory}/{file[i]}', settings.image_size) for i in range(2)]
 
                 dx = (self.canvas_size[0] - settings.image_size * 2 - settings.distance_between_images) // 2
 
                 self.image = [
-                    self.canvas.create_image(dx + settings.image_size // 2, self.canvas_size[1] // 2, image=self.img[0]),
+                    self.canvas.create_image(dx + settings.image_size // 2, self.canvas_size[1] // 2,
+                                             image=self.img[0]),
                     self.canvas.create_image(dx + settings.image_size * 1.5 + settings.distance_between_images,
                                              self.canvas_size[1] // 2, image=self.img[1]),
                 ]
@@ -134,4 +131,3 @@ if __name__ == '__main__':
     window.mainloop()
 else:
     files = os.listdir(directory)
-

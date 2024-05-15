@@ -1,5 +1,4 @@
 import random
-import tkinter as tk
 import threading
 from time import perf_counter, sleep
 import os
@@ -26,12 +25,15 @@ class MonkeyWindow3(MonkeyWindow):
 
     def update(self):
         while True:
-            table_size_x = int(self.canvas_size[0] // (settings.image_size3 + 5))
-            table_size_y = int(self.canvas_size[1] // (settings.image_size3 + 5))
+            table_size_x = min(int(self.canvas_size[0] // settings.image_size3), settings.grid_size[0])
+            table_size_y = min(int(self.canvas_size[1] // settings.image_size3), settings.grid_size[1])
+
+            deltaX = (self.canvas_size[0] - table_size_x * settings.image_size3) // (table_size_x - 1)
+            deltaY = (self.canvas_size[1] - table_size_y * settings.image_size3) // (table_size_y - 1)
 
             self.image_numbers = random.sample(list(range(len(files))), settings.max_image_number)
-            self.texture = [tk.PhotoImage(file=f'{directory}/{files[self.image_numbers[i]]}') for i in
-                            range(settings.max_image_number)]
+            self.texture = [utils.open_image(f'{directory}/{files[self.image_numbers[i]]}', settings.image_size3)
+                            for i in range(settings.max_image_number)]
             self.stop = False
             for image_number in range(settings.min_image_number + 1, settings.max_image_number + 1):
                 self.image_position = random.sample(
@@ -47,8 +49,8 @@ class MonkeyWindow3(MonkeyWindow):
 
                 self.image = [
                     self.canvas.create_image(
-                        settings.image_size3 // 2 + self.image_position[i][0] * (settings.image_size3 + 5),
-                        settings.image_size3 // 2 + self.image_position[i][1] * (settings.image_size3 + 5),
+                        settings.image_size3 // 2 + self.image_position[i][0] * (settings.image_size3 + deltaX),
+                        settings.image_size3 // 2 + self.image_position[i][1] * (settings.image_size3 + deltaY),
                         image=self.texture[i]) for i in range(image_number)]
                 self.canvas.itemconfig(self.image[-1], state='hidden')
 
@@ -68,9 +70,9 @@ class MonkeyWindow3(MonkeyWindow):
                 for i in range(len(self.image)):
                     self.canvas.move(self.image[i],
                                      (self.image_position2[i][0] - self.image_position[i][0]) * (
-                                                 settings.image_size3 + 5),
+                                                 settings.image_size3 + deltaX),
                                      (self.image_position2[i][1] - self.image_position[i][1]) * (
-                                                 settings.image_size3 + 5))
+                                                 settings.image_size3 + deltaY))
 
                 self.test_start = perf_counter()
 

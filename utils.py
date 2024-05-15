@@ -1,5 +1,8 @@
 import time
 
+from PIL import Image
+from PIL.ImageTk import PhotoImage
+
 import pygame
 import serial
 import threading
@@ -12,6 +15,10 @@ try:
 except:
     serial_available = False
 pygame.init()
+
+
+def open_image(filename: str, image_size: int):
+    return PhotoImage(Image.open(filename).resize((image_size, image_size)))
 
 
 def entry_value_check(value, name, declension=1, min_value=None, max_value=None, value_type=int):
