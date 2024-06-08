@@ -157,6 +157,9 @@ class App(tk.Tk):
         self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=5, column=0)
 
+        self.run_error_label = Label(self.run_frame_top, text='', fg='red')
+        self.run_error_label.pack()
+
         self.second_screen_canvas = Canvas(self.frame[frame_number])
         self.second_screen_canvas.grid(row=0, column=2)
 
@@ -174,10 +177,6 @@ class App(tk.Tk):
 
     def open_about(self):
         if not self.started:
-            if self.timer_radio_buttons or not settings['experiment_start']:
-                settings['experiment_start'] = time.perf_counter()
-            self.btn.configure(text="Завершить тестирование")
-            self.started = True
             match self.choose_experiment_combobox.get():
                 case 'Запоминание картинки':
                     self.window = MonkeyWindow1()
@@ -185,15 +184,25 @@ class App(tk.Tk):
                     self.window = MonkeyWindow2()
                 case 'Новая картинка':
                     self.window = MonkeyWindow3()
+
             if self.choose_experiment_combobox.get():
+                self.run_error_label.configure(text='')
+                if self.timer_radio_buttons or not settings['experiment_start']:
+                    settings['experiment_start'] = time.perf_counter()
+
+                self.btn.configure(text="Завершить тестирование")
+                self.started = True
+
                 utils.experiment_start()
 
-            self.update_thread = threading.Thread(target=self.update_log)
-            self.update_thread.start()
-            self.update_second_screen_thread = threading.Thread(target=self.second_screen_update)
-            self.update_second_screen_thread.start()
+                self.update_thread = threading.Thread(target=self.update_log)
+                self.update_thread.start()
+                self.update_second_screen_thread = threading.Thread(target=self.second_screen_update)
+                self.update_second_screen_thread.start()
 
-            self.window.mainloop()
+                self.window.mainloop()
+            else:
+                self.run_error_label.configure(text='Тип эксперимента не выбран')
         else:
             self.window.destroy()
             self.btn.configure(text="Запустить тестирование")
