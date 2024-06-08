@@ -1,6 +1,6 @@
 import tkinter as tk
 
-import settings
+from settings import settings
 from settings_windows.settings_window import SettingsWindow
 from improved_entry import ImprovedEntry
 
@@ -16,15 +16,15 @@ class ExperimentSettingsWindow(SettingsWindow):
         self.settingsFrame.grid(row=0, column=0)
 
         self.entries = [
-            ImprovedEntry(self.settingsFrame, 0, 0, 'Количество сессий',                              str(settings.session_number),       value_type=int,     min_value=1),
-            ImprovedEntry(self.settingsFrame, 0, 1, 'Количество тестов в сессии',                     str(settings.repeat_number),        value_type=int,     min_value=1),
-            ImprovedEntry(self.settingsFrame, 0, 2, 'Время отображения целевого изображения',         str(settings.delay[0]),             value_type=float,   min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 3, 'Задержка перед появлением тестовых изображений', str(settings.delay[1]),             value_type=float,   min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 4, 'Время для ответа',                               str(settings.delay[2]),             value_type=float,   min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 5, 'Задержка между тестами',                         str(settings.delay[3]),             value_type=float,   min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 6, 'Задержка между сессиями',                        str(settings.delay[4]),             value_type=float,   min_value=0),
-            ImprovedEntry(self.settingsFrame, 0, 7, 'Размер изображения',                             str(settings.image_size),           value_type=int,     min_value=1),
-            ImprovedEntry(self.settingsFrame, 0, 8, 'Расстояние между изображениями',                 str(settings.distance_between_images), value_type=int,  min_value=1)
+            ImprovedEntry(self.settingsFrame, 0, 0, 'Количество сессий',                              value_type=int,     min_value=1, save_value='session_number'),
+            ImprovedEntry(self.settingsFrame, 0, 1, 'Количество тестов в сессии',                     value_type=int,     min_value=1, save_value='repeat_number'),
+            ImprovedEntry(self.settingsFrame, 0, 2, 'Время отображения целевого изображения',         value_type=float,   min_value=0, save_value='delay[0]'),
+            ImprovedEntry(self.settingsFrame, 0, 3, 'Задержка перед появлением тестовых изображений', value_type=float,   min_value=0, save_value='delay[1]'),
+            ImprovedEntry(self.settingsFrame, 0, 4, 'Время для ответа',                               value_type=float,   min_value=0, save_value='delay[2]'),
+            ImprovedEntry(self.settingsFrame, 0, 5, 'Задержка между тестами',                         value_type=float,   min_value=0, save_value='delay[3]'),
+            ImprovedEntry(self.settingsFrame, 0, 6, 'Задержка между сессиями',                        value_type=float,   min_value=0, save_value='delay[4]'),
+            ImprovedEntry(self.settingsFrame, 0, 7, 'Размер изображения',                             value_type=int,     min_value=1, save_value='image_size'),
+            ImprovedEntry(self.settingsFrame, 0, 8, 'Расстояние между изображениями',                 value_type=int,  min_value=1, save_value='distance_between_images')
         ]
 
         self.restart_radiobuttons = tk.IntVar()
@@ -51,17 +51,12 @@ class ExperimentSettingsWindow(SettingsWindow):
             error_text = entry.check_value()
             if error_text:
                 break
-
+        print(f'error_text: {error_text}')
         if error_text:
             self.error_label.configure(text=error_text)
         else:
-            settings.delay = [float(i.get()) for i in self.entries[2:7]]
-            settings.session_number = int(self.entries[0].get())
-            settings.repeat_number = int(self.entries[1].get())
-            settings.image_size = int(self.entries[-2].get())
-            settings.distance_between_images = int(self.entries[-1].get())
-            settings.restart_after_answer = bool(self.restart_radiobuttons.get())
-            settings.same_images = bool(self.same_images.get())
+            for entry in self.entries:
+                entry.save_value()
             self.destroy()
 
 

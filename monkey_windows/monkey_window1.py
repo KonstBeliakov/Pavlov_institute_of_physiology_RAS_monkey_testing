@@ -1,14 +1,13 @@
 import time
 import tkinter.messagebox as mb
 
-from PIL import Image
 from PIL.ImageTk import PhotoImage
 
 import threading
 from random import choice, shuffle
 import os
 from monkey_windows.monkey_window import MonkeyWindow
-import settings
+from settings import settings
 import utils
 
 directory = "images"
@@ -29,7 +28,7 @@ class MonkeyWindow1(MonkeyWindow):
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
         self.img = PhotoImage(file=temp_image_file)
-        self.main_image = self.canvas.create_image(settings.image_size // 2, settings.image_size // 2, image=self.img)
+        self.main_image = self.canvas.create_image(settings['image_size'] // 2, settings['image_size'] // 2, image=self.img)
 
         self.picture_to_remember = choice(files)
 
@@ -47,13 +46,13 @@ class MonkeyWindow1(MonkeyWindow):
             self.destroy()
 
     def load_settings(self):
-        self.delay = settings.delay
-        self.session_number = settings.session_number
-        self.repeat_number = settings.repeat_number
+        self.delay = settings['delay']
+        self.session_number = settings['session_number']
+        self.repeat_number = settings['repeat_number']
 
     def image_pressed(self, number):
         if not self.pressed:
-            self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
+            self.log.append([self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
                              round(time.perf_counter() - self.test_start, 3),
                              number, self.right_image])
             if number == self.right_image:
@@ -66,7 +65,7 @@ class MonkeyWindow1(MonkeyWindow):
         for i in range(self.session_number):
             for j in range(self.repeat_number):
                 self.picture_to_remember = choice(files)
-                self.img = utils.open_image(f'{directory}/{self.picture_to_remember}', settings.image_size)
+                self.img = utils.open_image(f'{directory}/{self.picture_to_remember}', settings['image_size'])
 
                 self.main_image = self.canvas.create_image(self.canvas_size[0] // 2, self.canvas_size[1] // 2,
                                                            image=self.img)
@@ -84,14 +83,14 @@ class MonkeyWindow1(MonkeyWindow):
                 shuffle(file)
                 self.right_image = file.index(self.picture_to_remember)
 
-                self.img = [utils.open_image(f'{directory}/{file[i]}', settings.image_size) for i in range(2)]
+                self.img = [utils.open_image(f'{directory}/{file[i]}', settings['image_size']) for i in range(2)]
 
-                dx = (self.canvas_size[0] - settings.image_size * 2 - settings.distance_between_images) // 2
+                dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2
 
                 self.image = [
-                    self.canvas.create_image(dx + settings.image_size // 2, self.canvas_size[1] // 2,
+                    self.canvas.create_image(dx + settings['image_size'] // 2, self.canvas_size[1] // 2,
                                              image=self.img[0]),
-                    self.canvas.create_image(dx + settings.image_size * 1.5 + settings.distance_between_images,
+                    self.canvas.create_image(dx + settings['image_size'] * 1.5 + settings['distance_between_images'],
                                              self.canvas_size[1] // 2, image=self.img[1]),
                 ]
 
@@ -100,7 +99,7 @@ class MonkeyWindow1(MonkeyWindow):
 
                 self.test_start = time.perf_counter()
 
-                if not settings.restart_after_answer:
+                if not settings['restart_after_answer']:
                     time.sleep(self.delay[2])
                 else:
                     t = time.perf_counter()
@@ -110,7 +109,7 @@ class MonkeyWindow1(MonkeyWindow):
                         time.sleep(0.05)
 
                 if not self.pressed:
-                    self.log.append([self.experiment_number, round(time.perf_counter() - settings.experiment_start, 3),
+                    self.log.append([self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
                                      None, None, self.right_image])
 
                 for k in range(2):

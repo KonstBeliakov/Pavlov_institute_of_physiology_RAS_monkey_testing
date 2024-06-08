@@ -15,7 +15,7 @@ from PIL import ImageTk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkhtmlview import HTMLLabel
-import settings
+from settings import settings
 import utils
 from try_again_window import TryAgainWindow
 
@@ -90,15 +90,15 @@ class App(tk.Tk):
         self.basic_settings_label_frame.grid(column=0, row=1)
 
         self.entries = [
-            ImprovedEntry(self.basic_settings_label_frame, 0, 0, 'Путь до файла звука начала эксперимента',          str(settings.experiment_start_sound),    value_type=str),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 1, 'Путь до файла позитивного звукового подкрепления', str(settings.right_answer_sound),        value_type=str),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 2, 'Путь до файла негативного звукового подкрепления', str(settings.wrong_answer_sound),        value_type=str),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 3, 'Радиус круга отображающегося после нажатия',       str(settings.mouse_click_circle_radius), value_type=int,   min_value=0),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 4, 'Цвет круга',                                       str(settings.click_circle_color),        value_type=str),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 5, 'Толщина линии круга',                              str(settings.click_circle_width),        value_type=int,   min_value=0),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 6, 'Время отображения круга',                          str(settings.click_circle_time),         value_type=float, min_value=0),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 7, 'Размер копии второго монитора',                    str(settings.monitor_copy_size),         value_type=float, min_value=0, max_value=0.5),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 8, 'Цвет фона экспериментального окна',                str(settings.bg_color),                  value_type=str)
+            ImprovedEntry(self.basic_settings_label_frame, 0, 0, 'Путь до файла звука начала эксперимента',          value_type=str, save_value='experiment_start_sound'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 1, 'Путь до файла позитивного звукового подкрепления', value_type=str, save_value='right_answer_sound'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 2, 'Путь до файла негативного звукового подкрепления', value_type=str, save_value='wrong_answer_sound'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 3, 'Радиус круга отображающегося после нажатия',       value_type=int,   min_value=0, save_value='mouse_click_circle_radius'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 4, 'Цвет круга',                                       value_type=str, save_value='click_circle_color'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 5, 'Толщина линии круга',                              value_type=int,   min_value=0, save_value='click_circle_width'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 6, 'Время отображения круга',                          value_type=float, min_value=0, save_value='click_circle_time'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 7, 'Размер копии второго монитора',                    value_type=float, min_value=0, max_value=0.5, save_value='monitor_copy_size'),
+            ImprovedEntry(self.basic_settings_label_frame, 0, 8, 'Цвет фона экспериментального окна',                value_type=str, save_value='bg_color')
         ]
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
@@ -119,18 +119,10 @@ class App(tk.Tk):
             self.show_error(error_text)
         else:
             self.show_error('')
-            settings.using_sound = (self.sounds_in_experiments.get() == 'Да')
+            settings['using_sound'] = (self.sounds_in_experiments.get() == 'Да')
 
-            settings.experiment_start_sound = self.entries[0].get()
-            settings.right_answer_sound = self.entries[1].get()
-            settings.wrong_answer_sound = self.entries[2].get()
-
-            settings.mouse_click_circle_radius = float(self.entries[3].get())
-            settings.click_circle_color = self.entries[4].get()
-            settings.click_circle_width = float(self.entries[5].get())
-            settings.click_circle_time = float(self.entries[6].get())
-            settings.monitor_copy_size = float(self.entries[7].get())
-            settings.bg_color = self.entries[8].get()
+            for entry in self.entries:
+                entry.save_value()
 
     def show_error(self, text):
         self.error_label.configure(text=text)
@@ -176,7 +168,7 @@ class App(tk.Tk):
         self.second_screen_canvas = Canvas(self.frame[frame_number])
         self.second_screen_canvas.grid(row=0, column=2)
 
-        self.figure = plt.Figure(figsize=(5, 5))  # , facecolor='yellow')
+        self.figure = plt.Figure(figsize=(5, 5))
         self.graph_canvas = FigureCanvasTkAgg(self.figure, self.frame[frame_number])
         self.graph_canvas.get_tk_widget().grid(row=1, column=0)
         self.figure_subplot = self.figure.add_subplot(1, 1, 1)
@@ -190,8 +182,8 @@ class App(tk.Tk):
 
     def open_about(self):
         if not self.started:
-            if self.timer_radio_buttons or not settings.experiment_start:
-                settings.experiment_start = time.perf_counter()
+            if self.timer_radio_buttons or not settings['experiment_start']:
+                settings['experiment_start'] = time.perf_counter()
             self.btn.configure(text="Завершить тестирование")
             self.started = True
             match self.choose_experiment_combobox.get():
@@ -262,8 +254,8 @@ class App(tk.Tk):
         monitor_number = 2
         with mss.mss() as sct:
             mon = sct.monitors[monitor_number]
-            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * settings.monitor_copy_size),
-                                                                       int(mon['height'] * settings.monitor_copy_size),
+            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * settings['monitor_copy_size']),
+                                                                       int(mon['height'] * settings['monitor_copy_size']),
                                                                        image=python_image)
             monitor = {
                 "top": mon["top"],
@@ -276,8 +268,8 @@ class App(tk.Tk):
             with mss.mss() as sct:
                 sct_img = sct.grab(monitor)
                 img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
-                img2 = img.resize((int(img.size[0] * 2 * settings.monitor_copy_size),
-                                   int(img.size[1] * 2 * settings.monitor_copy_size)))
+                img2 = img.resize((int(img.size[0] * 2 * settings['monitor_copy_size']),
+                                   int(img.size[1] * 2 * settings['monitor_copy_size'])))
                 img3 = ImageTk.PhotoImage(img2)
 
                 self.second_screen_canvas.itemconfigure(self.canvas_image, image=img3)
