@@ -1,5 +1,4 @@
 import tkinter as tk
-
 import settings
 from utils import entry_value_check
 
@@ -35,7 +34,11 @@ class ImprovedEntry(tk.Entry):
                                  value_type=self.value_type)
 
     def save_value(self):
-        value = self.value_type(self.get())
+        if self.value_type == bool:
+            value = self.get().strip() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
+        else:
+            value = self.value_type(self.get())
+
         if self.save_to is not None:
             self.save_to = self.save_to.strip()
             if '[' in self.save_to:
@@ -45,12 +48,3 @@ class ImprovedEntry(tk.Entry):
             else:
                 settings.settings[self.save_to] = value
 
-
-def f(s):
-    i = s.find('[')
-    return s[:i], int(s[i:-1])
-
-
-if __name__ == '__main__':
-    print(f('a[0]'))
-    print(f('aaa[11]'))

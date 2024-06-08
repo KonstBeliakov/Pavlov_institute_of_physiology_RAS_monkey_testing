@@ -15,6 +15,8 @@ from PIL import ImageTk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkhtmlview import HTMLLabel
+
+from entry_list import EntryList
 from settings import settings
 import utils
 from try_again_window import TryAgainWindow
@@ -89,17 +91,17 @@ class App(tk.Tk):
         self.basic_settings_label_frame = Frame(self.frame[frame_number])
         self.basic_settings_label_frame.grid(column=0, row=1)
 
-        self.entries = [
-            ImprovedEntry(self.basic_settings_label_frame, 0, 0, 'Путь до файла звука начала эксперимента',          value_type=str, save_value='experiment_start_sound'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 1, 'Путь до файла позитивного звукового подкрепления', value_type=str, save_value='right_answer_sound'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 2, 'Путь до файла негативного звукового подкрепления', value_type=str, save_value='wrong_answer_sound'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 3, 'Радиус круга отображающегося после нажатия',       value_type=int,   min_value=0, save_value='mouse_click_circle_radius'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 4, 'Цвет круга',                                       value_type=str, save_value='click_circle_color'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 5, 'Толщина линии круга',                              value_type=int,   min_value=0, save_value='click_circle_width'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 6, 'Время отображения круга',                          value_type=float, min_value=0, save_value='click_circle_time'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 7, 'Размер копии второго монитора',                    value_type=float, min_value=0, max_value=0.5, save_value='monitor_copy_size'),
-            ImprovedEntry(self.basic_settings_label_frame, 0, 8, 'Цвет фона экспериментального окна',                value_type=str, save_value='bg_color')
-        ]
+        self.entries_list = EntryList(self.basic_settings_label_frame, 0, 0, [
+            {'text': 'Путь до файла звука начала эксперимента',          'value_type': str, 'save_value': 'experiment_start_sound'},
+            {'text': 'Путь до файла позитивного звукового подкрепления', 'value_type': str, 'save_value': 'right_answer_sound'},
+            {'text': 'Путь до файла негативного звукового подкрепления', 'value_type': str, 'save_value': 'wrong_answer_sound'},
+            {'text': 'Радиус круга отображающегося после нажатия',       'value_type': int,   'min_value': 0, 'save_value': 'mouse_click_circle_radius'},
+            {'text': 'Цвет круга',                                       'value_type': str, 'save_value': 'click_circle_color'},
+            {'text': 'Толщина линии круга',                              'value_type': int,   'min_value': 0, 'save_value': 'click_circle_width'},
+            {'text': 'Время отображения круга',                          'value_type': float, 'min_value': 0, 'save_value': 'click_circle_time'},
+            {'text': 'Размер копии второго монитора',                    'value_type': float, 'min_value': 0, 'max_value': 0.5, 'save_value': 'monitor_copy_size'},
+            {'text': 'Цвет фона экспериментального окна',                'value_type': str, 'save_value': 'bg_color'}
+        ])
 
         self.button_apply = Button(self.frame[frame_number], text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=2, column=0)
@@ -108,21 +110,11 @@ class App(tk.Tk):
         self.error_label.grid(row=3, column=0)
 
     def apply_basic_settings(self):
-        error_text = ''
-
-        for entry in self.entries:
-            error_text = entry.check_value()
-            if error_text:
-                break
-
-        if error_text:
-            self.show_error(error_text)
-        else:
-            self.show_error('')
+        if (error_text := self.entries_list.save_values(check_validity=True)) is None:
             settings['using_sound'] = (self.sounds_in_experiments.get() == 'Да')
-
-            for entry in self.entries:
-                entry.save_value()
+            self.show_error('')
+        else:
+            self.show_error(error_text)
 
     def show_error(self, text):
         self.error_label.configure(text=text)
