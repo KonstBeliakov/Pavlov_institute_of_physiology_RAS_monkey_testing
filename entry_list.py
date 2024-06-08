@@ -8,13 +8,19 @@ class EntryList:
         self.frame.grid(row=y, column=x)
         self.entries = [ImprovedEntry(screen=self.frame, x=0, y=i, **params) for i, params in enumerate(entries_params)]
 
-    def check_values(self):
+    def check_values(self, show_error=False):
+        error_text = ''
         for entry in self.entries:
             if (t := entry.check_value()) is not None:
-                return t
+                if show_error:
+                    entry.configure(fg='red')
+                error_text += f'{t}\n'
+            else:
+                entry.configure(fg='black')
+        return error_text
 
     def save_values(self, check_validity=True):
-        if check_validity and (t := self.check_values()) is not None:
+        if check_validity and (t := self.check_values(show_error=True)) is not None:
             return t
 
         for entry in self.entries:
