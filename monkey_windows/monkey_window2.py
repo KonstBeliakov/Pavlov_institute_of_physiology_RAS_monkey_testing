@@ -27,8 +27,8 @@ class MonkeyWindow2(MonkeyWindow):
         filename = 'pictograms/yes.png'
         self.python_image = utils.open_image(filename, settings['image_size2'])
 
-        self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename)
-                        for i in range(settings['image_number'])]
+        self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename,
+                                     speedX=self.image_speed) for i in range(settings['image_number'])]
 
         self.right_image = randrange(settings['image_number'])
 
@@ -46,10 +46,6 @@ class MonkeyWindow2(MonkeyWindow):
                                                     settings['barrier_width'] + (
                                                                 self.canvas_size[0] - settings['barrier_width']) // 2,
                                                     self.canvas_size[1], fill=settings['barrier_color'])
-
-        self.time = []
-        for i in range(settings['image_number']):
-            self.time.append(perf_counter())
 
         self.t1 = threading.Thread(target=self.update)
         self.t1.start()
@@ -70,8 +66,7 @@ class MonkeyWindow2(MonkeyWindow):
             while not next_experiment:
                 next_experiment = True
                 for i, obj in enumerate(self.objects):
-                    obj.move(int(self.image_speed * (perf_counter() - self.time[i])), 0)
-                    self.time[i] = perf_counter()
+                    obj.update()
 
                     if self.is_image_behind_barrier(i):
                         obj.show()

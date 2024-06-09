@@ -1,14 +1,18 @@
 import utils
 from monkey_windows.monkey_window import MonkeyWindow
+from time import perf_counter
 
 
 class CanvasObject:
-    def __init__(self, canvas, x: int, y: int, size: int, texture_file_name: str):
+    def __init__(self, canvas, x: int, y: int, size: int, texture_file_name: str, speedX=0, speedY=0):
         self.x = x
         self.y = y
         self.canvas = canvas
         self.texture = utils.open_image(texture_file_name, size)
         self.object = self.canvas.create_image(x, y, image=self.texture)
+        self.speedX = speedX
+        self.speedY = speedY
+        self.time = perf_counter()
 
     def move(self, dx: int, dy: int):
         self.x += dx
@@ -31,6 +35,11 @@ class CanvasObject:
 
     def pos(self):
         return self.x, self.y  # self.canvas.coords(object)
+
+    def update(self):
+        dt = perf_counter() - self.time
+        self.move(self.speedX * dt, self.speedY * dt)
+        self.time = perf_counter()
 
 
 if __name__ == '__main__':
