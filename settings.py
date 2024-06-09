@@ -2,6 +2,10 @@ settings = {
     'bg_color': '#fff',
     'monitor_copy_size': 0.05,
 
+    # arduino params
+    'port': 'COM3',
+    'baudrate': 9600,
+
     # sounds
     'using_sound': True,
     'experiment_start_sound': 'sounds/start.mp3',

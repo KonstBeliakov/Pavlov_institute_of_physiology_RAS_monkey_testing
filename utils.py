@@ -9,12 +9,23 @@ import threading
 
 from settings import settings
 
-try:
-    ser = serial.Serial('COM3', 9600)
-    serial_available = True
-except:
-    serial_available = False
 pygame.init()
+serial_available = False
+ser = None
+
+
+def check_serial():
+    global ser, serial_available
+    try:
+        if ser is not None:
+            ser.close()
+        ser = serial.Serial(settings['port'], settings['baudrate'])
+        serial_available = True
+    except Exception as e:
+        print(e)
+        serial_available = False
+    print(f'serial_available: {serial_available}')
+    return serial_available
 
 
 def open_image(filename: str, image_size: int):
@@ -62,22 +73,30 @@ def play_sound(sound):
 
 
 def positive_reinforcement():
-    ser.write(bytes([1]))
+    if serial_available:
+        ser.write(bytes([1]))
 
 
 def disable_anser_entry():
-    ser.write(bytes([2]))
+    if serial_available:
+        ser.write(bytes([2]))
 
 
 def anable_answer_entry():
-    ser.write(bytes([4]))
+    if serial_available:
+        ser.write(bytes([4]))
 
 
 def read_usb():
     while True:
-        print(f'received usb message: {ser.readline()}')
+        if serial_available:
+            print(f'received usb message: {ser.readline()}')
+        else:
+            print('serial is not available')
         time.sleep(.1)
 
+
+check_serial()
 
 if __name__ == '__main__':
     t1 = threading.Thread(target=read_usb, daemon=True)

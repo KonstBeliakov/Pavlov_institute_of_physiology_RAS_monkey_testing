@@ -44,27 +44,55 @@ class App(tk.Tk):
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
-        notebook = ttk.Notebook()
-        notebook.pack(expand=True, fill=BOTH)
-        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении']
-        self.frame = [ttk.Frame(notebook) for _ in range(len(frame_text))]
+        self.notebook = ttk.Notebook()
+        self.notebook.pack(expand=True, fill=BOTH)
+        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении', 'Проверка устройств']
+        self.frame = [ttk.Frame(self.notebook) for _ in range(len(frame_text))]
 
         for i in range(len(self.frame)):
             self.frame[i].pack(fill=BOTH, expand=True)
 
-        self.test_image = [PhotoImage(file="settings.png"), PhotoImage(file="run.png"), PhotoImage(file="info.png")]
+        self.test_image = [PhotoImage(file="settings.png"), PhotoImage(file="run.png"), PhotoImage(file="info.png"),
+                           PhotoImage(file='yes.png') if utils.serial_available else PhotoImage(file="no.png")]
 
         for i in range(len(self.frame)):
-            notebook.add(self.frame[i], text=frame_text[i], image=self.test_image[i], compound=LEFT)
+            self.notebook.add(self.frame[i], text=frame_text[i], image=self.test_image[i], compound=LEFT)
 
         self.info_frame_init()
         self.settings_frame_init()
         self.run_frame_init()
+        self.devise_check_frame_init()
 
     def confirm_delete(self):
         message = "Вы уверены, что хотите закрыть это окно?"
         if mb.askyesno(message=message, parent=self):
             self.destroy()
+
+    def devise_check(self):
+        if (error_text := self.devise_check_entries.save_values(check_validity=True)) is not None:
+            self.devise_check_error_label.configure(text=error_text)
+        else:
+            self.devise_check_error_label.configure(text='')
+            utils.check_serial()
+
+            if utils.serial_available:
+                self.test_image[3].configure(file='yes.png')
+            else:
+                self.test_image[3].configure(file='no.png')
+
+    def devise_check_frame_init(self):
+        frame_number = 3
+
+        self.devise_check_entries = EntryList(self.frame[frame_number], 0, 0, [
+            {'text': 'Порт', 'value_type': str, 'save_value': 'port'},
+            {'text': 'Частота', 'value_type': int, 'min_value': 0, 'save_value': 'baudrate'}
+        ])
+
+        self.check_devise_button = Button(self.frame[frame_number], text='Подключиться', command=self.devise_check)
+        self.check_devise_button.grid(row=1, column=0)
+
+        self.devise_check_error_label = Label(self.frame[frame_number], text='', fg='red')
+        self.devise_check_error_label.grid(row=2, column=0)
 
     def info_frame_init(self):
         frame_number = 2
