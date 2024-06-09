@@ -56,7 +56,7 @@ class MonkeyWindow1(MonkeyWindow):
                 # both images are hidden
                 self.objects[self.right_number].hide()
 
-                time.sleep(settings['delay'][1])
+                time.sleep(settings['delay'][1][(self.experiment_number - 1) % len(settings['delay'][1])])
 
                 # both images shows up and it's time for answering
                 dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2

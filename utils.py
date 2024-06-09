@@ -37,6 +37,21 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
         if may_be_empty:
             return None
         return f'{name} не указан{["", "о", "а"][declension]}'
+    if value_type == 'list float':
+        try:
+            t = [float(i) for i in value.split()]
+        except:
+            return f'{name} {["ен", "но", "на"][declension]} быть списком целых чисел (через пробел)'
+        else:
+            if min_value is not None:
+                for i in t:
+                    if i < min_value:
+                        return f'Все числа в списке "{name}" должны быть больше или равны {min_value}'
+            if max_value is not None:
+                for i in t:
+                    if i > max_value:
+                        return f'Все числа в списке "{name}" должны быть меньше или равны {max_value}'
+            return None
     try:
         if value_type == int:
             int(value)

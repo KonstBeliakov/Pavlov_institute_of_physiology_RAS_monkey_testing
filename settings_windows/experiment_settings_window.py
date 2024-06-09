@@ -18,7 +18,7 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'text': 'Количество сессий',                              'value_type': int,     'min_value': 1, 'save_value': 'session_number'},
             {'text': 'Количество тестов в сессии',                     'value_type': int,     'min_value': 1, 'save_value': 'repeat_number'},
             {'text': 'Время отображения целевого изображения',         'value_type': float,   'min_value': 0, 'save_value': 'delay[0]'},
-            {'text': 'Задержка перед появлением тестовых изображений', 'value_type': float,   'min_value': 0, 'save_value': 'delay[1]'},
+            {'text': 'Задержки перед появлением тестовых изображений \n(несколько чисел через пробел)', 'value_type': 'list float',    'min_value': 0, 'save_value': 'delay[1]'},
             {'text': 'Время для ответа',                               'value_type': float,   'min_value': 0, 'save_value': 'delay[2]'},
             {'text': 'Задержка между тестами',                         'value_type': float,   'min_value': 0, 'save_value': 'delay[3]'},
             {'text': 'Задержка между сессиями',                        'value_type': float,   'min_value': 0, 'save_value': 'delay[4]'},

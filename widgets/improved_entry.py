@@ -39,7 +39,10 @@ class ImprovedEntry(tk.Entry):
         if self.value_type == bool:
             value = self.get().strip() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
         else:
-            value = self.value_type(self.get())
+            if self.value_type == 'list float':
+                value = [float(i) for i in self.get().split()]
+            else:
+                value = self.value_type(self.get())
 
         if self.save_to is not None:
             self.save_to = self.save_to.strip()
