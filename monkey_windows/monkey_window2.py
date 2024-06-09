@@ -6,6 +6,7 @@ from settings import settings
 from random import randint, randrange
 import utils
 from monkey_windows.monkey_window import MonkeyWindow
+from widgets.canvas_object import CanvasObject
 
 
 class MonkeyWindow2(MonkeyWindow):
@@ -22,19 +23,18 @@ class MonkeyWindow2(MonkeyWindow):
         t = (self.canvas_size[1] - settings['image_number'] * self.image_size) // (settings['image_number'] + 1)
         x_pos = (self.canvas_size[0] - settings['barrier_width']) // 2 - self.image_size - settings['barrier_dist']
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings['image_number'])]
-        print(self.image_position)
 
         filename = 'pictograms/yes.png'
         self.python_image = utils.open_image(filename, settings['image_size2'])
 
-        self.image = [self.canvas.create_image(*self.image_position[i], image=self.python_image) for i in
-                      range(settings['image_number'])]
+        self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename)
+                        for i in range(settings['image_number'])]
 
         self.right_image = randrange(settings['image_number'])
 
-        for i in range(settings['image_number']):
-            if i != self.right_image:
-                self.canvas.itemconfig(self.image[i], state='hidden')
+        for obj in self.objects:
+            obj.hide()
+        self.objects[self.right_image].show()
 
         self.experiment_number = 1
         self.test_start = perf_counter()
@@ -69,22 +69,24 @@ class MonkeyWindow2(MonkeyWindow):
             next_experiment = False
             while not next_experiment:
                 next_experiment = True
-                for i in range(settings['image_number']):
-                    self.canvas.move(self.image[i], self.image_speed * (perf_counter() - self.time[i]), 0)
+                for i, obj in enumerate(self.objects):
+                    obj.move(int(self.image_speed * (perf_counter() - self.time[i])), 0)
                     self.time[i] = perf_counter()
 
                     if self.is_image_behind_barrier(i):
-                        self.canvas.itemconfig(self.image[i], state='normal')
-                    if not self.canvas.coords(self.image[i])[0] - (self.image_size // 2) > self.canvas_size[0]:
+                        obj.show()
+                    if not obj.x - (self.image_size // 2) > self.canvas_size[0]:
                         next_experiment = False
-
                 sleep(0.05)
+
             sleep(settings['session_delay2'])
             self.right_image = randrange(settings['image_number'])
-            for i in range(settings['image_number']):
-                pos = self.canvas.coords(self.image[i])
-                self.canvas.move(self.image[i], self.image_position[i][0] - pos[0], self.image_position[i][1] - pos[1])
-                self.canvas.itemconfig(self.image[i], state='normal' if self.right_image == i else 'hidden')
+
+            for i, obj in enumerate(self.objects):
+                obj.set_pos(*self.image_position[i])
+                obj.hide()
+
+            self.objects[self.right_image].show()
             self.test_start = perf_counter()
             if not self.pressed:
                 self.log.append([self.experiment_number, round(perf_counter() - settings['experiment_start'], 3),
@@ -94,8 +96,7 @@ class MonkeyWindow2(MonkeyWindow):
         self.destroy()
 
     def is_image_behind_barrier(self, n: int):
-        img_pos = [self.canvas.coords(self.image[n])[0] - self.image_size // 2,
-                   self.canvas.coords(self.image[n])[1] + self.image_size // 2]
+        img_pos = [self.objects[n].x - self.image_size // 2, self.objects[n].y + self.image_size // 2]
         barrier_pos = ((self.canvas_size[0] - settings['barrier_width']) // 2, 0,
                        settings['barrier_width'] + (self.canvas_size[0] - settings['barrier_width']) // 2,
                        self.canvas_size[1])
@@ -107,7 +108,7 @@ class MonkeyWindow2(MonkeyWindow):
         return t2 == 4
 
     def bind_image(self, x):
-        self.canvas.tag_bind(self.image[x], '<Button-1>', lambda event: self.object_click_event(x))
+        self.objects[x].bind('<Button-1>', lambda event: self.object_click_event(x))
 
     def bind(self):
         for i in range(settings['image_number']):
