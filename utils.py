@@ -21,8 +21,10 @@ def open_image(filename: str, image_size: int):
     return PhotoImage(Image.open(filename).resize((image_size, image_size)))
 
 
-def entry_value_check(value, name, declension=1, min_value=None, max_value=None, value_type=int):
+def entry_value_check(value, name, declension=1, min_value=None, max_value=None, value_type=int, may_be_empty=False):
     if not value:
+        if may_be_empty:
+            return None
         return f'{name} не указан{["", "о", "а"][declension]}'
     try:
         if value_type == int:
@@ -39,18 +41,18 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
 
 
 def right_answer():
-    if settings['using_sound']:
+    if settings['using_sound'] and settings['right_answer_sound']:
         play_sound(settings['right_answer_sound'])
     positive_reinforcement()
 
 
 def wrong_answer():
-    if settings['using_sound']:
+    if settings['using_sound'] and settings['wrong_answer_sound']:
         play_sound(settings['wrong_answer_sound'])
 
 
 def experiment_start():
-    if settings['using_sound']:
+    if settings['using_sound'] and settings['experiment_start_sound']:
         play_sound(settings['experiment_start_sound'])
 
 

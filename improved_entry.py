@@ -5,8 +5,10 @@ from utils import entry_value_check
 
 class ImprovedEntry(tk.Entry):
     def __init__(self, screen, x: int, y: int, text: str, value=None, value_type=int, min_value=None, max_value=None,
-                 save_value=None):
+                 save_value=None, may_be_empty=False):
         super().__init__(screen)
+
+        self.may_be_empty = may_be_empty
 
         if value is None:
             save_value = save_value.strip()
@@ -31,7 +33,7 @@ class ImprovedEntry(tk.Entry):
 
     def check_value(self):
         return entry_value_check(self.get(), self.label['text'], min_value=self.min_value, max_value=self.max_value,
-                                 value_type=self.value_type)
+                                 value_type=self.value_type, may_be_empty=self.may_be_empty)
 
     def save_value(self):
         if self.value_type == bool:

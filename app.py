@@ -92,9 +92,9 @@ class App(tk.Tk):
         self.basic_settings_label_frame.grid(column=0, row=1)
 
         self.entries_list = EntryList(self.basic_settings_label_frame, 0, 0, [
-            {'text': 'Путь до файла звука начала эксперимента',          'value_type': str, 'save_value': 'experiment_start_sound'},
-            {'text': 'Путь до файла позитивного звукового подкрепления', 'value_type': str, 'save_value': 'right_answer_sound'},
-            {'text': 'Путь до файла негативного звукового подкрепления', 'value_type': str, 'save_value': 'wrong_answer_sound'},
+            {'text': 'Путь до файла звука начала эксперимента (оставить пустым если не используется)',          'value_type': str, 'save_value': 'experiment_start_sound', 'may_be_empty': True},
+            {'text': 'Путь до файла позитивного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'right_answer_sound', 'may_be_empty': True},
+            {'text': 'Путь до файла негативного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'wrong_answer_sound', 'may_be_empty': True},
             {'text': 'Радиус круга отображающегося после нажатия',       'value_type': int,   'min_value': 0, 'save_value': 'mouse_click_circle_radius'},
             {'text': 'Цвет круга',                                       'value_type': str, 'save_value': 'click_circle_color'},
             {'text': 'Толщина линии круга',                              'value_type': int,   'min_value': 0, 'save_value': 'click_circle_width'},

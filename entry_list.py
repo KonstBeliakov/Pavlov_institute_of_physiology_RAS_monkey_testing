@@ -17,7 +17,7 @@ class EntryList:
                 error_text += f'{t}\n'
             else:
                 entry.configure(fg='black')
-        return error_text
+        return None if not error_text else error_text
 
     def save_values(self, check_validity=True):
         if check_validity and (t := self.check_values(show_error=True)) is not None:
