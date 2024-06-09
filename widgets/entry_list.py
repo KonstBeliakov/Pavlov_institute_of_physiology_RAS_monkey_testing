@@ -1,4 +1,4 @@
-from improved_entry import ImprovedEntry
+from widgets.improved_entry import ImprovedEntry
 from tkinter import Frame
 
 

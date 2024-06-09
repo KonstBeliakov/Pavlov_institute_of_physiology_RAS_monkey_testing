@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkhtmlview import HTMLLabel
 
-from entry_list import EntryList
+from widgets.entry_list import EntryList
 from settings import settings
 import utils
 from try_again_window import TryAgainWindow
@@ -28,8 +28,6 @@ from settings_windows.experiment_settings_window3 import ExperimentSettingsWindo
 from monkey_windows.monkey_window1 import MonkeyWindow1
 from monkey_windows.monkey_window2 import MonkeyWindow2
 from monkey_windows.monkey_window3 import MonkeyWindow3
-
-from improved_entry import ImprovedEntry
 
 
 class App(tk.Tk):
@@ -52,8 +50,8 @@ class App(tk.Tk):
         for i in range(len(self.frame)):
             self.frame[i].pack(fill=BOTH, expand=True)
 
-        self.test_image = [PhotoImage(file="settings.png"), PhotoImage(file="run.png"), PhotoImage(file="info.png"),
-                           PhotoImage(file='yes.png') if utils.serial_available else PhotoImage(file="no.png")]
+        self.test_image = [PhotoImage(file="pictograms/settings.png"), PhotoImage(file="pictograms/run.png"), PhotoImage(file="pictograms/info.png"),
+                           PhotoImage(file='pictograms/yes.png') if utils.serial_available else PhotoImage(file="pictograms/no.png")]
 
         for i in range(len(self.frame)):
             self.notebook.add(self.frame[i], text=frame_text[i], image=self.test_image[i], compound=LEFT)
@@ -76,9 +74,9 @@ class App(tk.Tk):
             utils.check_serial()
 
             if utils.serial_available:
-                self.test_image[3].configure(file='yes.png')
+                self.test_image[3].configure(file='pictograms/yes.png')
             else:
-                self.test_image[3].configure(file='no.png')
+                self.test_image[3].configure(file='pictograms/no.png')
 
     def devise_check_frame_init(self):
         frame_number = 3
@@ -279,7 +277,7 @@ class App(tk.Tk):
             time.sleep(1)
 
     def second_screen_update(self):
-        python_image = tk.PhotoImage(file="settings.png")
+        python_image = tk.PhotoImage(file="pictograms/settings.png")
         monitor_number = 2
         with mss.mss() as sct:
             mon = sct.monitors[monitor_number]

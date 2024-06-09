@@ -24,7 +24,7 @@ class MonkeyWindow2(MonkeyWindow):
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings['image_number'])]
         print(self.image_position)
 
-        filename = 'test.png'
+        filename = 'pictograms/yes.png'
         self.python_image = utils.open_image(filename, settings['image_size2'])
 
         self.image = [self.canvas.create_image(*self.image_position[i], image=self.python_image) for i in

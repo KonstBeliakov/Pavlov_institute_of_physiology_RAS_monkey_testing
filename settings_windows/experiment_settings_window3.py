@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from entry_list import EntryList
+from widgets.entry_list import EntryList
 from settings import settings
 from settings_windows.settings_window import SettingsWindow
 

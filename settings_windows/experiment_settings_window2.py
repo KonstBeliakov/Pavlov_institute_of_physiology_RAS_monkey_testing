@@ -1,6 +1,6 @@
 from tkinter import *
 from settings_windows.settings_window import SettingsWindow
-from entry_list import EntryList
+from widgets.entry_list import EntryList
 
 
 class ExperimentSettingsWindow2(SettingsWindow):

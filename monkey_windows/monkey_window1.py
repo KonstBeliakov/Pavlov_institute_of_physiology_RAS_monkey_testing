@@ -11,7 +11,7 @@ from settings import settings
 import utils
 
 directory = "images"
-temp_image_file = 'settings.png'
+temp_image_file = 'pictograms/settings.png'
 
 
 class MonkeyWindow1(MonkeyWindow):
@@ -124,7 +124,7 @@ class MonkeyWindow1(MonkeyWindow):
 
 if __name__ == '__main__':
     directory = '../images'
-    temp_image_file = '../settings.png'
+    temp_image_file = '../pictograms/settings.png'
     files = os.listdir(directory)
     window = MonkeyWindow1()
     window.mainloop()
