@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkhtmlview import HTMLLabel
 
-from widgets.entry_list import EntryList
+from widgets.widget_list import WidgetList
 from settings import settings
 import utils
 from try_again_window import TryAgainWindow
@@ -81,7 +81,7 @@ class App(tk.Tk):
     def devise_check_frame_init(self):
         frame_number = 3
 
-        self.devise_check_entries = EntryList(self.frame[frame_number], 0, 0, [
+        self.devise_check_entries = WidgetList(self.frame[frame_number], 0, 0, [
             {'text': 'Порт', 'value_type': str, 'save_value': 'port'},
             {'text': 'Частота', 'value_type': int, 'min_value': 0, 'save_value': 'baudrate'}
         ])
@@ -126,7 +126,7 @@ class App(tk.Tk):
         self.basic_settings_label_frame = Frame(self.frame[frame_number])
         self.basic_settings_label_frame.grid(column=0, row=1)
 
-        self.entries_list = EntryList(self.basic_settings_label_frame, 0, 0, [
+        self.entries_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
             {'text': 'Путь до файла звука начала эксперимента (оставить пустым если не используется)',          'value_type': str, 'save_value': 'experiment_start_sound', 'may_be_empty': True},
             {'text': 'Путь до файла позитивного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'right_answer_sound', 'may_be_empty': True},
             {'text': 'Путь до файла негативного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'wrong_answer_sound', 'may_be_empty': True},
