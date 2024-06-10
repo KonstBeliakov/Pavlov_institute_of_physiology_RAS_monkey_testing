@@ -27,6 +27,7 @@ settings = {
     'image_size': 100,
     'distance_between_images': 100,
     'same_images': False,
+    'display_target_image_twice': False,
 
     # Second type experiment settings
     'image_min_speed': 50,

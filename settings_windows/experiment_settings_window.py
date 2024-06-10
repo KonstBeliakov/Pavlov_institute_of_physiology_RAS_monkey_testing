@@ -23,7 +23,8 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'text': 'Задержка между тестами',                         'value_type': float,   'min_value': 0, 'save_value': 'delay[3]'},
             {'text': 'Задержка между сессиями',                        'value_type': float,   'min_value': 0, 'save_value': 'delay[4]'},
             {'text': 'Размер изображения',                             'value_type': int,     'min_value': 1, 'save_value': 'image_size'},
-            {'text': 'Расстояние между изображениями',                 'value_type': int,     'min_value': 1, 'save_value': 'distance_between_images'}
+            {'text': 'Расстояние между изображениями',                 'value_type': int,     'min_value': 1, 'save_value': 'distance_between_images'},
+            {'text': 'Отображать целевое изображение дважды (y/n)',    'value_type': bool,                    'save_value': 'display_target_image_twice'}
         ])
 
 

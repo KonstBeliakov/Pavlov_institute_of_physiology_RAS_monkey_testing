@@ -65,10 +65,10 @@ class MonkeyWindow2(MonkeyWindow):
             next_experiment = False
             while not next_experiment:
                 next_experiment = True
-                for i, obj in enumerate(self.objects):
+                for j, obj in enumerate(self.objects):
                     obj.update()
 
-                    if self.is_image_behind_barrier(i):
+                    if self.is_image_behind_barrier(j):
                         obj.show()
                     if not obj.x - (self.image_size // 2) > self.canvas_size[0]:
                         next_experiment = False

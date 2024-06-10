@@ -42,28 +42,35 @@ class MonkeyWindow1(MonkeyWindow):
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
                 image_numbers = sample(files, 2)
-                start_position = [self.canvas_size[0] // 2, self.canvas_size[1] // 2]
-                self.objects = [CanvasObject(self.canvas, 100 + 100 * i, 100, settings['image_size'],
+                screen_center_pos = [self.canvas_size[0] // 2, self.canvas_size[1] // 2]
+                dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2
+                pos = [[dx + settings['image_size'] // 2, self.canvas_size[1] // 2],
+                       [dx + settings['image_size'] * 1.5 + settings['distance_between_images'],
+                        self.canvas_size[1] // 2]
+                       ]
+                self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
                                              f'{directory}/{image_numbers[i]}') for i in range(2)]
                 self.right_number, self.wrong_number = [(t := randrange(2)), int(not t)]
 
-                self.objects[self.right_number].set_pos(*start_position)
+                if settings['display_target_image_twice']:
+                    self.objects[self.right_number].set_pos(*pos[0])
+                    self.right_image_copy = CanvasObject(self.canvas, *pos[1], settings['image_size'],
+                                                         f'{directory}/{image_numbers[self.right_number]}')
+                else:
+                    self.objects[self.right_number].set_pos(*screen_center_pos)
                 self.objects[self.right_number].show()
                 self.objects[self.wrong_number].hide()
 
                 time.sleep(settings['delay'][0])
 
                 # both images are hidden
+                if settings['display_target_image_twice']:
+                    self.right_image_copy.hide()
                 self.objects[self.right_number].hide()
 
                 time.sleep(settings['delay'][1][(self.experiment_number - 1) % len(settings['delay'][1])])
 
                 # both images shows up and it's time for answering
-                dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2
-                pos = [[dx + settings['image_size'] // 2, self.canvas_size[1] // 2],
-                       [dx + settings['image_size'] * 1.5 + settings['distance_between_images'], self.canvas_size[1] // 2]
-                       ]
-
                 self.objects[0].set_pos(*pos[0])
                 self.objects[1].set_pos(*pos[1])
 
@@ -88,8 +95,8 @@ class MonkeyWindow1(MonkeyWindow):
                 self.objects[0].hide()
                 self.objects[1].hide()
 
-                time.sleep(settings['delay'][3])
                 # both images are hidden again
+                time.sleep(settings['delay'][3])
 
                 self.experiment_number += 1
         time.sleep(settings['delay'][4])
