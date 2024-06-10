@@ -86,11 +86,20 @@ class App(tk.Tk):
             {'text': 'Частота', 'value_type': int, 'min_value': 0, 'save_value': 'baudrate'}
         ])
 
-        self.check_devise_button = Button(self.frame[frame_number], text='Подключиться', command=self.devise_check)
+        self.check_devise_button = Button(self.frame[frame_number], text='Подключиться к управляющей плате', command=self.devise_check)
         self.check_devise_button.grid(row=1, column=0)
 
+        self.check_second_screen_button = Button(self.frame[frame_number], text='Проверить второй монитор', command=self.check_second_screen)
+        self.check_second_screen_button.grid(row=2, column=0)
+
         self.devise_check_error_label = Label(self.frame[frame_number], text='', fg='red')
-        self.devise_check_error_label.grid(row=2, column=0)
+        self.devise_check_error_label.grid(row=3, column=0)
+
+    def check_second_screen(self):
+        self.check_second_screen_canvas = Canvas(self.frame[3])
+        self.check_second_screen_canvas.grid(row=4, column=0)
+        t1 = threading.Thread(target=lambda: self.second_screen_update(self.check_second_screen_canvas))
+        t1.start()
 
     def info_frame_init(self):
         frame_number = 2
@@ -223,7 +232,7 @@ class App(tk.Tk):
 
                 self.update_thread = threading.Thread(target=self.update_log)
                 self.update_thread.start()
-                self.update_second_screen_thread = threading.Thread(target=self.second_screen_update)
+                self.update_second_screen_thread = threading.Thread(target=lambda: self.second_screen_update(self.second_screen_canvas))
                 self.update_second_screen_thread.start()
 
                 self.window.mainloop()
@@ -276,12 +285,12 @@ class App(tk.Tk):
             self.draw_graph(list(range(len(graph_data))), graph_data)
             time.sleep(1)
 
-    def second_screen_update(self):
+    def second_screen_update(self, canvas):
         python_image = tk.PhotoImage(file="pictograms/settings.png")
         monitor_number = 2
         with mss.mss() as sct:
             mon = sct.monitors[monitor_number]
-            self.canvas_image = self.second_screen_canvas.create_image(int(mon['width'] * settings['monitor_copy_size']),
+            self.canvas_image = canvas.create_image(int(mon['width'] * settings['monitor_copy_size']),
                                                                        int(mon['height'] * settings['monitor_copy_size']),
                                                                        image=python_image)
             monitor = {
@@ -299,7 +308,7 @@ class App(tk.Tk):
                                    int(img.size[1] * 2 * settings['monitor_copy_size'])))
                 img3 = ImageTk.PhotoImage(img2)
 
-                self.second_screen_canvas.itemconfigure(self.canvas_image, image=img3)
+                canvas.itemconfigure(self.canvas_image, image=img3)
 
     def experiment_settings(self):
         match self.choose_experiment_combobox.get():
