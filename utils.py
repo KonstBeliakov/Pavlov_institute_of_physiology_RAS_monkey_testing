@@ -41,7 +41,7 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
         try:
             t = [float(i) for i in value.split()]
         except:
-            return f'{name} {["ен", "но", "на"][declension]} быть списком целых чисел (через пробел)'
+            return f'{name} долж{["ен", "но", "на"][declension]} быть списком вещественных чисел (через пробел)'
         else:
             if min_value is not None:
                 for i in t:

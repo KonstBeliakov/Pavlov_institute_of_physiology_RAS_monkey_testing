@@ -2,7 +2,7 @@ import time
 import tkinter.messagebox as mb
 
 import threading
-from random import sample, randrange
+from random import sample, randrange, shuffle
 import os
 from monkey_windows.monkey_window import MonkeyWindow
 from settings import settings
@@ -39,6 +39,16 @@ class MonkeyWindow1(MonkeyWindow):
         self.pressed = True
 
     def update(self):
+        experiments = settings['session_number'] * settings['repeat_number']
+
+        delays = [settings['delay'][1][i % len(settings['delay'][1])] for i in range(experiments)]
+        if settings['mix_delays']:
+            shuffle(delays)
+
+        r1 = settings['correct_answers_percentage'] * experiments // 100
+        right_numbers = [False] * r1 + [True] * (experiments - r1)
+        shuffle(right_numbers)
+
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
                 image_numbers = sample(files, 2)
@@ -50,7 +60,8 @@ class MonkeyWindow1(MonkeyWindow):
                        ]
                 self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
                                              f'{directory}/{image_numbers[i]}') for i in range(2)]
-                self.right_number, self.wrong_number = [(t := randrange(2)), int(not t)]
+                self.right_number, self.wrong_number = int(right_numbers[self.experiment_number]), \
+                    int(not right_numbers[self.experiment_number])
 
                 if settings['display_target_image_twice']:
                     self.objects[self.right_number].set_pos(*pos[0])
@@ -68,7 +79,7 @@ class MonkeyWindow1(MonkeyWindow):
                     self.right_image_copy.hide()
                 self.objects[self.right_number].hide()
 
-                time.sleep(settings['delay'][1][(self.experiment_number - 1) % len(settings['delay'][1])])
+                time.sleep(delays[self.experiment_number - 1])
 
                 # both images shows up and it's time for answering
                 self.objects[0].set_pos(*pos[0])
@@ -88,8 +99,9 @@ class MonkeyWindow1(MonkeyWindow):
                     time.sleep(0.05)
 
                 if not self.pressed:
-                    self.log.append([self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
-                                     None, None, self.right_number])
+                    self.log.append(
+                        [self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
+                         None, None, self.right_number])
                 self.pressed = False
 
                 self.objects[0].hide()

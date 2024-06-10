@@ -309,7 +309,10 @@ class App(tk.Tk):
                 self.experiment_settings_window = ExperimentSettingsWindow2()
             case 'Новая картинка':
                 self.experiment_settings_window = ExperimentSettingsWindow3()
-        self.experiment_settings_window.mainloop()
+        if self.choose_experiment_combobox.get():
+            self.experiment_settings_window.mainloop()
+        else:
+            self.run_error_label.configure(text='Перед тем как настроить эксперимент выберите его тип')
 
     def save_experiment_data(self, path):
         df = pd.DataFrame(

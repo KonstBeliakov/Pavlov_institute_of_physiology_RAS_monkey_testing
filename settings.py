@@ -28,6 +28,8 @@ settings = {
     'distance_between_images': 100,
     'same_images': False,
     'display_target_image_twice': False,
+    'mix_delays': False,
+    'correct_answers_percentage': 50,
 
     # Second type experiment settings
     'image_min_speed': 50,
