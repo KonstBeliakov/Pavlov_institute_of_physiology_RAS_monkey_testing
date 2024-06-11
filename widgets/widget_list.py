@@ -4,7 +4,7 @@ from tkinter import Frame
 
 
 class WidgetList:
-    def __init__(self, screen, x, y, widget_params):
+    def __init__(self, screen, x, y, widget_params, vertical=False):
         self.frame = Frame(screen)
         self.frame.grid(row=y, column=x)
         self.widgets = []
@@ -15,10 +15,17 @@ class WidgetList:
             else:
                 widget_type = 'entry'
 
-            if widget_type == 'radiobutton':
-                self.widgets.append(ImprovedRadiobuttons(screen=self.frame, x=0, y=i, **params))
+            if vertical:
+                x = 2 * i
+                y = 0
             else:
-                self.widgets.append(ImprovedEntry(screen=self.frame, x=0, y=i, **params))
+                x = 0
+                y = i
+
+            if widget_type == 'radiobutton':
+                self.widgets.append(ImprovedRadiobuttons(screen=self.frame, x=x, y=y, **params))
+            else:
+                self.widgets.append(ImprovedEntry(screen=self.frame, x=x, y=y, **params))
 
     def check_values(self, show_error=False):
         error_text = ''

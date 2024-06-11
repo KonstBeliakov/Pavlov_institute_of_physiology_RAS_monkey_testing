@@ -2,6 +2,11 @@ settings = {
     'bg_color': '#fff',
     'monitor_copy_size': 0.05,
 
+    # saving experiment data params
+    'experiment_data_filename': '',
+    'selected_period_start': '',
+    'selected_period_end': '',
+
     # arduino params
     'port': 'COM3',
     'baudrate': 9600,

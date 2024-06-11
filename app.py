@@ -21,6 +21,8 @@ from settings import settings
 import utils
 from try_again_window import TryAgainWindow
 
+from widgets.improved_entry import ImprovedEntry
+
 from settings_windows.experiment_settings_window2 import ExperimentSettingsWindow2
 from settings_windows.experiment_settings_window import ExperimentSettingsWindow
 from settings_windows.experiment_settings_window3 import ExperimentSettingsWindow3
@@ -44,14 +46,15 @@ class App(tk.Tk):
 
         self.notebook = ttk.Notebook()
         self.notebook.pack(expand=True, fill=BOTH)
-        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении', 'Проверка устройств']
+        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении', 'Проверка устройств', 'Анализ данных']
         self.frame = [ttk.Frame(self.notebook) for _ in range(len(frame_text))]
 
         for i in range(len(self.frame)):
             self.frame[i].pack(fill=BOTH, expand=True)
 
         self.test_image = [PhotoImage(file="pictograms/settings.png"), PhotoImage(file="pictograms/run.png"), PhotoImage(file="pictograms/info.png"),
-                           PhotoImage(file='pictograms/yes.png') if utils.serial_available else PhotoImage(file="pictograms/no.png")]
+                           PhotoImage(file='pictograms/yes.png') if utils.serial_available else PhotoImage(file="pictograms/no.png"),
+                           PhotoImage(file="pictograms/data.png")]
 
         for i in range(len(self.frame)):
             self.notebook.add(self.frame[i], text=frame_text[i], image=self.test_image[i], compound=LEFT)
@@ -60,11 +63,59 @@ class App(tk.Tk):
         self.settings_frame_init()
         self.run_frame_init()
         self.devise_check_frame_init()
+        self.data_frame_init()
 
     def confirm_delete(self):
         message = "Вы уверены, что хотите закрыть это окно?"
         if mb.askyesno(message=message, parent=self):
             self.destroy()
+
+    def find_experiments(self):
+        self.experiment_data.config(state=NORMAL)
+        self.experiment_data.delete(1.0, tk.END)
+        self.experiment_data.insert(tk.END, 'some data')
+
+    def create_data_file(self):
+        pass
+
+    def data_frame_init(self):
+        frame_number = 4
+
+        self.data_frame1 = Frame(self.frame[frame_number])
+        self.data_frame1.grid(row=0, column=0)
+
+        self.time_interval_entries = WidgetList(self.data_frame1, 0, 0, [
+            {'text': 'От', 'value_type': 'str', 'save_value': 'selected_period_start', 'may_be_empty': True},
+            {'text': 'До', 'value_type': 'str', 'save_value': 'selected_period_end',   'may_be_empty': True}
+        ], vertical=True)
+
+        self.button_search = Button(self.data_frame1, text='Найти эксперименты', command=self.find_experiments)
+        self.button_search.grid(row=0, column=1)
+
+        self.data_frame2 = Frame(self.frame[frame_number])
+        self.data_frame2.grid(row=1, column=0)
+
+        self.experiment_data = tk.Text(self.data_frame2, height=8, width=40)
+
+        t = ' '
+
+        self.experiment_data.insert(tk.END, t)
+        self.experiment_data.config(state=DISABLED)
+        self.scroll = tk.Scrollbar(self.data_frame2)
+        self.experiment_data.configure(yscrollcommand=self.scroll.set)
+        self.experiment_data.pack(side=tk.LEFT)
+
+        self.scroll.config(command=self.experiment_data.yview)
+        self.scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.data_frame3 = Frame(self.frame[frame_number])
+        self.data_frame3.grid(row=2, column=0)
+
+        self.filename_entry = ImprovedEntry(self.data_frame3, 0, 0, 'Название файла', value_type=str,
+                                            save_value='experiment_data_filename')
+
+        self.button_create_file = Button(self.data_frame3, text='Создать файл', command=self.create_data_file)
+        self.button_create_file.grid(row=0, column=2)
 
     def devise_check(self):
         if (error_text := self.devise_check_entries.save_values(check_validity=True)) is not None:
