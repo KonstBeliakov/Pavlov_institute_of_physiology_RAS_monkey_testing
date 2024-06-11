@@ -2,7 +2,7 @@ import time
 import tkinter.messagebox as mb
 
 import threading
-from random import sample, randrange, shuffle
+from random import sample, shuffle
 import os
 from monkey_windows.monkey_window import MonkeyWindow
 from settings import settings

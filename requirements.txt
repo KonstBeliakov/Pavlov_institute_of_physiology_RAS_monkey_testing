@@ -1,0 +1,15 @@
+future~=1.0.0
+py2exe~=0.13.0.1
+pyscreenshot~=3.1
+Pillow~=10.1.0
+numpy~=1.26.4
+opencv-python~=4.9.0.80
+PyAutoGUI~=0.9.54
+mss~=9.0.1
+usb~=0.0.83.dev0
+matplotlib~=3.8.3
+pandas~=2.2.0
+tkhtmlview~=0.3.0
+pygame~=2.5.2
+serial~=0.0.97
+pyserial~=3.5

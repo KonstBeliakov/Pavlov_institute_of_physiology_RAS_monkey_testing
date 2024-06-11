@@ -27,24 +27,8 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Отображать целевое изображение дважды',    'value_type': bool, 'save_value': 'display_target_image_twice'},
             {'widget_type': 'radiobutton', 'text': 'Перемешивать задержки',                    'value_type': bool, 'save_value': 'mix_delays'},
             {'text': 'Процент правильных ответов в первом окне',       'value_type': int,     'min_value': 0, 'save_value': 'correct_answers_percentage'},
+            {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
         ])
-
-
-        self.restart_radiobuttons = tk.IntVar()
-        self.restart_radiobuttons.set(0)
-        self.radio_button_yes = tk.Radiobutton(self.settingsFrame, text="Да", variable=self.restart_radiobuttons,
-                                               value=1)
-        self.radio_button_no = tk.Radiobutton(self.settingsFrame, text="Нет", variable=self.restart_radiobuttons,
-                                              value=0)
-        self.radio_button_yes.grid(row=9, column=1)
-        self.radio_button_no.grid(row=9, column=2)
-
-        self.same_images = tk.IntVar()
-        self.same_images.set(0)
-        self.same_images_yes = tk.Radiobutton(self.settingsFrame, text="Да", variable=self.same_images, value=1)
-        self.same_images_no = tk.Radiobutton(self.settingsFrame, text="Нет", variable=self.same_images, value=0)
-        self.same_images_yes.grid(row=10, column=1)
-        self.same_images_no.grid(row=10, column=2)
 
     def save_settings(self):
         if (error_text := self.widgets_list.save_values(check_validity=True)) is None:
