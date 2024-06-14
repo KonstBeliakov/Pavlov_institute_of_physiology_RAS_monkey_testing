@@ -27,3 +27,6 @@ class ImprovedRadiobuttons:
                 settings[self.save_to] = self.variable.get().strip() in ['Да', 'да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
             else:
                 settings[self.save_to] = self.value_type(self.variable.get())
+
+    def get(self):
+        return self.variable.get()

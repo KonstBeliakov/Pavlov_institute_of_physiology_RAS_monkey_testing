@@ -76,7 +76,15 @@ class App(tk.Tk):
             self.destroy()
 
     def load_data(self):
-        files = os.listdir('data/')
+        experiment_type = ['Запоминание картинки', 'Экстраполяция движения', 'Новая картинка'].index(self.experiment_type_radiobutton.get()) + 1
+        files = []
+        for file in sorted(os.listdir('data/')):
+            t1 = (not settings['selected_period_start'] or str(settings['selected_period_start']) < file)
+            t2 = (not settings['selected_period_end'] or file < str(settings['selected_period_end']))
+            t3 = int(file.split('.')[0][-1]) == experiment_type
+            if t1 and t2 and t3:
+                files.append(file)
+
         return files
 
     def find_experiments(self):
