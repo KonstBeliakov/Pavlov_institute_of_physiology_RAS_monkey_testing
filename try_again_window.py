@@ -19,20 +19,27 @@ class TryAgainWindow(tk.Toplevel):
 
         self.label2 = tk.Label(self.frame, text='Введите название файла записи данных эксперимента')
         self.entry = tk.Entry(self.frame)
-        self.button_confirm = tk.Button(self.frame, text='Сохранить', command=self.confirm)
-        self.button_cansel = tk.Button(self.frame, text='Не сохранять данные эксперимента', command=self.cansel)
+
+        self.frame2 = tk.Frame(self)
+        self.frame2.pack()
+
+        self.button_confirm = tk.Button(self.frame2, text='Сохранить в указанный файл', command=self.save)
+        self.button_authosave = tk.Button(self.frame2, text='Автосохранение', command=lambda: self.save(autosave=True))
+        self.button_cansel = tk.Button(self.frame2, text='Не сохранять данные эксперимента', command=self.cansel)
 
         self.failed_label = tk.Label(self, text='Не удалось сохранить: попробуйте еще раз', fg='#f00')
 
         self.label2.grid(row=0, column=0)
         self.entry.grid(row=0, column=1)
-        self.button_confirm.grid(row=1, column=0)
-        self.button_cansel.grid(row=1, column=1)
+        self.button_confirm.grid(row=0, column=0)
+        self.button_authosave.grid(row=0, column=1)
+        self.button_cansel.grid(row=0, column=2)
 
-    def confirm(self):
+    def save(self, autosave=False):
         try:
-            self.parent.save_experiment_data(self.entry.get())
-        except:
+            self.parent.save_experiment_data(self.entry.get(), autosave=autosave)
+        except Exception as e:
+            print(e)
             self.failed_label.pack()
         else:
             self.destroy()

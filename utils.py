@@ -6,6 +6,7 @@ from PIL.ImageTk import PhotoImage
 import pygame
 import serial
 import threading
+from dateutil import parser
 
 from settings import settings
 
@@ -52,6 +53,11 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
                     if i > max_value:
                         return f'Все числа в списке "{name}" должны быть меньше или равны {max_value}'
             return None
+    elif value_type == 'date':
+        try:
+            value = parser.parse(value).date()
+        except:
+            return f'Поле "{name}" должно быть датой (в почти любом формате)'
     try:
         if value_type == int:
             int(value)

@@ -1,6 +1,7 @@
 import tkinter as tk
 import settings
 from utils import entry_value_check
+from dateutil import parser
 
 
 class ImprovedEntry(tk.Entry):
@@ -38,11 +39,12 @@ class ImprovedEntry(tk.Entry):
     def save_value(self):
         if self.value_type == bool:
             value = self.get().strip() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
+        elif self.value_type == 'date':
+            value = parser.parse(self.get().strip()).date()
+        elif self.value_type == 'list float':
+            value = [float(i) for i in self.get().split()]
         else:
-            if self.value_type == 'list float':
-                value = [float(i) for i in self.get().split()]
-            else:
-                value = self.value_type(self.get())
+            value = self.value_type(self.get())
 
         if self.save_to is not None:
             self.save_to = self.save_to.strip()

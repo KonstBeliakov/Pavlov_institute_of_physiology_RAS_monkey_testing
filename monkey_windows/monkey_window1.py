@@ -13,6 +13,7 @@ from widgets.canvas_object import CanvasObject
 class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
+        self.experiment_type = 1
         self.pressed = False
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
         self.experiment_number = 1

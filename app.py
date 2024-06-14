@@ -1,3 +1,5 @@
+import datetime
+import os
 import time
 import tkinter as tk
 from tkinter import ttk
@@ -22,6 +24,7 @@ import utils
 from try_again_window import TryAgainWindow
 
 from widgets.improved_entry import ImprovedEntry
+from widgets.improved_radiobuttons import ImprovedRadiobuttons
 
 from settings_windows.experiment_settings_window2 import ExperimentSettingsWindow2
 from settings_windows.experiment_settings_window import ExperimentSettingsWindow
@@ -46,13 +49,15 @@ class App(tk.Tk):
 
         self.notebook = ttk.Notebook()
         self.notebook.pack(expand=True, fill=BOTH)
-        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении', 'Проверка устройств', 'Анализ данных']
+        frame_text = ['Общие настройки', 'Запуск эксперимента', 'Информация о приложении', 'Проверка устройств',
+                      'Анализ данных']
         self.frame = [ttk.Frame(self.notebook) for _ in range(len(frame_text))]
 
         for i in range(len(self.frame)):
             self.frame[i].pack(fill=BOTH, expand=True)
 
-        self.test_image = [PhotoImage(file="pictograms/settings.png"), PhotoImage(file="pictograms/run.png"), PhotoImage(file="pictograms/info.png"),
+        self.test_image = [PhotoImage(file="pictograms/settings.png"), PhotoImage(file="pictograms/run.png"),
+                           PhotoImage(file="pictograms/info.png"),
                            PhotoImage(file='pictograms/yes.png') if utils.serial_available else PhotoImage(file="pictograms/no.png"),
                            PhotoImage(file="pictograms/data.png")]
 
@@ -70,10 +75,30 @@ class App(tk.Tk):
         if mb.askyesno(message=message, parent=self):
             self.destroy()
 
+    def load_data(self):
+        files = os.listdir('data/')
+        return files
+
     def find_experiments(self):
-        self.experiment_data.config(state=NORMAL)
-        self.experiment_data.delete(1.0, tk.END)
-        self.experiment_data.insert(tk.END, 'some data')
+        if (error_text := self.time_interval_entries.check_values(show_error=True)) is not None:
+            self.data_frame_error_label.configure(text=error_text)
+        else:
+            if self.time_interval_entries.widgets[0].get():
+                self.time_interval_entries.widgets[0].save_value()
+            else:
+                settings['selected_period_start'] = ''
+
+            if self.time_interval_entries.widgets[1].get():
+                self.time_interval_entries.widgets[1].save_value()
+            else:
+                settings['selected_period_end'] = ''
+
+            self.experiment_type_radiobutton.save_value()
+
+            self.experiment_data.config(state=NORMAL)
+            self.experiment_data.delete(1.0, tk.END)
+            self.experiment_data.insert(tk.END, '\n'.join(self.load_data()))
+            self.experiment_data.config(state=DISABLED)
 
     def create_data_file(self):
         pass
@@ -81,19 +106,29 @@ class App(tk.Tk):
     def data_frame_init(self):
         frame_number = 4
 
-        self.data_frame1 = Frame(self.frame[frame_number])
-        self.data_frame1.grid(row=0, column=0)
+        self.data_frame0 = Frame(self.frame[frame_number])
+        self.data_frame0.grid(row=0, column=0)
 
-        self.time_interval_entries = WidgetList(self.data_frame1, 0, 0, [
-            {'text': 'От', 'value_type': 'str', 'save_value': 'selected_period_start', 'may_be_empty': True},
-            {'text': 'До', 'value_type': 'str', 'save_value': 'selected_period_end',   'may_be_empty': True}
+        self.experiment_type_radiobutton = ImprovedRadiobuttons(self.data_frame0, 0, 0, text='Тип эксперимента',
+                                                                values=['Запоминание картинки', 'Экстраполяция движения', 'Новая картинка'],
+                                                                value_type=str)
+
+        self.data_frame1 = Frame(self.frame[frame_number])
+        self.data_frame1.grid(row=1, column=0)
+
+        self.time_interval_entries = WidgetList(self.data_frame1, 0, 1, [
+            {'text': 'От', 'value_type': 'date', 'save_value': 'selected_period_start', 'may_be_empty': True},
+            {'text': 'До', 'value_type': 'date', 'save_value': 'selected_period_end',   'may_be_empty': True}
         ], vertical=True)
 
         self.button_search = Button(self.data_frame1, text='Найти эксперименты', command=self.find_experiments)
-        self.button_search.grid(row=0, column=1)
+        self.button_search.grid(row=1, column=1)
+
+        self.data_frame_error_label = Label(self.data_frame1, text='', fg='red')
+        self.data_frame_error_label.grid(row=2, column=0)
 
         self.data_frame2 = Frame(self.frame[frame_number])
-        self.data_frame2.grid(row=1, column=0)
+        self.data_frame2.grid(row=2, column=0)
 
         self.experiment_data = tk.Text(self.data_frame2, height=8, width=40)
 
@@ -109,7 +144,7 @@ class App(tk.Tk):
         self.scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.data_frame3 = Frame(self.frame[frame_number])
-        self.data_frame3.grid(row=2, column=0)
+        self.data_frame3.grid(row=3, column=0)
 
         self.filename_entry = ImprovedEntry(self.data_frame3, 0, 0, 'Название файла', value_type=str,
                                             save_value='experiment_data_filename')
@@ -374,10 +409,17 @@ class App(tk.Tk):
         else:
             self.run_error_label.configure(text='Перед тем как настроить эксперимент выберите его тип')
 
-    def save_experiment_data(self, path):
+    def save_experiment_data(self, path, autosave=False):
         df = pd.DataFrame(
             {name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
-        df.to_excel(path)
+        print('autosave...')
+        filename = f'{str(datetime.datetime.now()).split(".")[0].replace(":", "_")} {self.window.experiment_type}.xlsx'
+        print(f'filename: {filename}')
+        print(f'path: data/{filename}')
+        df.to_excel(f'data/{filename}')
+        if not autosave:
+            print('saving...')
+            df.to_excel(path)
 
 
 if __name__ == '__main__':

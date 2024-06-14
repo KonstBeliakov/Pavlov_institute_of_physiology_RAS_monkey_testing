@@ -15,6 +15,7 @@ files = os.listdir(directory)  # images name list
 class MonkeyWindow3(MonkeyWindow):
     def __init__(self):
         super().__init__()
+        self.experiment_type = 3
         self.test_start = None
         self.title('Experiment window')
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]

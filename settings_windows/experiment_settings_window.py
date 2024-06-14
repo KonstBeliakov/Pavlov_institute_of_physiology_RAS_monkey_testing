@@ -8,9 +8,6 @@ class ExperimentSettingsWindow(SettingsWindow):
     def __init__(self):
         super().__init__(experiment_type=1)
         self.title('Настройки эксперимента')
-        self.export_settings_window = None
-        self.import_settings_window = None
-
         self.settingsFrame = tk.Frame(self)
         self.settingsFrame.grid(row=0, column=0)
 
@@ -28,6 +25,8 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Перемешивать задержки',                    'value_type': bool, 'save_value': 'mix_delays'},
             {'text': 'Процент правильных ответов в первом окне',       'value_type': int,     'min_value': 0, 'save_value': 'correct_answers_percentage'},
             {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
+            # TODO
+            {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'}
         ])
 
     def save_settings(self):
