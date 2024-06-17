@@ -189,6 +189,15 @@ class App(tk.Tk):
         self.devise_check_error_label = Label(self.frame[frame_number], text='', fg='red')
         self.devise_check_error_label.grid(row=3, column=0)
 
+        self.button_check = [
+            Button(self.frame[frame_number], text='Проверить поилку', command=utils.positive_reinforcement),
+            Button(self.frame[frame_number], text='Проверить подъем заслонки', command=utils.disable_anser_entry),
+            Button(self.frame[frame_number], text='Проверить опускание заслонки', command=utils.anable_answer_entry)
+        ]
+
+        for i, button in enumerate(self.button_check):
+            button.grid(row=4 + i, column=0)
+
     def check_second_screen(self):
         self.check_second_screen_canvas = Canvas(self.frame[3])
         self.check_second_screen_canvas.grid(row=4, column=0)
