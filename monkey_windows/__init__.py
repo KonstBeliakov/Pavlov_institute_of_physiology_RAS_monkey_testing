@@ -1,0 +1,3 @@
+from monkey_windows.monkey_window1 import MonkeyWindow1
+from monkey_windows.monkey_window2 import MonkeyWindow2
+from monkey_windows.monkey_window3 import MonkeyWindow3
