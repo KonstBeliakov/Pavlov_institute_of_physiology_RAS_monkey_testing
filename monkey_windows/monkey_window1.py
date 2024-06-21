@@ -2,7 +2,7 @@ import time
 import tkinter.messagebox as mb
 
 import threading
-from random import sample, shuffle
+from random import sample, shuffle, choice
 import os
 from monkey_windows.monkey_window import MonkeyWindow
 from settings import settings
@@ -52,7 +52,17 @@ class MonkeyWindow1(MonkeyWindow):
 
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
-                image_numbers = sample(files, 2)
+                if settings['image_selection_method'] == 'Случайный':
+                    directory = "images_random"
+                    files = os.listdir(directory)
+                    image_numbers = sample(files, 2)
+                else:
+                    directory = "image_pairs"
+                    files = os.listdir(directory)
+                    img1_name = choice([i for i in files if 'A' in i])
+                    img2_name = img1_name.replace('A', 'B')
+                    image_numbers = [img1_name, img2_name]
+
                 screen_center_pos = [self.canvas_size[0] // 2, self.canvas_size[1] // 2]
                 dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2
                 pos = [[dx + settings['image_size'] // 2, self.canvas_size[1] // 2],
@@ -116,13 +126,13 @@ class MonkeyWindow1(MonkeyWindow):
 
 
 if __name__ == '__main__':
-    directory = '../images'
+    directory = '../images_random'
     temp_image_file = '../pictograms/settings.png'
     settings['experiment_start'] = time.perf_counter()
     files = os.listdir(directory)
     window = MonkeyWindow1()
     window.mainloop()
 else:
-    directory = "images"
+    directory = "images_random"
     temp_image_file = 'pictograms/settings.png'
     files = os.listdir(directory)

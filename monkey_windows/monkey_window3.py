@@ -8,7 +8,7 @@ from monkey_windows.monkey_window import MonkeyWindow
 from widgets.canvas_object import CanvasObject
 
 
-directory = "images"
+directory = "images_random"
 files = os.listdir(directory)  # images name list
 
 

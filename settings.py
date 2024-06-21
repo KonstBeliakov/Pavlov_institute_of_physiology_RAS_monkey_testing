@@ -35,6 +35,7 @@ settings = {
     'display_target_image_twice': False,
     'mix_delays': False,
     'correct_answers_percentage': 50,
+    'image_selection_method': 'Случайный',
 
     # Second type experiment settings
     'image_min_speed': 50,

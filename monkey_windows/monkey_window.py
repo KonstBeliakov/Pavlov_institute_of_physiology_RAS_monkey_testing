@@ -12,7 +12,7 @@ class MonkeyWindow(tk.Toplevel):
         self.canvas = tk.Canvas(self, bg=settings['bg_color'], width=self.canvas_size[0], height=self.canvas_size[1])
         self.canvas.pack(anchor=tk.CENTER, expand=1)
 
-        self.attributes("-fullscreen", True)
+        #self.attributes("-fullscreen", True)
 
         self.canvas.bind("<Button-1>", self.canvas_pressed)
 
