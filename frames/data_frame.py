@@ -1,3 +1,4 @@
+import utils
 from settings import settings
 from widgets.improved_entry import ImprovedEntry
 from widgets.improved_radiobuttons import ImprovedRadiobuttons
@@ -96,4 +97,11 @@ class DataFrame:
             self.experiment_data.config(state=DISABLED)
 
     def create_data_file(self):
-        pass
+        if self.filename_entry.get():
+            export_filename = f'datasets/{self.filename_entry.get()}'
+            if not export_filename.endswith('.xlsx'):
+                export_filename += '.xlsx'
+        else:
+            export_filename = None
+
+        utils.export_data(export_file=export_filename, files=[f'data/{i}' for i in self.load_data()])

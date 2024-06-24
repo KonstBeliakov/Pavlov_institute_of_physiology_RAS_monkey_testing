@@ -7,6 +7,10 @@ import pygame
 import serial
 import threading
 from dateutil import parser
+import datetime
+from os import listdir
+import pandas as pd
+import openpyxl
 
 from settings import settings
 
@@ -115,6 +119,28 @@ def read_usb():
         else:
             print('serial is not available')
         time.sleep(.1)
+
+
+def export_data(export_file=None, files=None):
+    if export_file is None:
+        export_file = f'datasets/dataset_{str(datetime.datetime.now()).split(".")[0].replace(":", "_")}.xlsx'
+    if files is None:
+        files = [i for i in listdir('data/') if i.endswith('.xlsx')]
+
+    l = []
+
+    for file in sorted(files):
+        dataframe = openpyxl.load_workbook(file)
+        dataframe1 = dataframe.active
+        for row in range(1, dataframe1.max_row):
+            l.append([col[row].value for col in dataframe1.iter_cols(3, dataframe1.max_column)] + [file])
+
+    l = [[i + 1] + row for i, row in enumerate(l)]
+    l = [['Номер эксперимента', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ',
+          'Источник информации']] + l
+
+    data_frame = pd.DataFrame(l)
+    data_frame.to_excel(export_file)
 
 
 check_serial()
