@@ -36,6 +36,7 @@ settings = {
     'mix_delays': False,
     'correct_answers_percentage': 50,
     'image_selection_method': 'Случайный',
+    'equalize_correct_answers_by_delays': False,
 
     # Second type experiment settings
     'image_min_speed': 50,

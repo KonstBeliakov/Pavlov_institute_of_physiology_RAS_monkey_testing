@@ -10,13 +10,48 @@ import utils
 from widgets.canvas_object import CanvasObject
 
 
+def generate_experiment_params():
+    exp_num = settings['session_number'] * settings['repeat_number']  # number of experiments
+    delays = [settings['delay'][1][i % len(settings['delay'][1])] for i in range(exp_num)]
+
+    if settings['mix_delays']:
+        shuffle(delays)
+
+    if settings['equalize_correct_answers_by_delays']:
+        d = {}
+        for delay in delays:
+            d[delay] = d.get(delay, 0) + 1
+
+        d2 = {}  # dictionary for counting the number of the current delay of each type
+        answers = {}  # dict of lists of answers for each delay
+        for delay in delays:
+            t = (d[delay] * settings['correct_answers_percentage'] // 100)
+            answers[delay] = [False] * t + [True] * (d[delay] - t)
+            shuffle(answers[delay])
+
+        exp = []  # list of params of every experiment
+        for delay in delays:
+            exp.append({'delay': delay, 'answer': answers[delay][d2.get(delay, 0)]})
+            d2[delay] = d2.get(delay, 0) + 1
+    else:
+        # number of responses in the first window
+        r1 = settings['correct_answers_percentage'] * exp_num // 100
+
+        answers = [False] * r1 + [True] * (exp_num - r1)
+        shuffle(answers)
+
+        exp = [{'delay': delay, 'answer': answer} for delay, answer in zip(delays, answers)]
+
+    return exp
+
+
 class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
         self.experiment_type = 1
         self.pressed = False
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
-        self.experiment_number = 1
+        self.experiment_number = 0
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
@@ -40,15 +75,7 @@ class MonkeyWindow1(MonkeyWindow):
         self.pressed = True
 
     def update(self):
-        experiments = settings['session_number'] * settings['repeat_number']
-
-        delays = [settings['delay'][1][i % len(settings['delay'][1])] for i in range(experiments)]
-        if settings['mix_delays']:
-            shuffle(delays)
-
-        r1 = settings['correct_answers_percentage'] * experiments // 100
-        right_numbers = [False] * r1 + [True] * (experiments - r1)
-        shuffle(right_numbers)
+        exp_params = generate_experiment_params()
 
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
@@ -71,8 +98,9 @@ class MonkeyWindow1(MonkeyWindow):
                        ]
                 self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
                                              f'{directory}/{image_numbers[i]}') for i in range(2)]
-                self.right_number, self.wrong_number = int(right_numbers[self.experiment_number]), \
-                    int(not right_numbers[self.experiment_number])
+
+                self.right_number = int(exp_params[self.experiment_number]['answer'])
+                self.wrong_number = int(not exp_params[self.experiment_number]['answer'])
 
                 if settings['display_target_image_twice']:
                     self.objects[self.right_number].set_pos(*pos[0])
@@ -90,7 +118,7 @@ class MonkeyWindow1(MonkeyWindow):
                     self.right_image_copy.hide()
                 self.objects[self.right_number].hide()
 
-                time.sleep(delays[self.experiment_number - 1])
+                time.sleep(exp_params[self.experiment_number - 1]['delay'])
 
                 # both images shows up and it's time for answering
                 self.objects[0].set_pos(*pos[0])

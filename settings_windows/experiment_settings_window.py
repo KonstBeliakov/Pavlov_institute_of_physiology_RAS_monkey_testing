@@ -24,8 +24,8 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Отображать целевое изображение дважды',    'value_type': bool, 'save_value': 'display_target_image_twice'},
             {'widget_type': 'radiobutton', 'text': 'Перемешивать задержки',                    'value_type': bool, 'save_value': 'mix_delays'},
             {'text': 'Процент правильных ответов в первом окне',       'value_type': int,     'min_value': 0, 'save_value': 'correct_answers_percentage'},
+            {'widget_type': 'radiobutton', 'text': 'Уравнять правильные ответы по задержкам', 'value_type': bool, 'save_value': 'equalize_correct_answers_by_delays'},
             {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
-            # TODO
             {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'}
         ])
 
