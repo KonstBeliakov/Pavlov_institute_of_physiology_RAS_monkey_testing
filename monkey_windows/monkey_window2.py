@@ -24,7 +24,7 @@ class MonkeyWindow2(MonkeyWindow):
         x_pos = (self.canvas_size[0] - settings['barrier_width']) // 2 - self.image_size - settings['barrier_dist']
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings['image_number'])]
 
-        filename = 'pictograms/yes.png'
+        filename = settings['exp2_filename'] if settings['exp2_filename'] else 'pictograms/no.png'
         self.python_image = utils.open_image(filename, settings['image_size2'])
 
         self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename,
@@ -68,7 +68,8 @@ class MonkeyWindow2(MonkeyWindow):
                 for j, obj in enumerate(self.objects):
                     obj.update()
 
-                    if self.is_image_behind_barrier(j):
+                    # if image is behind the barrier
+                    if self.objects[j].x - self.image_size // 2 > (self.canvas_size[0] - settings['barrier_width']) // 2:
                         obj.show()
                     if not obj.x - (self.image_size // 2) > self.canvas_size[0]:
                         next_experiment = False
@@ -89,18 +90,6 @@ class MonkeyWindow2(MonkeyWindow):
             self.experiment_number += 1
             self.pressed = False
         self.destroy()
-
-    def is_image_behind_barrier(self, n: int):
-        img_pos = [self.objects[n].x - self.image_size // 2, self.objects[n].y + self.image_size // 2]
-        barrier_pos = ((self.canvas_size[0] - settings['barrier_width']) // 2, 0,
-                       settings['barrier_width'] + (self.canvas_size[0] - settings['barrier_width']) // 2,
-                       self.canvas_size[1])
-        t = [img_pos, [img_pos[0] + self.image_size, img_pos[1]], [img_pos[0], img_pos[1] + self.image_size],
-             [img_pos[0] + self.image_size, img_pos[1] + self.image_size]]
-        t2 = 0
-        for i in t:
-            t2 += (barrier_pos[0] < i[0] < barrier_pos[2] and barrier_pos[1] < i[1] < barrier_pos[3])
-        return t2 == 4
 
     def bind_image(self, x):
         self.objects[x].bind('<Button-1>', lambda event: self.object_click_event(x))

@@ -49,6 +49,7 @@ settings = {
     'straight_movement': True,
     'repeat_number2': 3,
     'image_size2': 100,
+    'exp2_filename': None,
 
     # Experiment 3 settings
     'min_image_number': 2,
