@@ -61,7 +61,7 @@ def entry_value_check(value, name, declension=1, min_value=None, max_value=None,
         try:
             value = parser.parse(value).date()
         except:
-            return f'Поле "{name}" должно быть датой (в почти любом формате)'
+            return f'Поле "{name}" должно быть датой (YYYY-MM-DD)'
     try:
         if value_type == int:
             int(value)

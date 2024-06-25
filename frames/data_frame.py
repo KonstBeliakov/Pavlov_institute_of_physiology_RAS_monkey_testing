@@ -37,8 +37,11 @@ class DataFrame:
         self.data_frame_error_label = Label(self.data_frame1, text='', fg='red')
         self.data_frame_error_label.grid(row=2, column=0)
 
+        self.files_number_label = Label(root, text='Файлов выбрано: 0')
+        self.files_number_label.grid(row=2, column=0)
+
         self.data_frame2 = Frame(root)
-        self.data_frame2.grid(row=2, column=0)
+        self.data_frame2.grid(row=3, column=0)
 
         self.experiment_data = tk.Text(self.data_frame2, height=8, width=40)
 
@@ -54,7 +57,7 @@ class DataFrame:
         self.scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.data_frame3 = Frame(root)
-        self.data_frame3.grid(row=3, column=0)
+        self.data_frame3.grid(row=4, column=0)
 
         self.filename_entry = ImprovedEntry(self.data_frame3, 0, 0, 'Название файла', value_type=str,
                                             save_value='experiment_data_filename')
@@ -93,8 +96,12 @@ class DataFrame:
 
             self.experiment_data.config(state=NORMAL)
             self.experiment_data.delete(1.0, tk.END)
-            self.experiment_data.insert(tk.END, '\n'.join(self.load_data()))
+
+            files = self.load_data()
+            self.experiment_data.insert(tk.END, '\n'.join(files))
             self.experiment_data.config(state=DISABLED)
+
+            self.files_number_label.configure(text=f'Файлов выбрано: {len(files)}')
 
     def create_data_file(self):
         if self.filename_entry.get():
