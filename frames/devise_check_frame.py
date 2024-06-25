@@ -1,5 +1,3 @@
-import threading
-
 import utils
 from widgets.second_screen_copy import SecondScreenCopy
 from widgets.widget_list import WidgetList

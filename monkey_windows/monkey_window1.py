@@ -75,6 +75,7 @@ class MonkeyWindow1(MonkeyWindow):
         self.pressed = True
 
     def update(self):
+        utils.disable_anser_entry()
         exp_params = generate_experiment_params()
 
         for i in range(settings['session_number']):
@@ -121,6 +122,8 @@ class MonkeyWindow1(MonkeyWindow):
                 time.sleep(exp_params[self.experiment_number - 1]['delay'])
 
                 # both images shows up and it's time for answering
+                utils.anable_answer_entry()
+
                 self.objects[0].set_pos(*pos[0])
                 self.objects[1].set_pos(*pos[1])
 
@@ -145,6 +148,8 @@ class MonkeyWindow1(MonkeyWindow):
 
                 self.objects[0].hide()
                 self.objects[1].hide()
+
+                utils.disable_anser_entry()
 
                 # both images are hidden again
                 time.sleep(settings['delay'][3])
