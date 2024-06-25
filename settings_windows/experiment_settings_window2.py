@@ -22,7 +22,9 @@ class ExperimentSettingsWindow2(SettingsWindow):
             {'text': 'Задержка между экспериментами',     'value_type': float, 'min_value': 0, 'save_value': 'session_delay2'},
             {'text': 'Число повторений',                  'value_type': int,   'min_value': 1, 'save_value': 'repeat_number2'},
             {'text': 'Размер изображения',                'value_type': int,   'min_value': 1, 'save_value': 'image_size2'},
-            {'text': 'Используемое изображение',          'value_type': str,                   'save_value': 'exp2_filename', 'may_be_empty': True}
+            {'text': 'Используемое изображение',          'value_type': str,                   'save_value': 'exp2_filename', 'may_be_empty': True},
+            {'widget_type': 'radiobutton', 'text': 'Движение изображений', 'value_type': str,
+             'values': ['Слева направо', 'Справа налево'], 'save_value': 'movement_direction'}
         ])
 
     def save_settings(self):

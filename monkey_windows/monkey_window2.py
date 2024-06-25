@@ -24,11 +24,20 @@ class MonkeyWindow2(MonkeyWindow):
         x_pos = (self.canvas_size[0] - settings['barrier_width']) // 2 - self.image_size - settings['barrier_dist']
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings['image_number'])]
 
-        filename = settings['exp2_filename'] if settings['exp2_filename'] else 'pictograms/no.png'
-        self.python_image = utils.open_image(filename, settings['image_size2'])
+        try:
+            filename = settings['exp2_filename']
+            self.python_image = utils.open_image(filename, settings['image_size2'])
+        except FileNotFoundError:
+            filename = 'pictograms/no.png'
+            self.python_image = utils.open_image(filename, settings['image_size2'])
 
-        self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename,
-                                     speedX=self.image_speed) for i in range(settings['image_number'])]
+        if settings['movement_direction'] == 'Справа налево':
+            self.objects = [CanvasObject(self.canvas, self.canvas_size[0] - self.image_position[i][0],
+                                         self.canvas_size[1] - self.image_position[i][1], self.image_size, filename,
+                                         speedX=-self.image_speed) for i in range(settings['image_number'])]
+        else:
+            self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename,
+                                         speedX=self.image_speed) for i in range(settings['image_number'])]
 
         self.right_image = randrange(settings['image_number'])
 
@@ -44,7 +53,7 @@ class MonkeyWindow2(MonkeyWindow):
 
         self.barrier = self.canvas.create_rectangle((self.canvas_size[0] - settings['barrier_width']) // 2, 0,
                                                     settings['barrier_width'] + (
-                                                                self.canvas_size[0] - settings['barrier_width']) // 2,
+                                                            self.canvas_size[0] - settings['barrier_width']) // 2,
                                                     self.canvas_size[1], fill=settings['barrier_color'])
 
         self.t1 = threading.Thread(target=self.update)
@@ -69,10 +78,17 @@ class MonkeyWindow2(MonkeyWindow):
                     obj.update()
 
                     # if image is behind the barrier
-                    if self.objects[j].x - self.image_size // 2 > (self.canvas_size[0] - settings['barrier_width']) // 2:
-                        obj.show()
-                    if not obj.x - (self.image_size // 2) > self.canvas_size[0]:
+                    if settings['movement_direction'] == 'Справа налево':
+                        if self.objects[j].x + self.image_size // 2 < (self.canvas_size[0] + settings['barrier_width']) // 2:
+                            obj.show()
+                    else:  # moving from left to right
+                        if self.objects[j].x - self.image_size // 2 > (self.canvas_size[0] - settings['barrier_width']) // 2:
+                            obj.show()
+
+                    # check that the image goes beyond the screen
+                    if not (obj.x + (self.image_size // 2) < 0 or obj.x - (self.image_size // 2) > self.canvas_size[0]):
                         next_experiment = False
+
                 sleep(0.05)
 
             sleep(settings['session_delay2'])
