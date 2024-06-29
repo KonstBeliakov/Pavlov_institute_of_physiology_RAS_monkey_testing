@@ -1,12 +1,11 @@
 import json
 import tkinter as tk
 
-import settings
-
 
 class ImportSettingsWindow(tk.Toplevel):
-    def __init__(self, experiment_type):
+    def __init__(self, experiment_type, root):
         self.experiment_type = experiment_type
+        self.root = root
 
         super().__init__()
 
@@ -23,18 +22,22 @@ class ImportSettingsWindow(tk.Toplevel):
         self.button = tk.Button(self, text='Открыть', command=self.read_file)
         self.button.pack()
 
-        self.error_label = tk.Label(self, text='Не удалось открыть файл. Убедитесь что он существует', fg='#f00')
+        self.error_label = tk.Label(self, text='', fg='#f00')
+        self.error_label.pack()
 
     def read_file(self):
+        filename = self.entry.get()
+
         try:
-            with open(self.entry.get(), "r") as file:
+            with open(filename, "r") as file:
                 data = json.load(file)
-                settings.delay = data['delay']
-                settings.restart_after_answer = data['restart_after_answer']
-                settings.repeat_number = data['repeat_number']
-                settings.session_number = data['session_number']
-                settings.experiment_start = data['experiment_start']
-        except:
-            self.error_label.pack()
+
+            for i, widget in enumerate(self.root.widgets_list.widgets):
+                widget.set_value(data[str(i)])
+        except FileNotFoundError:
+            self.error_label.configure(text=f'Файл {filename} не найден')
+        except Exception as err:
+            self.error_label.configure(text=f'Не удалось извлечь настройки из файла {filename}')
+            print(err)
         else:
             self.destroy()

@@ -8,6 +8,7 @@ from settings_windows.settings_window import SettingsWindow
 class ExperimentSettingsWindow3(SettingsWindow):
     def __init__(self):
         super().__init__(experiment_type=3)
+        self.title('Настройки эксперимента 3')
 
         self.settingsFrame = tk.Frame(self)
         self.settingsFrame.grid(column=0, row=0)

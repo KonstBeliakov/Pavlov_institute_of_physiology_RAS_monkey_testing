@@ -6,7 +6,7 @@ from widgets.widget_list import WidgetList
 class ExperimentSettingsWindow2(SettingsWindow):
     def __init__(self):
         super().__init__(experiment_type=2)
-        self.title('Настройки эксперимента')
+        self.title('Настройки эксперимента 2')
 
         self.settingsFrame = Frame(self)
         self.settingsFrame.grid(column=0, row=0)

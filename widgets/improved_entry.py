@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import *
 import settings
 from utils import entry_value_check
 from dateutil import parser
@@ -55,3 +56,6 @@ class ImprovedEntry(tk.Entry):
             else:
                 settings.settings[self.save_to] = value
 
+    def set_value(self, value):
+        self.delete(0, END)
+        self.insert(0, str(value))

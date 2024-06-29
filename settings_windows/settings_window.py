@@ -8,6 +8,7 @@ from settings_windows.import_settings_window import ImportSettingsWindow
 class SettingsWindow(Toplevel):
     def __init__(self, experiment_type=None):
         self.experiment_type = experiment_type
+        self.widgets_list = None
 
         super().__init__()
 
@@ -38,11 +39,11 @@ class SettingsWindow(Toplevel):
         self.destroy()
 
     def open_export_settings_window(self):
-        self.export_settings_window = ExportSettingsWindow(self.experiment_type)
+        self.export_settings_window = ExportSettingsWindow(self.experiment_type, self)
         self.export_settings_window.mainloop()
 
     def open_import_settings_window(self):
-        self.import_settings_window = ImportSettingsWindow(self.experiment_type)
+        self.import_settings_window = ImportSettingsWindow(self.experiment_type, self)
         self.import_settings_window.mainloop()
 
     def show_error(self, error_text):

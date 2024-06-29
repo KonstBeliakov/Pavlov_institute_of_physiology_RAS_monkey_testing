@@ -1,12 +1,11 @@
 import tkinter as tk
 import json
 
-import settings
-
 
 class ExportSettingsWindow(tk.Toplevel):
-    def __init__(self, experiment_type):
+    def __init__(self, experiment_type, root):
         self.experiment_type = experiment_type
+        self.root = root
 
         super().__init__()
 
@@ -23,16 +22,21 @@ class ExportSettingsWindow(tk.Toplevel):
         self.button = tk.Button(self, text='Сохранить', command=self.write_file)
         self.button.pack()
 
-        self.error_label = tk.Label(self, text='Не удалось сохранить настройки, попробуйте еще раз', fg='#f00')
+        self.error_label = tk.Label(self, text='', fg='#f00')
+        self.error_label.pack()
 
     def write_file(self):
+        filename = self.entry.get()
+
         try:
-            data = {'delay': settings.delay, 'session_number': settings.session_number,
-                    'repeat_number': settings.repeat_number, 'experiment_start': settings.experiment_start,
-                    'restart_after_answer': settings.restart_after_answer}
-            with open(self.entry.get(), 'w') as file:
+            data = {}
+            for i, widget in enumerate(self.root.widgets_list.widgets):
+                data[i] = widget.get()
+
+            with open(filename, 'w') as file:
                 json.dump(data, file)
-        except:
-            self.error_label.pack()
+        except Exception as err:
+            self.error_label.configure(text=f'Не удалось записать файл {filename}')
+            print(err)
         else:
             self.destroy()

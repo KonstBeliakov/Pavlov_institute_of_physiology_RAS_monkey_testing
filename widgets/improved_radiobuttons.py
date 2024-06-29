@@ -7,7 +7,9 @@ class ImprovedRadiobuttons:
         self.label = Label(screen, text=text)
         self.label.grid(row=y, column=x)
 
-        self.variable = StringVar(screen, "USA")
+        self.values = values
+
+        self.variable = StringVar(screen, '')
         self.variable.set(values[0])
         self.radio_button_values = [Radiobutton(screen, text=values[i], variable=self.variable, value=values[i])
                                     for i in range(len(values))]
@@ -30,3 +32,9 @@ class ImprovedRadiobuttons:
 
     def get(self):
         return self.variable.get()
+
+    def set_value(self, value):
+        if str(value) in self.values:
+            self.variable.set(str(value))
+        else:
+            raise ValueError
