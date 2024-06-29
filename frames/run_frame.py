@@ -151,11 +151,13 @@ class RunFrame:
 
             graph_data = [0]
             for i, line in enumerate(self.window.log):
-                if line[-1] == line[-2]:
+                if line[-2] == line[-3] is None:
+                    graph_data.append(graph_data[-1])
+                elif line[-1] == line[-2]:
                     graph_data.append(graph_data[-1] + 1)
                 else:
                     graph_data.append(graph_data[-1] - 1)
-            self.draw_graph(list(range(len(graph_data))), graph_data)
+            self.draw_graph(list(range(len(graph_data[1:]))), graph_data[1:])
             sleep(1)
 
     def experiment_settings(self):
