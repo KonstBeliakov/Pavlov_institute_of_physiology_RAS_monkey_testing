@@ -49,9 +49,11 @@ class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
         self.experiment_type = 1
-        self.pressed = False
-        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
         self.experiment_number = 0
+
+        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+
+        self.pressed = False
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
@@ -65,13 +67,23 @@ class MonkeyWindow1(MonkeyWindow):
 
     def image_pressed(self, number):
         if not self.pressed:
-            self.log.append([self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
-                             round(time.perf_counter() - self.test_start, 3),
-                             number, self.right_number])
-            if number == self.right_number:
-                utils.right_answer()
+            self.log.append(
+                [self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
+                 round(time.perf_counter() - self.test_start, 3),
+                 number,
+                 self.new_image_number if settings['right_image'] == 'Старое изображение' else self.old_image_number])
+
+            if settings['right_image'] == 'Старое изображение':
+                if number == self.new_image_number:
+                    utils.right_answer()
+                else:
+                    utils.wrong_answer()
             else:
-                utils.wrong_answer()
+                if number == self.old_image_number:
+                    utils.right_answer()
+                else:
+                    utils.wrong_answer()
+
         self.pressed = True
 
     def update(self):
@@ -100,24 +112,24 @@ class MonkeyWindow1(MonkeyWindow):
                 self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
                                              f'{directory}/{image_numbers[i]}') for i in range(2)]
 
-                self.right_number = int(exp_params[self.experiment_number]['answer'])
-                self.wrong_number = int(not exp_params[self.experiment_number]['answer'])
+                self.new_image_number = int(exp_params[self.experiment_number]['answer'])
+                self.old_image_number = int(not exp_params[self.experiment_number]['answer'])
 
                 if settings['display_target_image_twice']:
-                    self.objects[self.right_number].set_pos(*pos[0])
-                    self.right_image_copy = CanvasObject(self.canvas, *pos[1], settings['image_size'],
-                                                         f'{directory}/{image_numbers[self.right_number]}')
+                    self.objects[self.new_image_number].set_pos(*pos[0])
+                    self.old_image_copy = CanvasObject(self.canvas, *pos[1], settings['image_size'],
+                                                         f'{directory}/{image_numbers[self.new_image_number]}')
                 else:
-                    self.objects[self.right_number].set_pos(*screen_center_pos)
-                self.objects[self.right_number].show()
-                self.objects[self.wrong_number].hide()
+                    self.objects[self.new_image_number].set_pos(*screen_center_pos)
+                self.objects[self.new_image_number].show()
+                self.objects[self.old_image_number].hide()
 
                 time.sleep(settings['delay'][0])
 
                 # both images are hidden
                 if settings['display_target_image_twice']:
-                    self.right_image_copy.hide()
-                self.objects[self.right_number].hide()
+                    self.old_image_copy.hide()
+                self.objects[self.new_image_number].hide()
 
                 time.sleep(exp_params[self.experiment_number - 1]['delay'])
 
@@ -143,7 +155,7 @@ class MonkeyWindow1(MonkeyWindow):
                 if not self.pressed:
                     self.log.append(
                         [self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
-                         None, None, self.right_number])
+                         None, None, self.new_image_number])
                 self.pressed = False
 
                 self.objects[0].hide()

@@ -4,7 +4,7 @@ from widgets.widget_list import WidgetList
 from settings_windows.settings_window import SettingsWindow
 
 
-class ExperimentSettingsWindow(SettingsWindow):
+class ExperimentSettingsWindow1(SettingsWindow):
     def __init__(self):
         super().__init__(experiment_type=1)
         self.title('Настройки эксперимента')
@@ -26,7 +26,8 @@ class ExperimentSettingsWindow(SettingsWindow):
             {'text': 'Процент правильных ответов в первом окне',       'value_type': int,     'min_value': 0, 'save_value': 'correct_answers_percentage'},
             {'widget_type': 'radiobutton', 'text': 'Уравнять правильные ответы по задержкам', 'value_type': bool, 'save_value': 'equalize_correct_answers_by_delays'},
             {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
-            {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'}
+            {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'},
+            {'widget_type': 'radiobutton', 'text': 'Правильный ответ', 'values': ['Новое изображение', 'Старое изображение'], 'value_type': str, 'save_value': 'right_image'}
         ])
 
     def save_settings(self):
@@ -37,5 +38,5 @@ class ExperimentSettingsWindow(SettingsWindow):
 
 
 if __name__ == '__main__':
-    window = ExperimentSettingsWindow()
+    window = ExperimentSettingsWindow1()
     window.mainloop()

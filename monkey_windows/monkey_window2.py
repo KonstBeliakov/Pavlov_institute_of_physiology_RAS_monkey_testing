@@ -45,7 +45,6 @@ class MonkeyWindow2(MonkeyWindow):
             obj.hide()
         self.objects[self.right_image].show()
 
-        self.experiment_number = 1
         self.test_start = perf_counter()
         self.pressed = False
 

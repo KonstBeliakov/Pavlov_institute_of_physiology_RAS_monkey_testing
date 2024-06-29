@@ -161,7 +161,7 @@ class RunFrame:
     def experiment_settings(self):
         match self.choose_experiment_combobox.get():
             case 'Запоминание картинки':
-                self.experiment_settings_window = ExperimentSettingsWindow()
+                self.experiment_settings_window = ExperimentSettingsWindow1()
             case 'Экстраполяция движения':
                 self.experiment_settings_window = ExperimentSettingsWindow2()
             case 'Новая картинка':

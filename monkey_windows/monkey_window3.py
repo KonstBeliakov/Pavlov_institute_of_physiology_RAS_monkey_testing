@@ -16,6 +16,8 @@ class MonkeyWindow3(MonkeyWindow):
     def __init__(self):
         super().__init__()
         self.experiment_type = 3
+        self.experiment_number = 0
+
         self.test_start = None
         self.title('Experiment window')
         self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
