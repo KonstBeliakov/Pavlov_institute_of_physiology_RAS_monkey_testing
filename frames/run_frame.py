@@ -128,32 +128,38 @@ class RunFrame:
         self.frame_log_top = LabelFrame(self.root, text='Результаты последних 10 тестов')
         self.frame_log_top.grid(row=0, column=1)
 
-        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(self.window.log[0]))] for _ in
+        while not self.window.log:
+            sleep(1)
+        log_header = list(self.window.log[0].keys())
+        #log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
+
+        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(log_header))] for _ in
                           range(11)]
 
         for i in range(len(self.log_label)):
             for j in range(len(self.log_label[i])):
                 self.log_label[i][j].grid(row=i, column=j)
 
-        for j, text in enumerate(self.window.log[0]):
+        for j, text in enumerate(log_header):
             self.log_label[0][j].configure(text=text)
-        sleep(1)
+
         while True:
-            for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 1):]):
-                for j, text in enumerate(line):
-                    if line[-1] == line[-2]:
-                        color = '#0f0'
-                    elif line[-2] == line[-3] is None:
-                        color = '#f0f'
-                    else:
-                        color = '#f00'
-                    self.log_label[i + 1][j].configure(text=str(text), fg=color)
+            for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 0):]):
+                if line['Ответ'] is None:
+                    color = '#f0f'
+                elif line['Ответ'] == line['Правильный ответ']:
+                    color = '#0f0'
+                else:
+                    color = '#f00'
+
+                for j, key in enumerate(log_header):
+                    self.log_label[i + 1][j].configure(text=str(line[key]), fg=color)
 
             graph_data = [0]
             for i, line in enumerate(self.window.log):
-                if line[-2] == line[-3] is None:
+                if line['Ответ'] is None:
                     graph_data.append(graph_data[-1])
-                elif line[-1] == line[-2]:
+                elif line['Ответ'] == line['Правильный ответ']:
                     graph_data.append(graph_data[-1] + 1)
                 else:
                     graph_data.append(graph_data[-1] - 1)

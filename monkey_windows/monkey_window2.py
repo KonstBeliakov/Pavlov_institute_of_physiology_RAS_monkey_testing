@@ -1,3 +1,4 @@
+from datetime import datetime
 import threading
 from time import sleep, perf_counter
 from tkinter import *
@@ -12,8 +13,10 @@ from widgets.canvas_object import CanvasObject
 class MonkeyWindow2(MonkeyWindow):
     def __init__(self):
         super().__init__()
+        self.experiment_number = 0
         self.experiment_type = 2
-        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+
+        self.log = []
 
         self.title('Experiment window')
 
@@ -58,11 +61,25 @@ class MonkeyWindow2(MonkeyWindow):
         self.t1 = threading.Thread(target=self.update)
         self.t1.start()
 
-    def object_click_event(self, x: int):
-        self.log.append([self.experiment_number, round(perf_counter() - settings['experiment_start'], 3),
-                         round(perf_counter() - self.test_start, 3),
-                         x, self.right_image])
-        if x == self.right_image:
+    def write_log(self, answer):
+        self.log.append({
+            'Номер': self.experiment_number,
+            'Время с начала эксперимента': round(perf_counter() - settings['experiment_start'], 3),
+            'Время реакции': None if answer is None else round(perf_counter() - self.test_start, 3),
+            'Ответ': answer,
+            'Правильный ответ': self.right_image,
+            'Дата': datetime.now().date(),
+            'Время': datetime.now().time(),
+            'Текущая отсрочка': 0,  # TODO
+            'Предыдущая отсрочка': 0,  # TODO
+            'Отказ от ответа': int(answer is None),
+            'Файл настроек эксперимента': settings['settings_file_name2']
+        })
+
+    def object_click_event(self, answer: int):
+        self.write_log(answer)
+
+        if answer == self.right_image:
             utils.right_answer()
         else:
             utils.wrong_answer()
@@ -70,6 +87,7 @@ class MonkeyWindow2(MonkeyWindow):
 
     def update(self):
         for i in range(settings['repeat_number2']):
+            self.experiment_number += 1
             next_experiment = False
             while not next_experiment:
                 next_experiment = True
@@ -100,8 +118,8 @@ class MonkeyWindow2(MonkeyWindow):
             self.objects[self.right_image].show()
             self.test_start = perf_counter()
             if not self.pressed:
-                self.log.append([self.experiment_number, round(perf_counter() - settings['experiment_start'], 3),
-                                 None, None, self.right_image])
+                self.write_log(None)
+
             self.experiment_number += 1
             self.pressed = False
         self.destroy()

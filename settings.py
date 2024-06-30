@@ -38,6 +38,7 @@ settings = {
     'image_selection_method': 'Случайный',
     'equalize_correct_answers_by_delays': False,
     'right_image': 'Старое изображение',
+    'settings_file_name': None,
 
     # Second type experiment settings
     'image_min_speed': 50,
@@ -50,8 +51,9 @@ settings = {
     'straight_movement': True,
     'repeat_number2': 3,
     'image_size2': 100,
-    'exp2_filename': None,
+    'exp2_filename': 'pictograms/no.png',
     'movement_direction': None,
+    'settings_file_name2': None,
 
     # Experiment 3 settings
     'min_image_number': 2,
@@ -60,5 +62,6 @@ settings = {
     'image_size3': 128,
     'delay3': [1.0, 1.0, 1.0, 0.5],
     'stop_after_error': True,
-    'grid_size': [5, 5]
+    'grid_size': [5, 5],
+    'settings_file_name3': None,
 }

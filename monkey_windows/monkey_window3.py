@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 import threading
 from time import perf_counter, sleep
 import os
@@ -20,7 +21,7 @@ class MonkeyWindow3(MonkeyWindow):
 
         self.test_start = None
         self.title('Experiment window')
-        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+        self.log = []
         self.experiment_number = 1
 
         self.stop = False
@@ -103,9 +104,23 @@ class MonkeyWindow3(MonkeyWindow):
         for i in range(len(self.objects)):
             self.bind_image(i)
 
+    def write_log(self, answer):
+        self.log.append({
+            'Номер': self.experiment_number,
+            'Время с начала эксперимента': round(perf_counter() - settings['experiment_start'], 3),
+            'Время реакции': round(perf_counter() - self.test_start, 3),
+            'Ответ': answer,
+            'Правильный ответ': len(self.objects) - 1,
+            'Файлы': '',  # TODO
+            'Дата': datetime.now().date(),
+            'Время': datetime.now().time(),
+            'Отказ от ответа': int(answer is None),
+            'Файл настроек эксперимента': settings['settings_file_name3']
+        })
+
     def image_pressed(self, number):
-        self.log.append([self.experiment_number, round(perf_counter() - settings['experiment_start'], 3),
-                         round(perf_counter() - self.test_start, 3), number, len(self.objects) - 1])
+        self.write_log(number)
+
         self.pressed = True
 
         if settings['stop_after_error'] and (number != len(self.objects) - 1):

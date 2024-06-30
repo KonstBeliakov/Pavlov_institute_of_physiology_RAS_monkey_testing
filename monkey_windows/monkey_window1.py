@@ -1,3 +1,5 @@
+import datetime
+from datetime import datetime
 import time
 import tkinter.messagebox as mb
 
@@ -48,10 +50,11 @@ def generate_experiment_params():
 class MonkeyWindow1(MonkeyWindow):
     def __init__(self):
         super().__init__()
+        self.test_start = time.perf_counter()
         self.experiment_type = 1
         self.experiment_number = 0
 
-        self.log = [['Номер', 'Абсолютное время', 'Время на ответ', 'Ответ', 'Правильный ответ']]
+        self.log = []
 
         self.pressed = False
 
@@ -65,13 +68,29 @@ class MonkeyWindow1(MonkeyWindow):
         if mb.askyesno(message=message, parent=self):
             self.destroy()
 
+    def write_log(self, answer):
+        self.log.append({
+            'Номер': self.experiment_number,
+            'Время с начала эксперимента': round(time.perf_counter() - settings['experiment_start'], 3),
+            'Время реакции': None if answer is None else round(time.perf_counter() - self.test_start, 3),
+            'Ответ': answer,
+            'Правильный ответ': self.new_image_number if settings['right_image'] == 'Старое изображение' else self.old_image_number,
+            'Файл 1': self.img1_name,
+            'Файл 2': self.img2_name,
+            'Дата': datetime.now().date(),
+            'Время': datetime.now().time(),
+            'Ответ справа': int(answer == 1),
+            'Ответ слева': int(answer == 0),
+            'Текущая отсрочка': self.exp_params[self.experiment_number]['delay'],
+            'Предыдущая отсрочка': None if self.experiment_number == 0 else self.exp_params[self.experiment_number - 1]['delay'],
+            'Правильным считается': settings['right_image'],
+            'Отказ от ответа': int(answer is None),
+            'Файл настроек эксперимента': settings['settings_file_name']
+        })
+
     def image_pressed(self, number):
         if not self.pressed:
-            self.log.append(
-                [self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
-                 round(time.perf_counter() - self.test_start, 3),
-                 number,
-                 self.new_image_number if settings['right_image'] == 'Старое изображение' else self.old_image_number])
+            self.write_log(number)
 
             if settings['right_image'] == 'Старое изображение':
                 if number == self.new_image_number:
@@ -88,20 +107,21 @@ class MonkeyWindow1(MonkeyWindow):
 
     def update(self):
         utils.disable_anser_entry()
-        exp_params = generate_experiment_params()
+        self.exp_params = generate_experiment_params()
 
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
                 if settings['image_selection_method'] == 'Случайный':
                     directory = "images_random"
                     files = os.listdir(directory)
-                    image_numbers = sample(files, 2)
+                    self.img1_name, self.img2_name = sample(files, 2)
                 else:
                     directory = "image_pairs"
                     files = os.listdir(directory)
-                    img1_name = choice([i for i in files if 'A' in i])
-                    img2_name = img1_name.replace('A', 'B')
-                    image_numbers = [img1_name, img2_name]
+                    self.img1_name = choice([i for i in files if 'A' in i])
+                    self.img2_name = self.img1_name.replace('A', 'B')
+
+                image_numbers = [self.img1_name, self.img2_name]
 
                 screen_center_pos = [self.canvas_size[0] // 2, self.canvas_size[1] // 2]
                 dx = (self.canvas_size[0] - settings['image_size'] * 2 - settings['distance_between_images']) // 2
@@ -112,8 +132,8 @@ class MonkeyWindow1(MonkeyWindow):
                 self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
                                              f'{directory}/{image_numbers[i]}') for i in range(2)]
 
-                self.new_image_number = int(exp_params[self.experiment_number]['answer'])
-                self.old_image_number = int(not exp_params[self.experiment_number]['answer'])
+                self.new_image_number = int(self.exp_params[self.experiment_number]['answer'])
+                self.old_image_number = int(not self.exp_params[self.experiment_number]['answer'])
 
                 if settings['display_target_image_twice']:
                     self.objects[self.new_image_number].set_pos(*pos[0])
@@ -131,7 +151,7 @@ class MonkeyWindow1(MonkeyWindow):
                     self.old_image_copy.hide()
                 self.objects[self.new_image_number].hide()
 
-                time.sleep(exp_params[self.experiment_number - 1]['delay'])
+                time.sleep(self.exp_params[self.experiment_number - 1]['delay'])
 
                 # both images shows up and it's time for answering
                 utils.anable_answer_entry()
@@ -153,9 +173,8 @@ class MonkeyWindow1(MonkeyWindow):
                     time.sleep(0.05)
 
                 if not self.pressed:
-                    self.log.append(
-                        [self.experiment_number, round(time.perf_counter() - settings['experiment_start'], 3),
-                         None, None, self.new_image_number])
+                    self.write_log(None)
+
                 self.pressed = False
 
                 self.objects[0].hide()
