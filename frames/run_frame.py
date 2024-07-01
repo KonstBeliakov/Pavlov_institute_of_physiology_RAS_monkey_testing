@@ -180,8 +180,7 @@ class RunFrame:
             self.run_error_label.configure(text='Перед тем как настроить эксперимент выберите его тип')
 
     def save_experiment_data(self, path, autosave=False):
-        df = pd.DataFrame(
-            {name: [str(line[i]) for line in self.window.log[1:]] for i, name in enumerate(self.window.log[0])})
+        df = pd.DataFrame(self.window.log)
         print('autosave...')
         filename = f'{str(datetime.datetime.now()).split(".")[0].replace(":", "_")} {self.window.experiment_type}.xlsx'
         print(f'filename: {filename}')

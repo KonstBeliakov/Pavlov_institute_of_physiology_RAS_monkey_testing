@@ -85,7 +85,7 @@ class MonkeyWindow1(MonkeyWindow):
             'Предыдущая отсрочка': None if self.experiment_number == 0 else self.exp_params[self.experiment_number - 1]['delay'],
             'Правильным считается': settings['right_image'],
             'Отказ от ответа': int(answer is None),
-            'Файл настроек эксперимента': settings['settings_file_name']
+            'Файл настроек эксперимента': settings['settings_file_name'][1]
         })
 
     def image_pressed(self, number):

@@ -28,11 +28,11 @@ class MonkeyWindow2(MonkeyWindow):
         self.image_position = [[x_pos, t * (i + 1) + self.image_size * i] for i in range(settings['image_number'])]
 
         try:
-            filename = settings['exp2_filename']
-            self.python_image = utils.open_image(filename, settings['image_size2'])
+            self.filename = settings['exp2_filename']
+            self.python_image = utils.open_image(self.filename, settings['image_size2'])
         except FileNotFoundError:
-            filename = 'pictograms/no.png'
-            self.python_image = utils.open_image(filename, settings['image_size2'])
+            self.filename = 'pictograms/no.png'
+            self.python_image = utils.open_image(self.filename, settings['image_size2'])
 
         if settings['movement_direction'] == 'Справа налево':
             self.objects = [CanvasObject(self.canvas, self.canvas_size[0] - self.image_position[i][0],
@@ -68,12 +68,11 @@ class MonkeyWindow2(MonkeyWindow):
             'Время реакции': None if answer is None else round(perf_counter() - self.test_start, 3),
             'Ответ': answer,
             'Правильный ответ': self.right_image,
+            'Файл': self.filename,
             'Дата': datetime.now().date(),
             'Время': datetime.now().time(),
-            'Текущая отсрочка': 0,  # TODO
-            'Предыдущая отсрочка': 0,  # TODO
             'Отказ от ответа': int(answer is None),
-            'Файл настроек эксперимента': settings['settings_file_name2']
+            'Файл настроек эксперимента': settings['settings_file_name'][2]
         })
 
     def object_click_event(self, answer: int):

@@ -40,15 +40,18 @@ class MonkeyWindow3(MonkeyWindow):
             self.image_numbers = random.sample(list(range(len(files))), settings['max_image_number'])
 
             self.stop = False
-            for image_number in range(settings['min_image_number'] + 1, settings['max_image_number'] + 1):
+            self.image_number = settings['min_image_number']
+
+            while self.image_number < settings['max_image_number'] + 1:
+                self.image_number += 1
                 self.image_position = random.sample(
                     list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
-                    image_number)
+                    self.image_number)
 
                 if settings['shuffle_images']:
                     self.image_position2 = random.sample(
                         list([(i, j) for i in range(table_size_x) for j in range(table_size_y)]),
-                        image_number)
+                        self.image_number)
                 else:
                     self.image_position2 = self.image_position
 
@@ -56,7 +59,7 @@ class MonkeyWindow3(MonkeyWindow):
                                              settings['image_size3'] // 2 + self.image_position[i][0] * (settings['image_size3'] + dx),
                                              settings['image_size3'] // 2 + self.image_position[i][1] * (settings['image_size3'] + dy),
                                              settings['image_size3'], f'{directory}/{files[self.image_numbers[i]]}')
-                                for i in range(image_number)]
+                                for i in range(self.image_number)]
 
                 self.objects[-1].hide()
 
@@ -88,7 +91,7 @@ class MonkeyWindow3(MonkeyWindow):
 
                 if not self.pressed:
                     self.log.append([self.experiment_number, round(perf_counter() - settings['experiment_start'], 3),
-                                     None, None, image_number])
+                                     None, None, self.image_number])
 
                 for obj in self.objects:
                     obj.hide()
@@ -111,11 +114,13 @@ class MonkeyWindow3(MonkeyWindow):
             'Время реакции': round(perf_counter() - self.test_start, 3),
             'Ответ': answer,
             'Правильный ответ': len(self.objects) - 1,
-            'Файлы': '',  # TODO
+            'Файлы': [f'{directory}/{files[self.image_numbers[i]]}' for i in range(self.image_number)],
             'Дата': datetime.now().date(),
             'Время': datetime.now().time(),
+            'Текущая отсрочка': settings['delay3'][1],
+            'Предыдущая отсрочка': None if self.experiment_number == 1 else settings['delay3'][1],
             'Отказ от ответа': int(answer is None),
-            'Файл настроек эксперимента': settings['settings_file_name3']
+            'Файл настроек эксперимента': settings['settings_file_name'][3]
         })
 
     def image_pressed(self, number):
