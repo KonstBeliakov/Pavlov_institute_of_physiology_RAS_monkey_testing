@@ -1,5 +1,6 @@
 from widgets.improved_entry import ImprovedEntry
 from widgets.improved_radiobuttons import ImprovedRadiobuttons
+from widgets.improved_checkbuttons import ImprovedCheckbuttons
 from tkinter import Frame
 
 
@@ -24,6 +25,8 @@ class WidgetList:
 
             if widget_type == 'radiobutton':
                 self.widgets.append(ImprovedRadiobuttons(screen=self.frame, x=x, y=y, **params))
+            elif widget_type == 'checkbutton':
+                self.widgets.append(ImprovedCheckbuttons(screen=self.frame, x=x, y=y, **params))
             else:
                 self.widgets.append(ImprovedEntry(screen=self.frame, x=x, y=y, **params))
 

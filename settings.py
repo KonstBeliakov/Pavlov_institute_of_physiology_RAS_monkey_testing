@@ -1,4 +1,6 @@
 settings = {
+    'test': None,
+
     'bg_color': '#fff',
     'monitor_copy_size': 0.05,
 
@@ -38,6 +40,10 @@ settings = {
     'image_selection_method': 'Случайный',
     'equalize_correct_answers_by_delays': False,
     'right_image': 'Старое изображение',
+    'log_header1': ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ', 'Файл 1',
+                    'Файл 2', 'Дата', 'Время', 'Ответ справа', 'Ответ слева', 'Текущая отсрочка', 'Предыдущая отсрочка',
+                    'Правильным считается', 'Отказ от ответа', 'Файл настроек эксперимента'],
+    'current_log_header1': None,
 
     # Second type experiment settings
     'image_min_speed': 50,
@@ -52,6 +58,9 @@ settings = {
     'image_size2': 100,
     'exp2_filename': 'pictograms/no.png',
     'movement_direction': None,
+    'log_header2': ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ', 'Файл',
+                    'Дата', 'Время', 'Отказ от ответа', 'Файл настроек эксперимента'],
+    'current_log_header2': None,
 
     # Experiment 3 settings
     'min_image_number': 2,
@@ -61,6 +70,10 @@ settings = {
     'delay3': [1.0, 1.0, 1.0, 0.5],
     'stop_after_error': True,
     'grid_size': [5, 5],
+    'log_header3': ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ', 'Файлы',
+                    'Дата', 'Время', 'Текущая отсрочка', 'Предыдущая отсрочка', 'Отказ от ответа',
+                    'Файл настроек эксперимента'],
+    'current_log_header3': None,
 
     # Settings
     'settings_file_name': [None, None, None, None],
