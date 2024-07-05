@@ -23,7 +23,9 @@ class ExperimentSettingsWindow3(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Перемешивать изображения',     'value_type': bool, 'save_value': 'shuffle_images'},
             {'widget_type': 'radiobutton', 'text': 'Начинать заново после ошибки', 'value_type': bool, 'save_value': 'stop_after_error'},
             {'text': 'Размер изображения',                 'value_type': int,                   'save_value': 'image_size3'},
-            {'text': 'Количество изображений в сетке (AxB)', 'value': str(f'{settings["grid_size"][0]}x{settings["grid_size"][1]}'), 'value_type': str}
+            {'text': 'Количество изображений в сетке (AxB)', 'value': str(f'{settings["grid_size"][0]}x{settings["grid_size"][1]}'), 'value_type': str},
+            {'widget_type': 'checkbutton', 'text': 'Отображаемые параметры', 'values': settings['log_header3'],
+             'value_type': str, 'save_value': 'current_log_header3', 'values_in_row': 3}
         ])
 
     def save_settings(self):

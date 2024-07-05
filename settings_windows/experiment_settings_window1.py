@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from settings import settings
 from widgets.widget_list import WidgetList
 from settings_windows.settings_window import SettingsWindow
 
@@ -28,11 +29,14 @@ class ExperimentSettingsWindow1(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Уравнять правильные ответы по задержкам', 'value_type': bool, 'save_value': 'equalize_correct_answers_by_delays'},
             {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
             {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'},
-            {'widget_type': 'radiobutton', 'text': 'Правильный ответ', 'values': ['Новое изображение', 'Старое изображение'], 'value_type': str, 'save_value': 'right_image'}
+            {'widget_type': 'radiobutton', 'text': 'Правильный ответ', 'values': ['Новое изображение', 'Старое изображение'], 'value_type': str, 'save_value': 'right_image'},
+            {'widget_type': 'checkbutton', 'text': 'Отображаемые параметры', 'values': settings['log_header1'],
+             'value_type': str, 'save_value': 'current_log_header1', 'values_in_row': 3}
         ])
 
     def save_settings(self):
         if (error_text := self.widgets_list.save_values(check_validity=True)) is None:
+            print(settings['current_log_header1'])
             self.destroy()
         else:
             self.show_error(error_text)

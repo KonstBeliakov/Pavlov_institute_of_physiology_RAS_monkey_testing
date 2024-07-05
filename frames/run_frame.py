@@ -130,8 +130,12 @@ class RunFrame:
 
         while not self.window.log:
             sleep(1)
-        log_header = list(self.window.log[0].keys())
-        #log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
+
+        experiment_type = self.window.experiment_type
+        log_header = settings[f'current_log_header{experiment_type}']
+        print(f'log_header: {log_header}')
+        if log_header is None:
+            log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
 
         self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(log_header))] for _ in
                           range(11)]

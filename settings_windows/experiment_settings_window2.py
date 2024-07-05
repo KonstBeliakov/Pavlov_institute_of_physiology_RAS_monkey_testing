@@ -1,4 +1,6 @@
 from tkinter import *
+
+from settings import settings
 from settings_windows.settings_window import SettingsWindow
 from widgets.widget_list import WidgetList
 
@@ -24,7 +26,9 @@ class ExperimentSettingsWindow2(SettingsWindow):
             {'text': 'Размер изображения',                'value_type': int,   'min_value': 1, 'save_value': 'image_size2'},
             {'text': 'Используемое изображение',          'value_type': str,                   'save_value': 'exp2_filename', 'may_be_empty': True},
             {'widget_type': 'radiobutton', 'text': 'Движение изображений', 'value_type': str,
-             'values': ['Слева направо', 'Справа налево'], 'save_value': 'movement_direction'}
+             'values': ['Слева направо', 'Справа налево'], 'save_value': 'movement_direction'},
+            {'widget_type': 'checkbutton', 'text': 'Отображаемые параметры', 'values': settings['log_header2'],
+             'value_type': str, 'save_value': 'current_log_header2', 'values_in_row': 3}
         ])
 
     def save_settings(self):
