@@ -12,7 +12,7 @@ class SettingsWindow(Toplevel):
 
         super().__init__()
 
-        self.geometry(f'+{-1000}+{50}')
+        #self.geometry(f'+{1000}+{50}')
 
         self.buttonFrame = tk.Frame(self)
         self.buttonFrame.grid(row=1, column=0)

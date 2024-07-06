@@ -36,7 +36,8 @@ class SettingsFrame:
             {'text': 'Толщина линии круга',                              'value_type': int,   'min_value': 0, 'save_value': 'click_circle_width'},
             {'text': 'Время отображения круга',                          'value_type': float, 'min_value': 0, 'save_value': 'click_circle_time'},
             {'text': 'Размер копии второго монитора',                    'value_type': float, 'min_value': 0, 'max_value': 0.5, 'save_value': 'monitor_copy_size'},
-            {'text': 'Цвет фона экспериментального окна',                'value_type': str, 'save_value': 'bg_color'}
+            {'text': 'Цвет фона экспериментального окна',                'value_type': str, 'save_value': 'bg_color'},
+            {'widget_type': 'radiobutton', 'text': 'Полноэкранный режим экспериментального окна', 'value_type': bool, 'save_value': 'fullscreen_mode'}
         ])
 
         self.button_apply = Button(root, text='Применить', command=self.apply_basic_settings)

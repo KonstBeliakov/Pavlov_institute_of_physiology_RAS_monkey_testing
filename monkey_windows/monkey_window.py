@@ -2,6 +2,7 @@ import time
 import tkinter as tk
 from settings import settings
 import threading
+from screeninfo import get_monitors
 
 
 class MonkeyWindow(tk.Toplevel):
@@ -12,7 +13,12 @@ class MonkeyWindow(tk.Toplevel):
         self.canvas = tk.Canvas(self, bg=settings['bg_color'], width=self.canvas_size[0], height=self.canvas_size[1])
         self.canvas.pack(anchor=tk.CENTER, expand=1)
 
-        #self.attributes("-fullscreen", True)
+        monitors = get_monitors()
+        if len(monitors) >= 2:
+            if settings['fullscreen_mode']:
+                self.geometry(f'{monitors[1].width}x{monitors[1].height}')
+            self.geometry(f'+{monitors[0].width}+0')
+        self.overrideredirect(True)
 
         self.canvas.bind("<Button-1>", self.canvas_pressed)
 

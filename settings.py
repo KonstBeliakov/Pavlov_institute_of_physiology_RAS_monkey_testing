@@ -1,6 +1,8 @@
 settings = {
     'test': None,
 
+    'fullscreen_mode': True,
+
     'bg_color': '#fff',
     'monitor_copy_size': 0.05,
 

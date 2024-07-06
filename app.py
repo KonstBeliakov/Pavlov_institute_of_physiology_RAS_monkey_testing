@@ -5,7 +5,7 @@ from tkinter import *
 import tkinter.messagebox as mb
 
 import mss
-
+from screeninfo import get_monitors
 import utils
 from frames import *
 
@@ -14,12 +14,8 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Основное окно')
-        with mss.mss() as sct:
-            if (t := len(sct.monitors)) >= 3:
-                self.geometry(f'+{-1000}+{50}')
-            print(f'monitors available: {t}')
-            print('monitors:')
-            print(sct.monitors)
+
+        self.geometry('+0+0')
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 

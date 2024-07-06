@@ -13,7 +13,6 @@ class ImportSettingsWindow(tk.Toplevel):
 
         self.title('Импортировать настройки')
         self.geometry('300x100')
-        self.geometry(f'+{-1000}+{50}')
 
         self.label = tk.Label(self, text='Открыть файл настроек')
         self.label.pack()

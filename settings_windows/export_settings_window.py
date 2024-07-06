@@ -13,7 +13,6 @@ class ExportSettingsWindow(tk.Toplevel):
 
         self.title('Экспортировать натройки')
         self.geometry('300x100')
-        self.geometry(f'+{-1000}+{50}')
 
         self.label = tk.Label(self, text='Сохранить файл настроек')
         self.label.pack()
