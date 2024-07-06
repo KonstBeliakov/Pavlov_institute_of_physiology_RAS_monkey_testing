@@ -40,5 +40,5 @@ class ExportSettingsWindow(tk.Toplevel):
             self.error_label.configure(text=f'Не удалось записать файл {filename}')
             print(err)
         else:
-            settings['settings_file_name'][self.root.experiment_type] = filename
+            settings['settings_file_name'][self.experiment_type] = filename
             self.destroy()

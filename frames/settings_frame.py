@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 
 from settings import settings
+from settings_windows.export_settings_window import ExportSettingsWindow
+from settings_windows.import_settings_window import ImportSettingsWindow
 from widgets.widget_list import WidgetList
 
 
@@ -27,7 +29,7 @@ class SettingsFrame:
         self.basic_settings_label_frame = Frame(root)
         self.basic_settings_label_frame.grid(column=0, row=1)
 
-        self.entries_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
+        self.widgets_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
             {'text': 'Путь до файла звука начала эксперимента (оставить пустым если не используется)',          'value_type': str, 'save_value': 'experiment_start_sound', 'may_be_empty': True},
             {'text': 'Путь до файла позитивного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'right_answer_sound', 'may_be_empty': True},
             {'text': 'Путь до файла негативного звукового подкрепления (оставить пустым если не используется)', 'value_type': str, 'save_value': 'wrong_answer_sound', 'may_be_empty': True},
@@ -40,15 +42,32 @@ class SettingsFrame:
             {'widget_type': 'radiobutton', 'text': 'Полноэкранный режим экспериментального окна', 'value_type': bool, 'save_value': 'fullscreen_mode'}
         ])
 
-        self.button_apply = Button(root, text='Применить', command=self.apply_basic_settings)
-        self.button_apply.grid(row=2, column=0)
+        self.button_frame = Frame(root)
+        self.button_frame.grid(row=2, column=0)
+
+        self.button_apply = Button(self.button_frame, text='Применить', command=self.apply_basic_settings)
+        self.button_apply.grid(row=0, column=0)
 
         self.error_label = tk.Label(root, text='Настройки не применены', fg='#f00')
         self.error_label.grid(row=3, column=0)
 
+        self.button_export = Button(self.button_frame, text='Экспортировать', command=self.export_settings)
+        self.button_export.grid(row=0, column=1)
+
+        self.button_import = Button(self.button_frame, text='Импортировать', command=self.import_settings)
+        self.button_import.grid(row=0, column=2)
+
     def apply_basic_settings(self):
-        if (error_text := self.entries_list.save_values(check_validity=True)) is None:
+        if (error_text := self.widgets_list.save_values(check_validity=True)) is None:
             settings['using_sound'] = (self.sounds_in_experiments.get() == 'Да')
             self.error_label.configure(text='')
         else:
             self.error_label.configure(text=error_text)
+
+    def import_settings(self):
+        self.import_settings_window = ImportSettingsWindow(0, self)
+        self.import_settings_window.mainloop()
+
+    def export_settings(self):
+        self.export_settings_window = ExportSettingsWindow(0, self)
+        self.export_settings_window.mainloop()
