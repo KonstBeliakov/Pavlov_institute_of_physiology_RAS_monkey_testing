@@ -129,11 +129,16 @@ class MonkeyWindow1(MonkeyWindow):
                        [dx + settings['image_size'] * 1.5 + settings['distance_between_images'],
                         self.canvas_size[1] // 2]
                        ]
-                self.objects = [CanvasObject(self.canvas, 0, 0, settings['image_size'],
-                                             f'{directory}/{image_numbers[i]}') for i in range(2)]
 
                 self.new_image_number = int(self.exp_params[self.experiment_number]['answer'])
                 self.old_image_number = int(not self.exp_params[self.experiment_number]['answer'])
+
+                t = [[], []]
+                t[self.old_image_number] = pos[1]
+                t[self.new_image_number] = pos[0]
+
+                self.objects = [CanvasObject(self.canvas, t[i][0], t[i][1], settings['image_size'],
+                                             f'{directory}/{image_numbers[i]}') for i in range(2)]
 
                 if settings['display_target_image_twice']:
                     self.objects[self.new_image_number].set_pos(*pos[0])

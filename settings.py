@@ -4,7 +4,7 @@ settings = {
     'fullscreen_mode': True,
 
     'bg_color': '#fff',
-    'monitor_copy_size': 0.05,
+    'monitor_copy_size': 0.1,
 
     # saving experiment data params
     'experiment_data_filename': '',

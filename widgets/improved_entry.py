@@ -17,10 +17,10 @@ class ImprovedEntry(tk.Entry):
             if '[' in save_value:
                 index = save_value.find('[')
                 num = int(save_value[index + 1: -1])
-                value = str(settings.settings[save_value[:index]][num])
+                value = settings.settings[save_value[:index]][num]
             else:
-                value = str(settings.settings[save_value])
-        self.insert(0, value)
+                value = settings.settings[save_value]
+        self.set_value(value)
 
         self.grid(row=y, column=x + 1)
 
@@ -58,4 +58,7 @@ class ImprovedEntry(tk.Entry):
 
     def set_value(self, value):
         self.delete(0, END)
-        self.insert(0, str(value))
+        if isinstance(value, list):
+            self.insert(0, ' '.join([str(i) for i in value]))
+        else:
+            self.insert(0, str(value))
