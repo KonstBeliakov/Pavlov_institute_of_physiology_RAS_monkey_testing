@@ -14,6 +14,13 @@ class SecondScreenCopy:
     def __init__(self, root, x, y):
         self.root = root
         self.canvas = tk.Canvas(self.root, bg='white')
+
+        with mss.mss() as sct:
+            if len(sct.monitors) > 2:
+                mon = sct.monitors[2]
+                self.canvas.configure(width=int(mon['width'] * settings['monitor_copy_size']),
+                                      height=int(mon['height'] * settings['monitor_copy_size']))
+
         self.canvas.grid(row=y, column=x)
 
         t1 = threading.Thread(target=lambda: self.second_screen_update())
@@ -27,9 +34,9 @@ class SecondScreenCopy:
             print(sct.monitors)
             if len(sct.monitors) > 2:
                 mon = sct.monitors[monitor_number]
-                self.canvas_image = self.canvas.create_image(int(mon['width'] * settings['monitor_copy_size']),
-                                                    int(mon['height'] * settings['monitor_copy_size']),
-                                                    image=python_image)
+                self.canvas_image = self.canvas.create_image(self.canvas.winfo_width() // 2,
+                                                             self.canvas.winfo_height() // 2,
+                                                             image=python_image)
                 monitor = {
                     "top": mon["top"],
                     "left": mon["left"],
@@ -42,7 +49,7 @@ class SecondScreenCopy:
                         sct_img = sct.grab(monitor)
                         img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
                         img2 = img.resize((int(img.size[0] * 2 * settings['monitor_copy_size']),
-                                       int(img.size[1] * 2 * settings['monitor_copy_size'])))
+                                           int(img.size[1] * 2 * settings['monitor_copy_size'])))
                         img3 = ImageTk.PhotoImage(img2)
 
                         self.canvas.itemconfigure(self.canvas_image, image=img3)

@@ -5,6 +5,9 @@ from try_again_window import TryAgainWindow
 from time import perf_counter, sleep
 import pandas as pd
 
+import mss
+import mss.tools
+
 from tkinter import ttk
 import tkinter as tk
 
@@ -67,9 +70,6 @@ class RunFrame:
 
         self.run_error_label = Label(self.run_frame_top, text='', fg='red')
         self.run_error_label.pack()
-
-        self.second_screen_canvas = Canvas(root)
-        self.second_screen_canvas.grid(row=0, column=2)
 
         self.figure = plt.Figure(figsize=(5, 5))
         self.graph_canvas = FigureCanvasTkAgg(self.figure, root)
@@ -195,4 +195,4 @@ class RunFrame:
             df.to_excel(path)
 
     def check_second_screen(self):
-        self.second_screen_copy = SecondScreenCopy(self.root, 2, 0)
+        self.second_screen_copy = SecondScreenCopy(self.root, 1, 1)

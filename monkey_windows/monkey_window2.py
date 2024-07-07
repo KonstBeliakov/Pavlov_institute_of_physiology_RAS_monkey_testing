@@ -36,10 +36,10 @@ class MonkeyWindow2(MonkeyWindow):
 
         if settings['movement_direction'] == 'Справа налево':
             self.objects = [CanvasObject(self.canvas, self.canvas_size[0] - self.image_position[i][0],
-                                         self.canvas_size[1] - self.image_position[i][1], self.image_size, filename,
+                                         self.canvas_size[1] - self.image_position[i][1], self.image_size, self.filename,
                                          speedX=-self.image_speed) for i in range(settings['image_number'])]
         else:
-            self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, filename,
+            self.objects = [CanvasObject(self.canvas, *self.image_position[i], self.image_size, self.filename,
                                          speedX=self.image_speed) for i in range(settings['image_number'])]
 
         self.right_image = randrange(settings['image_number'])
