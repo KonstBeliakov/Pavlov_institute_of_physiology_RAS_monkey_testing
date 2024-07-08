@@ -22,6 +22,9 @@ class ImprovedCheckbuttons:
         self.value_type = value_type
         self.save_to = save_value
 
+        if save_value is not None and isinstance(settings[save_value], list):
+            self.set_values(settings[save_value])
+
     def check_value(self):
         pass
 
@@ -54,7 +57,7 @@ class ImprovedCheckbuttons:
 
 if __name__ == '__main__':
     root = Tk()
-    checkbutton = ImprovedCheckbutton(root, 0, 0, 'checkbutton', values=['1', '2', '3'], value_type=int, save_value='test')
+    checkbutton = ImprovedCheckbuttons(root, 0, 0, 'checkbutton', values=['1', '2', '3'], value_type=int, save_value='test')
 
     checkbutton.set_values([1, 3])
     print(checkbutton.get())  # [1, 3]

@@ -109,14 +109,20 @@ class MonkeyWindow1(MonkeyWindow):
         utils.disable_anser_entry()
         self.exp_params = generate_experiment_params()
 
+        if settings['experiment1_directory']:
+            directory = settings['experiment1_directory']
+        else:
+            if settings['image_selection_method'] == 'Случайный':
+                directory = 'images_random'
+            else:
+                directory = 'image_pairs'
+
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
                 if settings['image_selection_method'] == 'Случайный':
-                    directory = "images_random"
                     files = os.listdir(directory)
                     self.img1_name, self.img2_name = sample(files, 2)
                 else:
-                    directory = "image_pairs"
                     files = os.listdir(directory)
                     self.img1_name = choice([i for i in files if 'A' in i])
                     self.img2_name = self.img1_name.replace('A', 'B')

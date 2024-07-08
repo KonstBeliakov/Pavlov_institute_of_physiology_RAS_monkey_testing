@@ -46,6 +46,7 @@ settings = {
                     'Файл 2', 'Дата', 'Время', 'Ответ справа', 'Ответ слева', 'Текущая отсрочка', 'Предыдущая отсрочка',
                     'Правильным считается', 'Отказ от ответа', 'Файл настроек эксперимента'],
     'current_log_header1': None,
+    'experiment1_directory': '',
 
     # Second type experiment settings
     'image_min_speed': 50,

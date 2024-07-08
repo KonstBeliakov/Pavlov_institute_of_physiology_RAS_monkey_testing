@@ -20,6 +20,10 @@ class ImprovedRadiobuttons:
         self.value_type = value_type
         self.save_to = save_value
 
+        if save_value is not None:
+            print(save_value, settings[save_value], self.values)
+            self.set_value(settings[save_value])
+
     def check_value(self):
         pass
 
@@ -34,7 +38,13 @@ class ImprovedRadiobuttons:
         return self.variable.get()
 
     def set_value(self, value):
-        if str(value) in self.values:
-            self.variable.set(str(value))
+        if self.value_type == bool:
+            if value:
+                self.variable.set('Да')
+            else:
+                self.variable.set('Нет')
         else:
-            raise ValueError
+            if str(value) in self.values:
+                self.variable.set(str(value))
+            else:
+                raise ValueError

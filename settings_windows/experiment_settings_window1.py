@@ -30,13 +30,13 @@ class ExperimentSettingsWindow1(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Переходить к следующему заданию после ответа\n(досрочное завершение времени на ответ)', 'value_type': bool, 'save_value': 'restart_after_answer'},
             {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'},
             {'widget_type': 'radiobutton', 'text': 'Правильный ответ', 'values': ['Новое изображение', 'Старое изображение'], 'value_type': str, 'save_value': 'right_image'},
+            {'text': 'Брать изображения из папки', 'value_type': str, 'save_value': 'experiment1_directory', 'may_be_empty': True},
             {'widget_type': 'checkbutton', 'text': 'Отображаемые параметры', 'values': settings['log_header1'],
              'value_type': str, 'save_value': 'current_log_header1', 'values_in_row': 3}
         ])
 
     def save_settings(self):
         if (error_text := self.widgets_list.save_values(check_validity=True)) is None:
-            print(settings['current_log_header1'])
             self.destroy()
         else:
             self.show_error(error_text)
