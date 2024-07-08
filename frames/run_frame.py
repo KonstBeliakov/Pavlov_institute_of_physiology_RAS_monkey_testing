@@ -5,9 +5,6 @@ from try_again_window import TryAgainWindow
 from time import perf_counter, sleep
 import pandas as pd
 
-import mss
-import mss.tools
-
 from tkinter import ttk
 import tkinter as tk
 
@@ -71,17 +68,29 @@ class RunFrame:
         self.run_error_label = Label(self.run_frame_top, text='', fg='red')
         self.run_error_label.pack()
 
-        self.figure = plt.Figure(figsize=(5, 5))
-        self.graph_canvas = FigureCanvasTkAgg(self.figure, root)
-        self.graph_canvas.get_tk_widget().grid(row=1, column=0)
-        self.figure_subplot = self.figure.add_subplot(1, 1, 1)
+    def generate_canvases(self):
+        graph_number = len(settings['delay'][1])
+        self.figures = []
+        for i in range(graph_number):
+            self.figures.append(plt.Figure(figsize=(5, 5)))
+            self.figures[i].suptitle(f'Отсрочка {settings['delay'][1][i]} секунд')
 
-        self.draw_graph([0, 1, 2], [5, 3, 7])
+        self.graph_canvas = [FigureCanvasTkAgg(figure, self.root) for i, figure in enumerate(self.figures)]
+        for i, canvas in enumerate(self.graph_canvas):
+            canvas.get_tk_widget().grid(row=1, column=i)
 
-    def draw_graph(self, x, y):
-        self.figure_subplot.clear()
-        self.figure_subplot.plot(x, y)
-        self.graph_canvas.draw()
+        self.figure_subplots = [self.figures[i].add_subplot(1, 1, 1) for i in range(graph_number)]
+
+        self.draw_graphs(None)
+
+    def draw_graphs(self, data):
+        if data is not None:
+            for i, subplot in enumerate(self.figure_subplots):
+                subplot.clear()
+                subplot.plot(list(range(len(data[i]))), data[i])
+
+        for canvas in self.graph_canvas:
+            canvas.draw()
 
     def open_about(self):
         if not self.started:
@@ -147,6 +156,8 @@ class RunFrame:
         for j, text in enumerate(log_header):
             self.log_label[0][j].configure(text=text)
 
+        self.generate_canvases()
+
         while True:
             for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 0):]):
                 if line['Ответ'] is None:
@@ -159,15 +170,19 @@ class RunFrame:
                 for j, key in enumerate(log_header):
                     self.log_label[i + 1][j].configure(text=str(line[key]), fg=color)
 
-            graph_data = [0]
+            delays = sorted(settings['delay'][1])
+
+            graph_data = [[0] for _ in range(len(delays))]
             for i, line in enumerate(self.window.log):
+                index = delays.index(line['Текущая отсрочка'])
                 if line['Ответ'] is None:
-                    graph_data.append(graph_data[-1])
+                    graph_data[index].append(graph_data[index][-1])
                 elif line['Ответ'] == line['Правильный ответ']:
-                    graph_data.append(graph_data[-1] + 1)
+                    graph_data[index].append(graph_data[index][-1] + 1)
                 else:
-                    graph_data.append(graph_data[-1] - 1)
-            self.draw_graph(list(range(len(graph_data[1:]))), graph_data[1:])
+                    graph_data[index].append(graph_data[index][-1] - 1)
+
+            self.draw_graphs(graph_data)
             sleep(1)
 
     def experiment_settings(self):
