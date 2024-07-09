@@ -6,6 +6,8 @@ settings = {
     'bg_color': '#fff',
     'monitor_copy_size': 0.1,
 
+    'settings_filename': 'data.json',
+
     # saving experiment data params
     'experiment_data_filename': '',
     'selected_period_start': '',

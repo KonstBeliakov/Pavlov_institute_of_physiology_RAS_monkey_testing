@@ -74,7 +74,6 @@ class RunFrame:
         self.graph_canvas1 = FigureCanvasTkAgg(self.figure1, self.root)
         self.graph_canvas1.get_tk_widget().grid(row=1, column=0)
         self.figure_subplot1 = self.figure1.add_subplot()
-        self.figure_subplot1.legend([f'Задержка {delay} секунд' for delay in settings['delay'][1]])
 
         self.figure2 = plt.Figure(figsize=(5, 5))
         self.figure2.suptitle(f'Среднее время ответа по задержкам')
@@ -116,6 +115,7 @@ class RunFrame:
         self.figure_subplot1.clear()
         for i in range(graph_number):
             self.figure_subplot1.plot(list(range(len(graph_data[i]))), graph_data[i])
+        self.figure_subplot1.legend([f'Задержка {delay} секунд' for delay in settings['delay'][1]])
 
         delays = sorted(settings['delay'][1])
         time_sum = {delay: 0 for delay in delays}
@@ -281,4 +281,4 @@ class RunFrame:
             df.to_excel(path)
 
     def check_second_screen(self):
-        self.second_screen_copy = SecondScreenCopy(self.root, 1, 1)
+        self.second_screen_copy = SecondScreenCopy(self.root, 2, 0)

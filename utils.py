@@ -1,3 +1,4 @@
+import json
 import time
 
 from PIL import Image
@@ -141,6 +142,30 @@ def export_data(export_file=None, files=None):
 
     data_frame = pd.DataFrame(l)
     data_frame.to_excel(export_file)
+
+
+def load_settings(filename=None):
+    if filename is None:
+        filename = settings['settings_filename']
+    print('Загружаем настройки...', end='')
+    try:
+        with open(filename, 'r') as settings_file:
+            data = json.load(settings_file)
+            for key in data:
+                settings[key] = data[key]
+    except Exception as err:
+        print(f'\nПри загрузке настроек произошла ошибка: {err}')
+    else:
+        print('Успешно')
+
+
+def save_settings(filename=None):
+    if filename is None:
+        filename = settings['settings_filename']
+    print('Сохранение настроек...', end='')
+    with open(filename, 'w') as settings_file:
+        json.dump(settings, settings_file)
+    print('Успешно')
 
 
 check_serial()

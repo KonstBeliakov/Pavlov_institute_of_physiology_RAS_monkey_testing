@@ -17,6 +17,8 @@ class App(tk.Tk):
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
+        utils.load_settings()
+
         self.notebook = ttk.Notebook()
         self.notebook.pack(expand=True, fill=BOTH)
         frame_text = ['Общие настройки', 'Запуск эксперимента', 'Проверка устройств', 'Экспорт данных',
@@ -44,6 +46,7 @@ class App(tk.Tk):
     def confirm_delete(self):
         message = "Вы уверены, что хотите закрыть это окно?"
         if mb.askyesno(message=message, parent=self):
+            utils.save_settings()
             self.destroy()
 
 
