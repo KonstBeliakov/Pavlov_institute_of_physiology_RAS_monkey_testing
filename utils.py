@@ -168,6 +168,17 @@ def save_settings(filename=None):
     print('Успешно')
 
 
+def auto_save(filename=None):
+    while True:
+        save_settings(filename)
+        time.sleep(settings['autosave_period'])
+
+
+def start_auto_saving(filename=None):
+    t = threading.Thread(target=lambda: auto_save(filename))
+    t.start()
+
+
 check_serial()
 
 if __name__ == '__main__':

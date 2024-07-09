@@ -18,6 +18,7 @@ class App(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
         utils.load_settings()
+        utils.start_auto_saving()
 
         self.notebook = ttk.Notebook()
         self.notebook.pack(expand=True, fill=BOTH)
