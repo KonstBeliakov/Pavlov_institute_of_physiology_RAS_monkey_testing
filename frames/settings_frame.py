@@ -39,7 +39,8 @@ class SettingsFrame:
             {'text': 'Время отображения круга',                          'value_type': float, 'min_value': 0, 'save_value': 'click_circle_time'},
             {'text': 'Размер копии второго монитора',                    'value_type': float, 'min_value': 0, 'max_value': 0.5, 'save_value': 'monitor_copy_size'},
             {'text': 'Цвет фона экспериментального окна',                'value_type': str, 'save_value': 'bg_color'},
-            {'widget_type': 'radiobutton', 'text': 'Полноэкранный режим экспериментального окна', 'value_type': bool, 'save_value': 'fullscreen_mode'}
+            {'widget_type': 'radiobutton', 'text': 'Полноэкранный режим экспериментального окна', 'value_type': bool, 'save_value': 'fullscreen_mode'},
+            {'text': 'Частота автосохранений (в минутах)', 'value_type': int, 'save_value': 'autosave_period'}
         ])
 
         self.button_frame = Frame(root)

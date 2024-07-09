@@ -7,7 +7,7 @@ settings = {
     'monitor_copy_size': 0.1,
 
     'settings_filename': 'data.json',
-    'autosave_period': 5 * 60,
+    'autosave_period': 5,
 
     # saving experiment data params
     'experiment_data_filename': '',

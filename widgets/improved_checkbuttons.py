@@ -40,7 +40,7 @@ class ImprovedCheckbuttons:
                 s.append(self.value_type(self.values[i]))
         return s
 
-    def set_values(self, values):
+    def set_value(self, values):
         for var in self.variables:
             var.set(0)
 

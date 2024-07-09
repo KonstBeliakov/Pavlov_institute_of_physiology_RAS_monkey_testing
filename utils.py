@@ -171,7 +171,7 @@ def save_settings(filename=None):
 def auto_save(filename=None):
     while True:
         save_settings(filename)
-        time.sleep(settings['autosave_period'])
+        time.sleep(settings['autosave_period'] * 60)
 
 
 def start_auto_saving(filename=None):
