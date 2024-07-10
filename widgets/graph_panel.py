@@ -8,41 +8,31 @@ class GraphPanel:
     def __init__(self, root):
         self.root = root
 
-        self.figsize = (4, 4)
+        self.figsizes = [(8, 4), (4, 4), (4, 4), (4, 4)]
 
-        self.figure1 = plt.Figure(figsize=self.figsize)
-        self.figure1.suptitle(f'Кривые ответов по задержкам')
-        self.graph_canvas1 = FigureCanvasTkAgg(self.figure1, self.root)
-        self.graph_canvas1.get_tk_widget().grid(row=1, column=0)
-        self.figure_subplot1 = self.figure1.add_subplot()
+        self.figures = [plt.Figure(figsize=figsize) for figsize in self.figsizes]
+        self.graph_canvases = [FigureCanvasTkAgg(figure, self.root) for figure in self.figures]
 
-        self.figure2 = plt.Figure(figsize=self.figsize)
-        self.figure2.suptitle(f'Среднее время ответа по задержкам')
-        self.graph_canvas2 = FigureCanvasTkAgg(self.figure2, self.root)
-        self.graph_canvas2.get_tk_widget().grid(row=1, column=1)
-        self.figure_subplot2 = self.figure2.add_subplot()
+        for i, canvas in enumerate(self.graph_canvases):
+            canvas.get_tk_widget().grid(row=1, column=i)
 
-        self.figure3 = plt.Figure(figsize=self.figsize)
-        self.figure3.suptitle(f'Процент правильных ответов по задержкам')
-        self.graph_canvas3 = FigureCanvasTkAgg(self.figure3, self.root)
-        self.graph_canvas3.get_tk_widget().grid(row=1, column=2)
-        self.figure_subplot3 = self.figure3.add_subplot()
+        self.figures[0].suptitle('Кривые ответов по задержкам')
+        self.figures[1].suptitle('Среднее время ответа по задержкам')
+        self.figures[2].suptitle('Процент правильных ответов по задержкам')
+        self.figures[3].suptitle('Процент отказов по задержкам')
 
-        self.figure4 = plt.Figure(figsize=self.figsize)
-        self.figure4.suptitle(f'Процент отказов по задержкам')
-        self.graph_canvas4 = FigureCanvasTkAgg(self.figure4, self.root)
-        self.graph_canvas4.get_tk_widget().grid(row=1, column=3)
-        self.figure_subplot4 = self.figure4.add_subplot()
+        self.figure_subplots = [figure.add_subplot() for figure in self.figures]
 
         self.draw()
 
     def draw(self):
-        self.graph_canvas1.draw()
-        self.graph_canvas2.draw()
-        self.graph_canvas3.draw()
-        self.graph_canvas4.draw()
+        for canvas in self.graph_canvases:
+            canvas.draw()
 
     def update(self, data):
+        for subplot in self.figure_subplots:
+            subplot.clear()
+
         delays = sorted(settings['delay'][1])
 
         graph_data = [[0] for _ in range(len(delays))]
@@ -56,10 +46,9 @@ class GraphPanel:
                 graph_data[index].append(graph_data[index][-1] - 1)
 
         graph_number = len(settings['delay'][1])
-        self.figure_subplot1.clear()
         for i in range(graph_number):
-            self.figure_subplot1.plot(list(range(len(graph_data[i]))), graph_data[i])
-        self.figure_subplot1.legend([f'Задержка {delay} секунд' for delay in settings['delay'][1]])
+            self.figure_subplots[0].plot(list(range(len(graph_data[i]))), graph_data[i])
+        self.figure_subplots[0].legend([f'Задержка {delay} секунд' for delay in settings['delay'][1]])
 
         delays = sorted(settings['delay'][1])
         time_sum = {delay: 0 for delay in delays}
@@ -77,8 +66,7 @@ class GraphPanel:
             else:
                 avg_time.append(0)
 
-        self.figure_subplot2.clear()
-        self.figure_subplot2.plot(delays, avg_time)
+        self.figure_subplots[1].plot(delays, avg_time)
 
         correct_answer_count = {delay: 0 for delay in delays}
         total_answer_count = {delay: 0 for delay in delays}
@@ -101,8 +89,7 @@ class GraphPanel:
             else:
                 right_answer_percentage.append(0)
 
-        self.figure_subplot3.clear()
-        self.figure_subplot3.plot(delays, right_answer_percentage)
+        self.figure_subplots[2].plot(delays, right_answer_percentage)
 
         refusals_persentage = []
         for delay in delays:
@@ -111,7 +98,6 @@ class GraphPanel:
             else:
                 refusals_persentage.append(0)
 
-        self.figure_subplot4.clear()
-        self.figure_subplot4.plot(delays, refusals_persentage)
+        self.figure_subplots[3].plot(delays, refusals_persentage)
 
         self.draw()
