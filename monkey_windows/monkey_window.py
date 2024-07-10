@@ -14,8 +14,10 @@ class MonkeyWindow(tk.Toplevel):
         self.canvas.pack(anchor=tk.CENTER, expand=1)
 
         monitors = get_monitors()
-        if len(monitors) >= 2:
-            if settings['fullscreen_mode']:
+        if len(monitors) >= 2 and settings['fullscreen_mode']:
+            if settings['screen_size']:
+                self.geometry(settings['screen_size'])
+            else:
                 self.geometry(f'{monitors[1].width}x{monitors[1].height}')
         self.overrideredirect(True)
 

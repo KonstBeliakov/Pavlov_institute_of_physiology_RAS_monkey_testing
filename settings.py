@@ -5,6 +5,7 @@ settings = {
 
     'bg_color': '#fff',
     'monitor_copy_size': 0.1,
+    'screen_size': '',
 
     'settings_filename': 'data.json',
     'autosave_period': 5,

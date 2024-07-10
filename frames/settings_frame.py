@@ -41,7 +41,8 @@ class SettingsFrame:
             {'text': 'Цвет фона экспериментального окна',                'value_type': str, 'save_value': 'bg_color'},
             {'widget_type': 'radiobutton', 'text': 'Полноэкранный режим экспериментального окна', 'value_type': bool, 'save_value': 'fullscreen_mode'},
             {'text': 'Частота автосохранений (в минутах)', 'value_type': int, 'save_value': 'autosave_period'},
-            {'text': 'Номер захватываемого монитора', 'value_type': int, 'save_value': 'captured_monitor'}
+            {'text': 'Номер захватываемого монитора', 'value_type': int, 'save_value': 'captured_monitor'},
+            {'text': 'Размер экспериментального монитора', 'value_type': str, 'save_value': 'screen_size', 'may_be_empty': True},
         ])
 
         self.button_frame = Frame(root)
