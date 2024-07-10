@@ -2,6 +2,7 @@ import utils
 from settings import settings
 from widgets.improved_entry import ImprovedEntry
 from widgets.improved_radiobuttons import ImprovedRadiobuttons
+from widgets.graph_panel import GraphPanel
 import tkinter as tk
 from tkinter import *
 
@@ -64,6 +65,8 @@ class DataFrame:
 
         self.button_create_file = Button(self.data_frame3, text='Создать файл', command=self.create_data_file)
         self.button_create_file.grid(row=0, column=2)
+
+        self.graph_panel = GraphPanel(self.root, row=5, column=0)
 
     def load_data(self):
         experiment_type = ['Запоминание картинки', 'Экстраполяция движения',

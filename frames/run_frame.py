@@ -30,7 +30,7 @@ class RunFrame:
         self.run_frame_top = LabelFrame(root, text='Настройки запуска')
         self.run_frame_top.grid(row=0, column=0)
         self.run_frame = Frame(self.run_frame_top)
-        self.run_frame.pack()
+        self.run_frame.grid(row=0, column=0)
 
         self.choose_experiment_label = Label(self.run_frame, text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
@@ -64,10 +64,10 @@ class RunFrame:
         self.btn.grid(row=5, column=0)
 
         self.run_error_label = Label(self.run_frame_top, text='', fg='red')
-        self.run_error_label.pack()
+        self.run_error_label.grid(row=1, column=0)
 
     def generate_canvases(self):
-        self.graph_panel = GraphPanel(self.root)
+        self.graph_panel = GraphPanel(self.root, row=1, column=0)
 
     def update_graph_data(self, log):
         self.graph_panel.update(log)
@@ -114,7 +114,7 @@ class RunFrame:
                 print('Данные эксперимента сохранены успешно')
 
     def update_log(self):
-        self.frame_log_top = LabelFrame(self.root, text='Результаты последних 10 тестов')
+        self.frame_log_top = LabelFrame(self.run_frame_top, text='Результаты последних 10 тестов')
         self.frame_log_top.grid(row=0, column=1)
 
         while not self.window.log:
@@ -178,4 +178,4 @@ class RunFrame:
             df.to_excel(path)
 
     def check_second_screen(self):
-        self.second_screen_copy = SecondScreenCopy(self.root, 2, 0)
+        self.second_screen_copy = SecondScreenCopy(self.run_frame_top, 2, 0)

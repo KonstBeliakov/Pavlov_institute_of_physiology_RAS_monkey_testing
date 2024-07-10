@@ -1,3 +1,5 @@
+from tkinter import Frame
+
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -5,21 +7,26 @@ from settings import settings
 
 
 class GraphPanel:
-    def __init__(self, root):
+    def __init__(self, root, row, column):
         self.root = root
 
-        self.figsizes = [(8, 4), (4, 4), (4, 4), (4, 4)]
+        self.frame = Frame(root)
+        self.frame.grid(row=row, column=column)
+
+        self.figsizes = [(8, 4), (3.5, 4), (3.5, 4), (3.5, 4)]
 
         self.figures = [plt.Figure(figsize=figsize) for figsize in self.figsizes]
-        self.graph_canvases = [FigureCanvasTkAgg(figure, self.root) for figure in self.figures]
+        self.graph_canvases = [FigureCanvasTkAgg(figure, self.frame) for figure in self.figures]
 
         for i, canvas in enumerate(self.graph_canvases):
-            canvas.get_tk_widget().grid(row=1, column=i)
+            canvas.get_tk_widget().grid(row=0, column=i)
 
-        self.figures[0].suptitle('Кривые ответов по задержкам')
-        self.figures[1].suptitle('Среднее время ответа по задержкам')
-        self.figures[2].suptitle('Процент правильных ответов по задержкам')
-        self.figures[3].suptitle('Процент отказов по задержкам')
+        fontsize = 12
+
+        self.figures[0].suptitle('Кривые ответов', fontsize=fontsize)
+        self.figures[1].suptitle('Среднее время ответа', fontsize=fontsize)
+        self.figures[2].suptitle('Процент правильных ответов', fontsize=fontsize)
+        self.figures[3].suptitle('Процент отказов', fontsize=fontsize)
 
         self.figure_subplots = [figure.add_subplot() for figure in self.figures]
 
