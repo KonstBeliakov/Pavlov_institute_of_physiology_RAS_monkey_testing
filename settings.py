@@ -50,6 +50,8 @@ settings = {
                     'Правильным считается', 'Отказ от ответа', 'Файл настроек эксперимента'],
     'current_log_header1': None,
     'experiment1_directory': '',
+    'used_images': 'Игнорировать',
+    'used_images_directory': 'used_images',
 
     # Second type experiment settings
     'image_min_speed': 50,

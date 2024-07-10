@@ -1,4 +1,5 @@
 import datetime
+import shutil
 from datetime import datetime
 import time
 import tkinter.messagebox as mb
@@ -110,20 +111,20 @@ class MonkeyWindow1(MonkeyWindow):
         self.exp_params = generate_experiment_params()
 
         if settings['experiment1_directory']:
-            directory = settings['experiment1_directory']
+            self.directory = settings['experiment1_directory']
         else:
             if settings['image_selection_method'] == 'Случайный':
-                directory = 'images_random'
+                self.directory = 'images_random'
             else:
-                directory = 'image_pairs'
+                self.directory = 'image_pairs'
 
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
                 if settings['image_selection_method'] == 'Случайный':
-                    files = os.listdir(directory)
+                    files = os.listdir(self.directory)
                     self.img1_name, self.img2_name = sample(files, 2)
                 else:
-                    files = os.listdir(directory)
+                    files = os.listdir(self.directory)
                     self.img1_name = choice([i for i in files if 'A' in i])
                     self.img2_name = self.img1_name.replace('A', 'B')
 
@@ -144,12 +145,12 @@ class MonkeyWindow1(MonkeyWindow):
                 t[self.new_image_number] = pos[0]
 
                 self.objects = [CanvasObject(self.canvas, t[i][0], t[i][1], settings['image_size'],
-                                             f'{directory}/{image_numbers[i]}') for i in range(2)]
+                                             f'{self.directory}/{image_numbers[i]}') for i in range(2)]
 
                 if settings['display_target_image_twice']:
                     self.objects[self.new_image_number].set_pos(*pos[0])
                     self.old_image_copy = CanvasObject(self.canvas, *pos[1], settings['image_size'],
-                                                         f'{directory}/{image_numbers[self.new_image_number]}')
+                                                         f'{self.directory}/{image_numbers[self.new_image_number]}')
                 else:
                     self.objects[self.new_image_number].set_pos(*screen_center_pos)
                 self.objects[self.new_image_number].show()
@@ -194,10 +195,25 @@ class MonkeyWindow1(MonkeyWindow):
                 utils.disable_anser_entry()
 
                 # both images are hidden again
+                self.handle_used_images()
                 time.sleep(settings['delay'][3])
 
                 self.experiment_number += 1
         time.sleep(settings['delay'][4])
+
+    def handle_used_images(self):
+        mode = settings['used_images']
+        match mode:
+            case 'Переносить':
+                directory_from = self.directory
+                directory_to = settings['used_images_directory']
+                for file in self.img1_name, self.img2_name:
+                    shutil.move(f'{directory_from}/{file}', f'{directory_to}/{file}')
+            case 'Удалять':
+                for file in self.img1_name, self.img2_name:
+                    os.remove(f'{self.directory}/{file}')
+            case 'Игнорировать':
+                pass
 
 
 if __name__ == '__main__':

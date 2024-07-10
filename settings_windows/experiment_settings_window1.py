@@ -31,8 +31,10 @@ class ExperimentSettingsWindow1(SettingsWindow):
             {'widget_type': 'radiobutton', 'text': 'Способ выбора изображений', 'values': ['Случайный', 'Парами'], 'value_type': str, 'save_value': 'image_selection_method'},
             {'widget_type': 'radiobutton', 'text': 'Правильный ответ', 'values': ['Новое изображение', 'Старое изображение'], 'value_type': str, 'save_value': 'right_image'},
             {'text': 'Брать изображения из папки', 'value_type': str, 'save_value': 'experiment1_directory', 'may_be_empty': True},
+            {'widget_type': 'radiobutton', 'text': 'Использованные изображения', 'values': ['Игнорировать', 'Переносить', 'Удалять'], 'value_type': str, 'save_value': 'used_images'},
+            {'text': 'Папка для переноса использованных изображений', 'value_type': str, 'save_value': 'used_images_directory'},
             {'widget_type': 'checkbutton', 'text': 'Отображаемые параметры', 'values': settings['log_header1'],
-             'value_type': str, 'save_value': 'current_log_header1', 'values_in_row': 3}
+             'value_type': str, 'save_value': 'current_log_header1', 'values_in_row': 3},
         ])
 
     def save_settings(self):
