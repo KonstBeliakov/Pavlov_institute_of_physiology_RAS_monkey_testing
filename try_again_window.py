@@ -1,5 +1,6 @@
-
 import tkinter as tk
+
+import utils
 
 
 class TryAgainWindow(tk.Toplevel):
@@ -9,6 +10,7 @@ class TryAgainWindow(tk.Toplevel):
         self.parent = parent
         self.title('Ошибка')
         self.geometry('600x120')
+        utils.move_to_first_screen(self)
 
         self.label = tk.Label(self, text='При сохранении данных эксперимента произошла ошибка.\n'
                                          'Скоре всего название файла было написано не правильно (или не было указано).\n'

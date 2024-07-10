@@ -1,4 +1,5 @@
 import utils
+from settings import settings
 from widgets.second_screen_copy import SecondScreenCopy
 from widgets.widget_list import WidgetList
 from tkinter import *
@@ -28,7 +29,8 @@ class DeviseCheckFrame:
         self.button_check = [
             Button(root, text='Проверить поилку', command=utils.positive_reinforcement),
             Button(root, text='Проверить подъем заслонки', command=utils.disable_anser_entry),
-            Button(root, text='Проверить опускание заслонки', command=utils.anable_answer_entry)
+            Button(root, text='Проверить опускание заслонки', command=utils.anable_answer_entry),
+            Button(root, text=f'Закрасить экспериментальное окно', command=utils.paint_second_monitor)
         ]
 
         for i, button in enumerate(self.button_check):

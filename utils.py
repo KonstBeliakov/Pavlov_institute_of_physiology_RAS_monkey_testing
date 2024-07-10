@@ -1,5 +1,6 @@
 import json
 import time
+from tkinter import *
 
 import mss
 from PIL import Image
@@ -185,6 +186,20 @@ def move_to_first_screen(window):
         if len(sct.monitors) > 2:
             mon = sct.monitors[1]
             window.geometry(f'-{mon['width']}+0')
+
+
+def paint_second_monitor():
+    window = Tk()
+    with mss.mss() as sct:
+        if len(sct.monitors) > 2:
+            mon = sct.monitors[2]
+            window.geometry(f'{mon["width"]}x{mon["width"]}')
+        canvas = Canvas(window, bg=settings['bg_color'], width=mon["width"], height=mon["width"])
+        canvas.pack()
+    window.overrideredirect(True)
+
+    window.mainloop()
+
 
 check_serial()
 

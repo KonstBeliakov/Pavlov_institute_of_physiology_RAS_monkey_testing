@@ -1,3 +1,4 @@
+import threading
 import tkinter as tk
 from tkinter import ttk
 
@@ -6,6 +7,8 @@ import tkinter.messagebox as mb
 
 import utils
 from frames import *
+from settings import settings
+from screeninfo import get_monitors
 
 
 class App(tk.Tk):
@@ -19,6 +22,10 @@ class App(tk.Tk):
 
         utils.load_settings()
         utils.start_auto_saving()
+
+        if settings['fullscreen_mode'] and len(get_monitors()) >= 2:
+            t = threading.Thread(target=utils.paint_second_monitor)
+            t.start()
 
         self.notebook = ttk.Notebook()
         self.notebook.pack(expand=True, fill=BOTH)
