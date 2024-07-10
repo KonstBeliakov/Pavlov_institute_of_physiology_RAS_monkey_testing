@@ -1,6 +1,7 @@
 import json
 import tkinter as tk
 
+import utils
 from settings import settings
 
 
@@ -10,6 +11,7 @@ class ImportSettingsWindow(tk.Toplevel):
         self.root = root
 
         super().__init__()
+        utils.move_to_first_screen(self)
 
         self.title('Импортировать настройки')
         self.geometry('300x100')

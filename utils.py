@@ -1,6 +1,7 @@
 import json
 import time
 
+import mss
 from PIL import Image
 from PIL.ImageTk import PhotoImage
 
@@ -178,6 +179,12 @@ def start_auto_saving(filename=None):
     t = threading.Thread(target=lambda: auto_save(filename))
     t.start()
 
+
+def move_to_first_screen(window):
+    with mss.mss() as sct:
+        if len(sct.monitors) > 2:
+            mon = sct.monitors[1]
+            window.geometry(f'-{mon['width']}+0')
 
 check_serial()
 

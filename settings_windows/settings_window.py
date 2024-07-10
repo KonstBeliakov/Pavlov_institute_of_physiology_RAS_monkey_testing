@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 
+import utils
 from settings_windows.export_settings_window import ExportSettingsWindow
 from settings_windows.import_settings_window import ImportSettingsWindow
 
@@ -11,6 +12,7 @@ class SettingsWindow(Toplevel):
         self.widgets_list = None
 
         super().__init__()
+        utils.move_to_first_screen(self)
 
         self.buttonFrame = tk.Frame(self)
         self.buttonFrame.grid(row=1, column=0)

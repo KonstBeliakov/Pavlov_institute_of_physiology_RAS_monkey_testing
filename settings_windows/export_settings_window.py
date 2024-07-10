@@ -1,6 +1,7 @@
 import tkinter as tk
 import json
 
+import utils
 from settings import settings
 
 
@@ -10,6 +11,7 @@ class ExportSettingsWindow(tk.Toplevel):
         self.root = root
 
         super().__init__()
+        utils.move_to_first_screen(self)
 
         self.title('Экспортировать натройки')
         self.geometry('300x100')

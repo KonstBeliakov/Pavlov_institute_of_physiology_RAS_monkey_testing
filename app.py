@@ -4,6 +4,8 @@ from tkinter import ttk
 from tkinter import *
 import tkinter.messagebox as mb
 
+import mss
+
 import utils
 from frames import *
 
@@ -13,7 +15,7 @@ class App(tk.Tk):
         super().__init__()
         self.title('Основное окно')
 
-        self.geometry('+0+0')
+        utils.move_to_first_screen(self)
 
         self.protocol("WM_DELETE_WINDOW", self.confirm_delete)
 
