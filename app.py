@@ -4,8 +4,6 @@ from tkinter import ttk
 from tkinter import *
 import tkinter.messagebox as mb
 
-import mss
-
 import utils
 from frames import *
 
