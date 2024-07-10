@@ -28,15 +28,13 @@ class SecondScreenCopy:
 
     def second_screen_update(self):
         python_image = tk.PhotoImage(file="pictograms/settings.png")
-        monitor_number = 2
+        monitor_number = settings['captured_monitor']
         with mss.mss() as sct:
             print('monitors:')
             print(sct.monitors)
             if len(sct.monitors) > 2:
                 mon = sct.monitors[monitor_number]
-                self.canvas_image = self.canvas.create_image(self.canvas.winfo_width() // 2,
-                                                             self.canvas.winfo_height() // 2,
-                                                             image=python_image)
+                self.canvas_image = self.canvas.create_image(0, 0, anchor='nw', image=python_image)
                 monitor = {
                     "top": mon["top"],
                     "left": mon["left"],
@@ -48,8 +46,8 @@ class SecondScreenCopy:
                     with mss.mss() as sct:
                         sct_img = sct.grab(monitor)
                         img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
-                        img2 = img.resize((int(img.size[0] * 2 * settings['monitor_copy_size']),
-                                           int(img.size[1] * 2 * settings['monitor_copy_size'])))
+                        img2 = img.resize((int(img.size[0] * settings['monitor_copy_size']),
+                                           int(img.size[1] * settings['monitor_copy_size'])))
                         img3 = ImageTk.PhotoImage(img2)
 
                         self.canvas.itemconfigure(self.canvas_image, image=img3)

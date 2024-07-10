@@ -8,6 +8,7 @@ settings = {
 
     'settings_filename': 'data.json',
     'autosave_period': 5,
+    'captured_monitor': 2,
 
     # saving experiment data params
     'experiment_data_filename': '',
