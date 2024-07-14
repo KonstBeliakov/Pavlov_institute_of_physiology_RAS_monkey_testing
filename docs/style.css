@@ -1,0 +1,23 @@
+body{
+    background: #ddffff;
+    font-family: 'Arial', sans-serif;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+h1, h2, h3, h4, h4, h5, h6, b{
+    color: #002050;
+}
+ul {
+    border: 1px solid black;
+    padding: 10px 30px;
+    box-shadow: 0 0 7px rgba(0,0,0,0.5);
+}
+
+#side_link{
+    margin-right: -90px;
+    text-align: right;
+}
+
+li{
+    padding: 3px;
+}
