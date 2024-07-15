@@ -1,17 +1,17 @@
-from tkinter import *
+from customtkinter import *
 from settings import settings
 
 
 class ImprovedRadiobuttons:
     def __init__(self, screen, x: int, y: int, text, values=('Да', 'Нет'), value_type=int, save_value=None):
-        self.label = Label(screen, text=text)
+        self.label = CTkLabel(screen, text=text)
         self.label.grid(row=y, column=x)
 
         self.values = values
 
         self.variable = StringVar(screen, '')
         self.variable.set(values[0])
-        self.radio_button_values = [Radiobutton(screen, text=values[i], variable=self.variable, value=values[i])
+        self.radio_button_values = [CTkRadioButton(screen, text=values[i], variable=self.variable, value=values[i])
                                     for i in range(len(values))]
 
         for i in range(len(values)):

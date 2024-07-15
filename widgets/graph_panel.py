@@ -1,4 +1,5 @@
-from tkinter import Frame
+import customtkinter as ctk
+
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -10,7 +11,7 @@ class GraphPanel:
     def __init__(self, root, row, column):
         self.root = root
 
-        self.frame = Frame(root)
+        self.frame = ctk.CTkFrame(root)
         self.frame.grid(row=row, column=column)
 
         self.figsizes = [(8, 4), (3.5, 4), (3.5, 4), (3.5, 4)]

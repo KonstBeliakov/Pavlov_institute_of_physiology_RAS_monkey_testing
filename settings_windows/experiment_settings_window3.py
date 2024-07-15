@@ -1,6 +1,6 @@
-import tkinter as tk
+from customtkinter import *
 
-from widgets.widget_list import WidgetList
+from widgets import WidgetList
 from settings import settings
 from settings_windows.settings_window import SettingsWindow
 
@@ -10,7 +10,7 @@ class ExperimentSettingsWindow3(SettingsWindow):
         super().__init__(experiment_type=3)
         self.title('Настройки эксперимента 3')
 
-        self.settingsFrame = tk.Frame(self)
+        self.settingsFrame = CTkFrame(self)
         self.settingsFrame.grid(column=0, row=0)
 
         self.widgets_list = WidgetList(self.settingsFrame, 0, 0, [

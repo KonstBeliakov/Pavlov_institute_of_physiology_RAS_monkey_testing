@@ -1,21 +1,20 @@
-from tkinter import *
+from customtkinter import *
 import tkinter as tk
 from tkinter import ttk
 
 from settings import settings
-from settings_windows.export_settings_window import ExportSettingsWindow
-from settings_windows.import_settings_window import ImportSettingsWindow
-from widgets.widget_list import WidgetList
+from settings_windows import *
+from widgets import WidgetList
 
 
 class SettingsFrame:
     def __init__(self, root, app):
         self.root = root
         self.app = app
-        self.basic_settings_radio_button_frame = Frame(root)
+        self.basic_settings_radio_button_frame = CTkFrame(root)
         self.basic_settings_radio_button_frame.grid(column=0, row=0)
 
-        self.sounds_in_experiments_label = Label(self.basic_settings_radio_button_frame,
+        self.sounds_in_experiments_label = CTkLabel(self.basic_settings_radio_button_frame,
                                                  text='Использовать звуковое подкрепление')
         self.sounds_in_experiments_label.grid(column=0, row=0)
         self.sounds_in_experiments = tk.StringVar(value='Да')
@@ -26,7 +25,7 @@ class SettingsFrame:
                                       variable=self.sounds_in_experiments)
         self.btn_no.grid(column=2, row=0)
 
-        self.basic_settings_label_frame = Frame(root)
+        self.basic_settings_label_frame = CTkFrame(root)
         self.basic_settings_label_frame.grid(column=0, row=1)
 
         self.widgets_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
@@ -45,19 +44,19 @@ class SettingsFrame:
             {'text': 'Размер экспериментального монитора', 'value_type': str, 'save_value': 'screen_size', 'may_be_empty': True},
         ])
 
-        self.button_frame = Frame(root)
+        self.button_frame = CTkFrame(root)
         self.button_frame.grid(row=2, column=0)
 
-        self.button_apply = Button(self.button_frame, text='Применить', command=self.apply_basic_settings)
+        self.button_apply = CTkButton(self.button_frame, text='Применить', command=self.apply_basic_settings)
         self.button_apply.grid(row=0, column=0)
 
         self.error_label = tk.Label(root, text='Настройки не применены', fg='#f00')
         self.error_label.grid(row=3, column=0)
 
-        self.button_export = Button(self.button_frame, text='Экспортировать', command=self.export_settings)
+        self.button_export = CTkButton(self.button_frame, text='Экспортировать', command=self.export_settings)
         self.button_export.grid(row=0, column=1)
 
-        self.button_import = Button(self.button_frame, text='Импортировать', command=self.import_settings)
+        self.button_import = CTkButton(self.button_frame, text='Импортировать', command=self.import_settings)
         self.button_import.grid(row=0, column=2)
 
     def apply_basic_settings(self):

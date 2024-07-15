@@ -1,0 +1,7 @@
+from widgets.graph_panel import GraphPanel
+from widgets.canvas_object import CanvasObject
+from widgets.improved_checkbuttons import ImprovedCheckbuttons
+from widgets.improved_entry import ImprovedEntry
+from widgets.improved_radiobuttons import ImprovedRadiobuttons
+from widgets.second_screen_copy import SecondScreenCopy
+from widgets.widget_list import WidgetList

@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import *
+from customtkinter import *
 import settings
 from utils import entry_value_check
 from dateutil import parser
 
 
-class ImprovedEntry(tk.Entry):
+class ImprovedEntry(CTkEntry):
     def __init__(self, screen, x: int, y: int, text: str, value=None, value_type=int, min_value=None, max_value=None,
                  save_value=None, may_be_empty=False):
         super().__init__(screen)

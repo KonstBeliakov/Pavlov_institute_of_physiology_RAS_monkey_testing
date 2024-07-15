@@ -1,12 +1,11 @@
-import tkinter as tk
-from tkinter import *
+from customtkinter import *
 
 import utils
 from settings_windows.export_settings_window import ExportSettingsWindow
 from settings_windows.import_settings_window import ImportSettingsWindow
 
 
-class SettingsWindow(Toplevel):
+class SettingsWindow(CTkToplevel):
     def __init__(self, experiment_type=None):
         self.experiment_type = experiment_type
         self.widgets_list = None
@@ -14,23 +13,23 @@ class SettingsWindow(Toplevel):
         super().__init__()
         utils.move_to_first_screen(self)
 
-        self.buttonFrame = tk.Frame(self)
+        self.buttonFrame = CTkFrame(self)
         self.buttonFrame.grid(row=1, column=0)
 
-        self.btn_confirm = tk.Button(self.buttonFrame, text='Применить', command=self.save_settings)
+        self.btn_confirm = CTkButton(self.buttonFrame, text='Применить', command=self.save_settings)
         self.btn_confirm.grid(row=0, column=0)
-        self.btn_confirm = tk.Button(self.buttonFrame, text='Отмена', command=self.cansel)
+        self.btn_confirm = CTkButton(self.buttonFrame, text='Отмена', command=self.cansel)
         self.btn_confirm.grid(row=0, column=1)
-        self.btn_import_settings = tk.Button(self.buttonFrame, text='Импортировать настройки',
+        self.btn_import_settings = CTkButton(self.buttonFrame, text='Импортировать настройки',
                                              command=self.open_import_settings_window)
         self.btn_import_settings.grid(row=0, column=2)
-        self.btn_export_settings = tk.Button(self.buttonFrame, text='Экспортировать настройки',
+        self.btn_export_settings = CTkButton(self.buttonFrame, text='Экспортировать настройки',
                                              command=self.open_export_settings_window)
-        self.errorFrame = Frame(self)
+        self.errorFrame = CTkFrame(self)
         self.errorFrame.grid(row=2, column=0)
 
         self.btn_export_settings.grid(row=0, column=3)
-        self.error_label = tk.Label(self.errorFrame, text='Ошибка!', fg='#f00')
+        self.error_label = CTkLabel(self.errorFrame, text='Ошибка!', text_color='#f00')
 
     def save_settings(self):
         pass
@@ -52,6 +51,6 @@ class SettingsWindow(Toplevel):
 
 
 if __name__ == '__main__':
-    window = Tk()
+    window = CTk()
     settings_window = SettingsWindow()
     settings_window.mainloop()

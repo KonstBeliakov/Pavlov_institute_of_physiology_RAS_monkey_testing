@@ -1,19 +1,18 @@
 import datetime
 import threading
-from tkinter import *
+from tkinter import LabelFrame
 from try_again_window import TryAgainWindow
 from time import perf_counter, sleep
 import pandas as pd
 
 from tkinter import ttk
-import tkinter as tk
+from customtkinter import *
 
 import utils
 from monkey_windows import *
 from settings_windows import *
+from widgets import *
 from settings import settings
-from widgets.graph_panel import GraphPanel
-from widgets.second_screen_copy import SecondScreenCopy
 
 
 class RunFrame:
@@ -29,10 +28,10 @@ class RunFrame:
 
         self.run_frame_top = LabelFrame(root, text='Настройки запуска')
         self.run_frame_top.grid(row=0, column=0)
-        self.run_frame = Frame(self.run_frame_top)
+        self.run_frame = CTkFrame(self.run_frame_top)
         self.run_frame.grid(row=0, column=0)
 
-        self.choose_experiment_label = Label(self.run_frame, text='Тип эксперимента')
+        self.choose_experiment_label = CTkLabel(self.run_frame, text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
 
         self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки',
@@ -40,30 +39,30 @@ class RunFrame:
                                                                                'Новая картинка'])
         self.choose_experiment_combobox.grid(row=1, column=0)
 
-        self.btn_settings = tk.Button(self.run_frame, text='Настроить эксперимент',
+        self.btn_settings = CTkButton(self.run_frame, text='Настроить эксперимент',
                                       command=self.experiment_settings)
         self.btn_settings.grid(row=1, column=1)
 
-        self.timer_ask_label = Label(self.run_frame, text='Обнулить глобальный таймер эксперимента')
+        self.timer_ask_label = CTkLabel(self.run_frame, text='Обнулить глобальный таймер эксперимента')
         self.timer_ask_label.grid(row=2, column=0)
 
         self.timer_radio_buttons = IntVar()
         self.timer_radio_buttons.set(0)
-        self.radio_button_yes = Radiobutton(self.run_frame, text="Да", variable=self.timer_radio_buttons, value=1)
-        self.radio_button_no = Radiobutton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
+        self.radio_button_yes = CTkRadioButton(self.run_frame, text="Да", variable=self.timer_radio_buttons, value=1)
+        self.radio_button_no = CTkRadioButton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
         self.radio_button_yes.grid(row=3, column=0)
         self.radio_button_no.grid(row=3, column=1)
 
-        self.output_file_label = Label(self.run_frame, text='Файл записи результатов эксперимента')
+        self.output_file_label = CTkLabel(self.run_frame, text='Файл записи результатов эксперимента')
         self.output_file_label.grid(row=4, column=0)
 
-        self.output_file_entry = Entry(self.run_frame)
+        self.output_file_entry = CTkEntry(self.run_frame)
         self.output_file_entry.grid(row=4, column=1)
 
-        self.btn = tk.Button(self.run_frame, text="Запустить тестирование", command=self.open_about)
+        self.btn = CTkButton(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=5, column=0)
 
-        self.run_error_label = Label(self.run_frame_top, text='', fg='red')
+        self.run_error_label = CTkLabel(self.run_frame_top, text='', text_color='red')
         self.run_error_label.grid(row=1, column=0)
 
     def generate_canvases(self):
@@ -114,7 +113,7 @@ class RunFrame:
                 print('Данные эксперимента сохранены успешно')
 
     def update_log(self):
-        self.frame_log_top = LabelFrame(self.run_frame_top, text='Результаты последних 10 тестов')
+        self.frame_log_top = CTkFrame(self.run_frame_top, text='Результаты последних 10 тестов')
         self.frame_log_top.grid(row=0, column=1)
 
         while not self.window.log:
@@ -126,7 +125,7 @@ class RunFrame:
         if log_header is None:
             log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
 
-        self.log_label = [[tk.Label(self.frame_log_top, text='') for _ in range(len(log_header))] for _ in
+        self.log_label = [[CTkLabel(self.frame_log_top, text='') for _ in range(len(log_header))] for _ in
                           range(11)]
 
         for i in range(len(self.log_label)):

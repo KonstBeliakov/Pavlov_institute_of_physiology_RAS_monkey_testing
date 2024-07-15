@@ -1,16 +1,17 @@
-from tkinter import *
+from customtkinter import *
+import customtkinter as ctk
 from settings import settings
 
 
 class ImprovedCheckbuttons:
     def __init__(self, screen, x: int, y: int, text: str, values: list, value_type=int, save_value=None, values_in_row=None):
-        self.label = Label(screen, text=text)
+        self.label = ctk.CTkLabel(screen, text=text)
         self.label.grid(row=y, column=x)
 
         self.values = values
 
         self.variables = [IntVar() for _ in range(len(values))]
-        self.checkbuttons = [Checkbutton(screen, text=values[i], variable=self.variables[i], command=self.selected)
+        self.checkbuttons = [ctk.CTkCheckBox(screen, text=values[i], variable=self.variables[i], command=self.selected)
                              for i in range(len(values))]
 
         if values_in_row is None:
@@ -56,13 +57,13 @@ class ImprovedCheckbuttons:
 
 
 if __name__ == '__main__':
-    root = Tk()
+    root = CTk()
     checkbutton = ImprovedCheckbuttons(root, 0, 0, 'checkbutton', values=['1', '2', '3'], value_type=int, save_value='test')
 
     checkbutton.set_value([1, 3])
     print(checkbutton.get())  # [1, 3]
 
-    button = Button(root, text='save_value', command=checkbutton.save_value)
+    button = CTkButton(root, text='save_value', command=checkbutton.save_value)
     button.grid(row=1, column=0)
 
     root.mainloop()

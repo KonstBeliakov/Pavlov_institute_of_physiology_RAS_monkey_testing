@@ -1,11 +1,11 @@
 from tkhtmlview import HTMLLabel
-from tkinter import Button
+from customtkinter import CTkButton
 from os import startfile, path
 
 
 class InfoFrame:
     def __init__(self, root):
-        self.button = Button(root, text='Открыть документацию в браузере', command=self.open_documentation)
+        self.button = CTkButton(root, text='Открыть документацию в браузере', command=self.open_documentation)
         self.button.pack()
         self.doc_path = path.abspath(path.join('docs', 'index.html'))
 

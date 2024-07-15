@@ -1,11 +1,13 @@
 import tkinter as tk
 import json
 
+from customtkinter import *
+
 import utils
 from settings import settings
 
 
-class ExportSettingsWindow(tk.Toplevel):
+class ExportSettingsWindow(CTkToplevel):
     def __init__(self, experiment_type, root):
         self.experiment_type = experiment_type
         self.root = root

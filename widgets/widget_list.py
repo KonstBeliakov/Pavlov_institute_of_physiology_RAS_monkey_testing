@@ -1,12 +1,12 @@
 from widgets.improved_entry import ImprovedEntry
 from widgets.improved_radiobuttons import ImprovedRadiobuttons
 from widgets.improved_checkbuttons import ImprovedCheckbuttons
-from tkinter import Frame
+from customtkinter import CTkFrame
 
 
 class WidgetList:
     def __init__(self, screen, x, y, widget_params, vertical=False):
-        self.frame = Frame(screen)
+        self.frame = CTkFrame(screen)
         self.frame.grid(row=y, column=x)
         self.widgets = []
         for i, params in enumerate(widget_params):
@@ -36,10 +36,10 @@ class WidgetList:
             if isinstance(widget, ImprovedEntry):
                 if (t := widget.check_value()) is not None:
                     if show_error:
-                        widget.configure(fg='red')
+                        widget.configure(text_color='red')
                     error_text += f'{t}\n'
                 else:
-                    widget.configure(fg='black')
+                    widget.configure(text_color='black')
         return None if not error_text else error_text
 
     def save_values(self, check_validity=True):

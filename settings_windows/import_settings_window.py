@@ -1,11 +1,11 @@
 import json
-import tkinter as tk
+from customtkinter import *
 
 import utils
 from settings import settings
 
 
-class ImportSettingsWindow(tk.Toplevel):
+class ImportSettingsWindow(CTkToplevel):
     def __init__(self, experiment_type, root):
         self.experiment_type = experiment_type
         self.root = root
@@ -16,16 +16,16 @@ class ImportSettingsWindow(tk.Toplevel):
         self.title('Импортировать настройки')
         self.geometry('300x100')
 
-        self.label = tk.Label(self, text='Открыть файл настроек')
+        self.label = CTkLabel(self, text='Открыть файл настроек')
         self.label.pack()
 
-        self.entry = tk.Entry(self)
+        self.entry = CTkEntry(self)
         self.entry.pack()
 
-        self.button = tk.Button(self, text='Открыть', command=self.read_file)
+        self.button = CTkButton(self, text='Открыть', command=self.read_file)
         self.button.pack()
 
-        self.error_label = tk.Label(self, text='', fg='#f00')
+        self.error_label = CTkLabel(self, text='', fg='#f00')
         self.error_label.pack()
 
     def read_file(self):

@@ -1,8 +1,7 @@
+from customtkinter import *
+
+from widgets import *
 import utils
-from settings import settings
-from widgets.second_screen_copy import SecondScreenCopy
-from widgets.widget_list import WidgetList
-from tkinter import *
 
 
 class DeviseCheckFrame:
@@ -15,22 +14,22 @@ class DeviseCheckFrame:
             {'text': 'Частота', 'value_type': int, 'min_value': 0, 'save_value': 'baudrate'}
         ])
 
-        self.check_devise_button = Button(root, text='Подключиться к управляющей плате',
+        self.check_devise_button = CTkButton(root, text='Подключиться к управляющей плате',
                                           command=self.devise_check)
         self.check_devise_button.grid(row=1, column=0)
 
-        self.check_second_screen_button = Button(root, text='Проверить второй монитор',
+        self.check_second_screen_button = CTkButton(root, text='Проверить второй монитор',
                                                  command=self.check_second_screen)
         self.check_second_screen_button.grid(row=2, column=0)
 
-        self.devise_check_error_label = Label(root, text='', fg='red')
+        self.devise_check_error_label = CTkLabel(root, text='', text_color='red')
         self.devise_check_error_label.grid(row=3, column=0)
 
         self.button_check = [
-            Button(root, text='Проверить поилку', command=utils.positive_reinforcement),
-            Button(root, text='Проверить подъем заслонки', command=utils.disable_anser_entry),
-            Button(root, text='Проверить опускание заслонки', command=utils.anable_answer_entry),
-            Button(root, text=f'Закрасить экспериментальное окно', command=utils.paint_second_monitor)
+            CTkButton(root, text='Проверить поилку', command=utils.positive_reinforcement),
+            CTkButton(root, text='Проверить подъем заслонки', command=utils.disable_anser_entry),
+            CTkButton(root, text='Проверить опускание заслонки', command=utils.anable_answer_entry),
+            CTkButton(root, text=f'Закрасить экспериментальное окно', command=utils.paint_second_monitor)
         ]
 
         for i, button in enumerate(self.button_check):
