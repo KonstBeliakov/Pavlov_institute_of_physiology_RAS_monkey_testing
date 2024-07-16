@@ -115,6 +115,9 @@ class RunFrame:
         self.frame_log_top = CTkFrame(self.run_frame_top)
         self.frame_log_top.grid(row=0, column=1)
 
+        self.log_header_label = CTkLabel(self.frame_log_top, text='Результаты последних 10 тестов')
+        self.log_header_label.pack(fill=X)
+
         while not self.window.log:
             sleep(1)
 

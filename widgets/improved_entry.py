@@ -41,7 +41,10 @@ class ImprovedEntry(CTkEntry):
         if self.value_type == bool:
             value = self.get().strip() in ['Да', 'y', 'yes', 'Yes', 'True', 'true', 't', '1', 'YES']
         elif self.value_type == 'date':
-            value = parser.parse(self.get().strip()).date()
+            if self.may_be_empty and not self.get().strip():
+                value = ''
+            else:
+                value = parser.parse(self.get().strip()).date()
         elif self.value_type == 'list float':
             value = [float(i) for i in self.get().split()]
         else:

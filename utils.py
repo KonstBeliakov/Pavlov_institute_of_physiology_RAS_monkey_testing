@@ -201,6 +201,25 @@ def paint_second_monitor():
     window.mainloop()
 
 
+def load_data_from_file(filename) -> list[dict]:
+    dataframe = openpyxl.load_workbook(filename)
+
+    data_list = []
+    df = dataframe.active
+
+    header = [col[0].value for col in df.iter_cols(0, df.max_column)]
+
+    print(f'header: {header}')
+
+    for row in range(1, df.max_row):
+        row_data = {}
+        for i, col in enumerate(df.iter_cols(0, df.max_column)):
+            row_data[header[i]] = col[row].value
+        data_list.append(row_data)
+
+    return data_list
+
+
 check_serial()
 
 if __name__ == '__main__':

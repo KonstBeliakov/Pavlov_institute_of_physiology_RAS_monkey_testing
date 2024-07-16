@@ -58,32 +58,30 @@ class DataFrame:
 
         self.graph_panel = GraphPanel(self.root, row=5, column=0)
 
-    def load_data(self):
+    def load_data(self) -> list[str]:
+        """The function returns a list of file names that fit the specified time frame"""
+
         experiment_type = ['Запоминание картинки', 'Экстраполяция движения',
                            'Новая картинка'].index(self.experiment_type_radiobutton.get()) + 1
         files = []
         for file in sorted(listdir('data/')):
-            t1 = (not settings['selected_period_start'] or str(settings['selected_period_start']) < file)
-            t2 = (not settings['selected_period_end'] or file < str(settings['selected_period_end']))
-            t3 = int(file.split('.')[0][-1]) == experiment_type
-            if t1 and t2 and t3:
+            condition1 = (not settings['selected_period_start'] or str(settings['selected_period_start']) < file)
+            condition2 = (not settings['selected_period_end'] or file < str(settings['selected_period_end']))
+            condition3 = int(file.split('.')[0][-1]) == experiment_type
+            if condition1 and condition2 and condition3:
                 files.append(file)
 
         return files
 
-    def find_experiments(self):
+    def find_experiments(self) -> None:
+        """The function processes the entered time limits and displays a list of matching files and
+         updates graph readings"""
+
         if (error_text := self.time_interval_entries.check_values(show_error=True)) is not None:
             self.data_frame_error_label.configure(text=error_text)
         else:
-            if self.time_interval_entries.widgets[0].get():
-                self.time_interval_entries.widgets[0].save_value()
-            else:
-                settings['selected_period_start'] = ''
-
-            if self.time_interval_entries.widgets[1].get():
-                self.time_interval_entries.widgets[1].save_value()
-            else:
-                settings['selected_period_end'] = ''
+            self.time_interval_entries.widgets[0].save_value()
+            self.time_interval_entries.widgets[1].save_value()
 
             self.experiment_type_radiobutton.save_value()
 
@@ -96,7 +94,12 @@ class DataFrame:
 
             self.files_number_label.configure(text=f'Файлов выбрано: {len(files)}')
 
-    def create_data_file(self):
+            data = []
+            for filename in files:
+                data += utils.load_data_from_file(f'data/{filename}')
+            self.graph_panel.update(data)
+
+    def create_data_file(self) -> None:
         if self.filename_entry.get():
             export_filename = f'datasets/{self.filename_entry.get()}'
             if not export_filename.endswith('.xlsx'):
