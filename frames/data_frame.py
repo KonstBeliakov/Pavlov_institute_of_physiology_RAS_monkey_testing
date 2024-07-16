@@ -39,7 +39,7 @@ class DataFrame:
         self.data_frame2 = CTkFrame(root)
         self.data_frame2.grid(row=3, column=0)
 
-        self.experiment_data = CTkTextbox(self.data_frame2, height=8, width=40)
+        self.experiment_data = CTkTextbox(self.data_frame2, height=200, width=500)
 
         t = ' '
 

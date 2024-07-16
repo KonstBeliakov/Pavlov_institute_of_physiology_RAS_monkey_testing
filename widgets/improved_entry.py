@@ -1,4 +1,3 @@
-import tkinter as tk
 from customtkinter import *
 import settings
 from utils import entry_value_check
@@ -24,7 +23,8 @@ class ImprovedEntry(CTkEntry):
 
         self.grid(row=y, column=x + 1)
 
-        self.label = tk.Label(screen, text=text)
+        self.text = text
+        self.label = CTkLabel(screen, text=self.text)
         self.label.grid(row=y, column=x)
 
         self.value_type = value_type
@@ -34,7 +34,7 @@ class ImprovedEntry(CTkEntry):
         self.save_to = save_value
 
     def check_value(self):
-        return entry_value_check(self.get(), self.label['text'], min_value=self.min_value, max_value=self.max_value,
+        return entry_value_check(self.get(), self.text, min_value=self.min_value, max_value=self.max_value,
                                  value_type=self.value_type, may_be_empty=self.may_be_empty)
 
     def save_value(self):

@@ -5,7 +5,6 @@ from try_again_window import TryAgainWindow
 from time import perf_counter, sleep
 import pandas as pd
 
-from tkinter import ttk
 from customtkinter import *
 
 import utils
@@ -26,7 +25,7 @@ class RunFrame:
         self.app = app
         self.started = False
 
-        self.run_frame_top = LabelFrame(root, text='Настройки запуска')
+        self.run_frame_top = CTkFrame(root)
         self.run_frame_top.grid(row=0, column=0)
         self.run_frame = CTkFrame(self.run_frame_top)
         self.run_frame.grid(row=0, column=0)
@@ -34,7 +33,7 @@ class RunFrame:
         self.choose_experiment_label = CTkLabel(self.run_frame, text='Тип эксперимента')
         self.choose_experiment_label.grid(row=0, column=0)
 
-        self.choose_experiment_combobox = ttk.Combobox(self.run_frame, values=['Запоминание картинки',
+        self.choose_experiment_combobox = CTkComboBox(self.run_frame, values=['Запоминание картинки',
                                                                                'Экстраполяция движения',
                                                                                'Новая картинка'])
         self.choose_experiment_combobox.grid(row=1, column=0)
