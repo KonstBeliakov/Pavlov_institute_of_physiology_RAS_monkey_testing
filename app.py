@@ -64,3 +64,11 @@ class App(CTk):
         if msg.get() == 'Да':
             utils.save_settings()
             self.destroy()
+
+
+if __name__ == '__main__':
+    print('start...')
+    set_appearance_mode('System')
+    set_default_color_theme('blue')
+    app = App()
+    app.mainloop()

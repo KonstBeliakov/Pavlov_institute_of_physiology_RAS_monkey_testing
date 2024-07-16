@@ -53,7 +53,7 @@ class MonkeyWindow1(MonkeyWindow):
         super().__init__()
         self.test_start = time.perf_counter()
         self.experiment_type = 1
-        self.experiment_number = 0
+        self.experiment_number = 1
 
         self.log = []
 
