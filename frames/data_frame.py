@@ -45,12 +45,7 @@ class DataFrame:
 
         self.experiment_data.insert(END, t)
         self.experiment_data.configure(state=DISABLED)
-        self.scroll = CTkScrollbar(self.data_frame2)
-        self.experiment_data.configure(yscrollcommand=self.scroll.set)
         self.experiment_data.pack(side=LEFT)
-
-        self.scroll.configure(command=self.experiment_data.yview)
-        self.scroll.pack(side=RIGHT, fill=Y)
 
         self.data_frame3 = CTkFrame(root)
         self.data_frame3.grid(row=4, column=0)

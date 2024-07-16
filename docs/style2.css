@@ -1,0 +1,33 @@
+body{
+    background-image: linear-gradient(
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2)
+  ), url('bg.avif');
+    background-size : 99.9%;
+    background-attachment: fixed;
+    font-family: 'Arial', sans-serif;
+    margin-left: 100px;
+    margin-right: 100px;
+    color: #77bbcc;
+}
+h1, h2, h3, h4, h4, h5, h6, b{
+    color: #aaeeff;
+}
+ul {
+    border: 1px dashed #aaeeff;
+    padding: 10px 30px;
+    box-shadow: 0 0 10px rgba(150,220,255,0.5);
+}
+
+.side_link, #switcher{
+    margin-right: -90px;
+    text-align: right;
+}
+
+li{
+    padding: 5px;
+}
+
+a{
+    color: #77bbcc;
+}

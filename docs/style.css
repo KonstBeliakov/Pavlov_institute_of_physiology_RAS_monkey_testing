@@ -13,7 +13,7 @@ ul {
     box-shadow: 0 0 7px rgba(0,0,0,0.5);
 }
 
-#side_link{
+.side_link{
     margin-right: -90px;
     text-align: right;
 }
