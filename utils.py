@@ -14,6 +14,7 @@ import datetime
 from os import listdir
 import pandas as pd
 import openpyxl
+import copy
 
 from settings import settings
 
@@ -164,9 +165,12 @@ def load_settings(filename=None):
 def save_settings(filename=None):
     if filename is None:
         filename = settings['settings_filename']
+    settings1 = copy.deepcopy(settings)
+    del settings1['selected_period_start']  # json can't save date
+    del settings1['selected_period_end']
     print('Сохранение настроек...', end='')
     with open(filename, 'w') as settings_file:
-        json.dump(settings, settings_file)
+        json.dump(settings1, settings_file)
     print('Успешно')
 
 

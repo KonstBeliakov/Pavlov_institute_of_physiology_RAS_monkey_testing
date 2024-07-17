@@ -28,29 +28,32 @@ class RunFrame:
         self.run_frame_top = CTkFrame(root)
         self.run_frame_top.grid(row=0, column=0)
         self.run_frame = CTkFrame(self.run_frame_top)
-        self.run_frame.grid(row=0, column=0)
+        self.run_frame.grid(row=0, column=0, sticky='ns')
+
+        self.run_frame_header_label = CTkLabel(self.run_frame, text='Настройки эксперимента')
+        self.run_frame_header_label.grid(row=0, column=0)
 
         self.choose_experiment_label = CTkLabel(self.run_frame, text='Тип эксперимента')
-        self.choose_experiment_label.grid(row=0, column=0)
+        self.choose_experiment_label.grid(row=1, column=0)
 
         self.choose_experiment_combobox = CTkComboBox(self.run_frame, values=['Запоминание картинки',
                                                                                'Экстраполяция движения',
                                                                                'Новая картинка'])
-        self.choose_experiment_combobox.grid(row=1, column=0)
+        self.choose_experiment_combobox.grid(row=2, column=0)
 
         self.btn_settings = CTkButton(self.run_frame, text='Настроить эксперимент',
                                       command=self.experiment_settings)
-        self.btn_settings.grid(row=1, column=1)
+        self.btn_settings.grid(row=2, column=1)
 
         self.timer_ask_label = CTkLabel(self.run_frame, text='Обнулить глобальный таймер эксперимента')
-        self.timer_ask_label.grid(row=2, column=0)
+        self.timer_ask_label.grid(row=3, column=0)
 
         self.timer_radio_buttons = IntVar()
         self.timer_radio_buttons.set(0)
         self.radio_button_yes = CTkRadioButton(self.run_frame, text="Да", variable=self.timer_radio_buttons, value=1)
         self.radio_button_no = CTkRadioButton(self.run_frame, text="Нет", variable=self.timer_radio_buttons, value=0)
-        self.radio_button_yes.grid(row=3, column=0)
-        self.radio_button_no.grid(row=3, column=1)
+        self.radio_button_yes.grid(row=3, column=1)
+        self.radio_button_no.grid(row=3, column=2)
 
         self.output_file_label = CTkLabel(self.run_frame, text='Файл записи результатов эксперимента')
         self.output_file_label.grid(row=4, column=0)
@@ -72,6 +75,8 @@ class RunFrame:
 
     def open_about(self):
         if not self.started:
+            if hasattr(self, "frame_log_top"):
+                self.frame_log_top.destroy()
             match self.choose_experiment_combobox.get():
                 case 'Запоминание картинки':
                     self.window = MonkeyWindow1()
