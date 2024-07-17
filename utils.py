@@ -108,7 +108,12 @@ def positive_reinforcement():
 
 def disable_anser_entry():
     if serial_available:
-        ser.write(bytes([2]))
+        def f():
+            time.sleep(settings['barrier_delay'])
+            ser.write(bytes([2]))
+
+        t1 = threading.Thread(target=f)
+        t1.start()
 
 
 def anable_answer_entry():

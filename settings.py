@@ -8,6 +8,7 @@ settings = {
     'screen_size': '',
     'move_cursor': False,
     'escape_key': 't',
+    'barrier_delay': 0.0,
 
     'settings_filename': 'data.json',
     'autosave_period': 5,
