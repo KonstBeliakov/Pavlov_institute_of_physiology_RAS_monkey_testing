@@ -50,6 +50,12 @@ class App(CTk):
         self.dataframe = DataFrame(root=self.frames[3])
         self.info_frame = InfoFrame(self.frames[4])
 
+        self.bind("<Key>", self.key_handler)
+
+    def key_handler(self, event):
+        if (event.char == settings['escape_key']):
+            self.run_frame.close_experiment_window()
+
     def tab_changed(self):
         if self.tabview.get() == 'Информация о приложении':
             doc_path = path.abspath(path.join('docs', 'index.html'))

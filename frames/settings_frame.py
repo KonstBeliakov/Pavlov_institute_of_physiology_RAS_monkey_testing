@@ -48,6 +48,8 @@ class SettingsFrame:
             {'text': 'Номер захватываемого монитора', 'value_type': int, 'save_value': 'captured_monitor'},
             {'text': 'Размер экспериментального монитора', 'value_type': str, 'save_value': 'screen_size',
              'may_be_empty': True},
+            {'widget_type': 'radiobutton', 'text': 'Автоматически перемещать курсор на\nоператорский монитор',
+             'value_type': bool, 'save_value': 'move_cursor'},
         ])
 
         self.button_frame = CTkFrame(root)

@@ -1,8 +1,8 @@
 import datetime
 import threading
-from tkinter import LabelFrame
 from try_again_window import TryAgainWindow
 from time import perf_counter, sleep
+import win32api
 import pandas as pd
 
 from customtkinter import *
@@ -64,6 +64,9 @@ class RunFrame:
         self.btn = CTkButton(self.run_frame, text="Запустить тестирование", command=self.open_about)
         self.btn.grid(row=5, column=0)
 
+        self.close_experiment_window_label = CTkLabel(master=self.run_frame,
+                                                      text='Для завершения эксперимента можно нажать клавишу t')
+
         self.run_error_label = CTkLabel(self.run_frame_top, text='', text_color='red')
         self.run_error_label.grid(row=1, column=0)
 
@@ -74,7 +77,9 @@ class RunFrame:
         self.graph_panel.update(log)
 
     def open_about(self):
-        if not self.started:
+        if self.started:
+            self.close_experiment_window()
+        else:
             if hasattr(self, "frame_log_top"):
                 self.frame_log_top.destroy()
             match self.choose_experiment_combobox.get():
@@ -100,21 +105,16 @@ class RunFrame:
                 self.update_second_screen_thread = threading.Thread(target=self.check_second_screen)
                 self.update_second_screen_thread.start()
 
+                if settings['move_cursor']:
+                    self.move_cursor_thread = threading.Thread(target=self.move_cursor)
+                    self.move_cursor_thread.start()
+
+                self.close_experiment_window_label.grid(row=6, column=0)
+
                 self.window.mainloop()
             else:
                 self.run_error_label.configure(text='Тип эксперимента не выбран')
-        else:
-            self.window.destroy()
-            self.btn.configure(text="Запустить тестирование")
-            self.started = False
-            try:
-                self.save_experiment_data(self.output_file_entry.get())
-            except Exception as err:
-                print(f'При сохранении данных произошла ошибка: {err}')
-                self.try_again_window = TryAgainWindow(self)
-                self.try_again_window.mainloop()
-            else:
-                print('Данные эксперимента сохранены успешно')
+
 
     def update_log(self):
         self.frame_log_top = CTkFrame(self.run_frame_top)
@@ -128,7 +128,7 @@ class RunFrame:
 
         experiment_type = self.window.experiment_type
         log_header = settings[f'current_log_header{experiment_type}']
-        print(f'log_header: {log_header}')
+
         if log_header is None:
             log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
 
@@ -195,3 +195,22 @@ class RunFrame:
 
     def check_second_screen(self):
         self.second_screen_copy = SecondScreenCopy(self.run_frame_top, 2, 0)
+
+    def move_cursor(self):
+        while self.started:
+            sleep(0.1)
+            win32api.SetCursorPos((-100, 100))
+
+    def close_experiment_window(self):
+        self.close_experiment_window_label.grid_forget()
+        self.window.destroy()
+        self.btn.configure(text="Запустить тестирование")
+        self.started = False
+        try:
+            self.save_experiment_data(self.output_file_entry.get())
+        except Exception as err:
+            print(f'При сохранении данных произошла ошибка: {err}')
+            self.try_again_window = TryAgainWindow(self)
+            self.try_again_window.mainloop()
+        else:
+            print('Данные эксперимента сохранены успешно')
