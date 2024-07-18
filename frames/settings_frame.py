@@ -50,6 +50,9 @@ class SettingsFrame:
              'may_be_empty': True},
             {'widget_type': 'radiobutton', 'text': 'Автоматически перемещать курсор на\nоператорский монитор',
              'value_type': bool, 'save_value': 'move_cursor'},
+            {'text': 'Длительность положительного подкрепления', 'value_type': float, 'save_value': 'drink_delay'},
+            {'widget_type': 'radiobutton', 'text': 'Используемый скрипт arduino', 'values': ['18-10-03.ino', '24-07-18.ino'],
+             'value_type': str, 'save_value': 'arduino_script'},
         ])
 
         self.button_frame = CTkFrame(root)

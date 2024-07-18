@@ -22,6 +22,8 @@ pygame.init()
 serial_available = False
 ser = None
 
+arduino_data = [0] * 8
+
 
 def check_serial():
     global ser, serial_available
@@ -101,24 +103,69 @@ def play_sound(sound):
     pygame.mixer.music.play(0)
 
 
+def send_data():
+    x = sum([value * 2 ** i for i, value in enumerate(arduino_data)])
+    ser.write(bytes(x))
+
+
 def positive_reinforcement():
     if serial_available:
-        ser.write(bytes([1]))
+        if settings['arduino_script'] == '24-07-18.ino':
+            def f():
+                ser.write(bytes([1]))
+                time.sleep(settings['drink_delay'])
+                ser.write(bytes([2]))
+
+            t = threading.Thread(target=f)
+            t.start()
+        else:
+            def f():
+                arduino_data[0] = 1
+                send_data()
+                time.sleep(settings['drink_delay'])
+                arduino_data[0] = 0
+                send_data()
+
+            t = threading.Thread(target=f)
+            t.start()
 
 
 def disable_anser_entry():
     if serial_available:
-        def f():
-            time.sleep(settings['barrier_delay'])
-            ser.write(bytes([2]))
+        if settings['arduino_script'] == '24-07-18.ino':
+            def f():
+                time.sleep(settings['barrier_delay'])
+                ser.write(bytes([3]))
 
-        t1 = threading.Thread(target=f)
-        t1.start()
+            t = threading.Thread(target=f)
+            t.start()
+        else:
+            def f():
+                time.sleep(settings['barrier_delay'])
+                arduino_data[1] = 1
+                send_data()
+                time.sleep(0.4)
+                arduino_data[1] = 0
+                send_data()
+
+            t1 = threading.Thread(target=f)
+            t1.start()
 
 
 def anable_answer_entry():
     if serial_available:
-        ser.write(bytes([4]))
+        if settings['arduino_script'] == '24-07-18.ino':
+            ser.write(bytes([4]))
+        else:
+            def f():
+                arduino_data[2] = 1
+                send_data()
+                time.sleep(0.4)
+                arduino_data[2] = 0
+                send_data()
+
+            t = threading.Thread(target=f)
+            t.start()
 
 
 def read_usb():

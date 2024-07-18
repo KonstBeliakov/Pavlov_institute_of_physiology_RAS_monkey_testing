@@ -9,6 +9,8 @@ settings = {
     'move_cursor': False,
     'escape_key': 't',
     'barrier_delay': 0.0,
+    'drink_delay': 1,
+    'arduino_script': '24-07-18.ino',
 
     'settings_filename': 'data.json',
     'autosave_period': 5,
