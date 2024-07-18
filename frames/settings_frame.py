@@ -28,11 +28,13 @@ class SettingsFrame:
         self.basic_settings_label_frame.grid(column=0, row=1)
 
         self.widgets_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
-            {'text': 'Путь до файла звука начала эксперимента (оставить пустым если не используется)',
+            {'text': 'Путь до файла звука начала эксперимента\n(оставить пустым если не используется)',
              'value_type': str, 'save_value': 'experiment_start_sound', 'may_be_empty': True},
-            {'text': 'Путь до файла позитивного звукового подкрепления (оставить пустым если не используется)',
+            {'text': 'Путь до файла звука начала теста\n(оставить пустым если не используется)',
+             'value_type': str, 'save_value': 'test_start_sound', 'may_be_empty': True},
+            {'text': 'Путь до файла позитивного звукового подкрепления\n(оставить пустым если не используется)',
              'value_type': str, 'save_value': 'right_answer_sound', 'may_be_empty': True},
-            {'text': 'Путь до файла негативного звукового подкрепления (оставить пустым если не используется)',
+            {'text': 'Путь до файла негативного звукового подкрепления\n(оставить пустым если не используется)',
              'value_type': str, 'save_value': 'wrong_answer_sound', 'may_be_empty': True},
             {'text': 'Радиус круга отображающегося после нажатия', 'value_type': int, 'min_value': 0,
              'save_value': 'mouse_click_circle_radius'},
@@ -53,6 +55,8 @@ class SettingsFrame:
             {'text': 'Длительность положительного подкрепления', 'value_type': float, 'save_value': 'drink_delay'},
             {'widget_type': 'radiobutton', 'text': 'Используемый скрипт arduino', 'values': ['18-10-03.ino', '24-07-18.ino'],
              'value_type': str, 'save_value': 'arduino_script'},
+            {'text': 'Время работы заслонки для подъема/опускания', 'value_type': float,
+             'save_value': 'barrier_working_time'},
         ])
 
         self.button_frame = CTkFrame(root)

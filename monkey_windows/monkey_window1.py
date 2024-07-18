@@ -120,6 +120,10 @@ class MonkeyWindow1(MonkeyWindow):
 
         for i in range(settings['session_number']):
             for j in range(settings['repeat_number']):
+                time.sleep(settings['delay'][6])
+                utils.test_start()
+                time.sleep(settings['delay'][5])
+
                 if settings['image_selection_method'] == 'Случайный':
                     files = os.listdir(self.directory)
                     self.img1_name, self.img2_name = sample(files, 2)
@@ -192,9 +196,10 @@ class MonkeyWindow1(MonkeyWindow):
                 self.objects[0].hide()
                 self.objects[1].hide()
 
-                utils.disable_anser_entry()
-
                 # both images are hidden again
+
+                time.sleep(settings['barrier_delay'])
+                utils.disable_anser_entry()
                 self.handle_used_images()
                 time.sleep(settings['delay'][3])
 

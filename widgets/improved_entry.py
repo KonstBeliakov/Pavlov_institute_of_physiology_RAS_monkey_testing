@@ -16,6 +16,10 @@ class ImprovedEntry(CTkEntry):
             if '[' in save_value:
                 index = save_value.find('[')
                 num = int(save_value[index + 1: -1])
+                print(f'settings.settings["delay"] = {settings.settings["delay"]}')
+                print(f'save_value: {save_value}')
+                print(f'index: {index}')
+                print(f'delay[{num}] = {settings.settings['delay'][num]}')
                 value = settings.settings[save_value[:index]][num]
             else:
                 value = settings.settings[save_value]

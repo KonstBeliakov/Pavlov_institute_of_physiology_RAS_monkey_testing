@@ -98,6 +98,11 @@ def experiment_start():
         play_sound(settings['experiment_start_sound'])
 
 
+def test_start():
+    if settings['using_sound'] and settings['test_start_sound']:
+        play_sound(settings['test_start_sound'])
+
+
 def play_sound(sound):
     pygame.mixer.music.load(sound)
     pygame.mixer.music.play(0)
@@ -105,7 +110,7 @@ def play_sound(sound):
 
 def send_data():
     x = sum([value * 2 ** i for i, value in enumerate(arduino_data)])
-    ser.write(bytes(x))
+    ser.write(bytes([x]))
 
 
 def positive_reinforcement():
@@ -133,23 +138,17 @@ def positive_reinforcement():
 def disable_anser_entry():
     if serial_available:
         if settings['arduino_script'] == '24-07-18.ino':
-            def f():
-                time.sleep(settings['barrier_delay'])
-                ser.write(bytes([3]))
-
-            t = threading.Thread(target=f)
-            t.start()
+            ser.write(bytes([3]))
         else:
             def f():
-                time.sleep(settings['barrier_delay'])
                 arduino_data[1] = 1
                 send_data()
-                time.sleep(0.4)
+                time.sleep(settings['barrier_working_time'])
                 arduino_data[1] = 0
                 send_data()
 
-            t1 = threading.Thread(target=f)
-            t1.start()
+            t = threading.Thread(target=f)
+            t.start()
 
 
 def anable_answer_entry():
@@ -160,7 +159,7 @@ def anable_answer_entry():
             def f():
                 arduino_data[2] = 1
                 send_data()
-                time.sleep(0.4)
+                time.sleep(settings['barrier_working_time'])
                 arduino_data[2] = 0
                 send_data()
 

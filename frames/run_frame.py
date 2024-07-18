@@ -98,6 +98,7 @@ class RunFrame:
                 self.btn.configure(text="Завершить тестирование")
                 self.started = True
 
+                print('start_experiment_sound')
                 utils.experiment_start()
 
                 self.update_thread = threading.Thread(target=self.update_log)

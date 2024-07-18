@@ -8,11 +8,8 @@ settings = {
     'screen_size': '',
     'move_cursor': False,
     'escape_key': 't',
-    'barrier_delay': 0.0,
     'drink_delay': 1,
-    'arduino_script': '24-07-18.ino',
 
-    'settings_filename': 'data.json',
     'autosave_period': 5,
     'captured_monitor': 2,
 
@@ -24,10 +21,13 @@ settings = {
     # arduino params
     'port': 'COM3',
     'baudrate': 9600,
+    'arduino_script': '24-07-18.ino',
+    'barrier_working_time': 0.4,
 
     # sounds
     'using_sound': True,
     'experiment_start_sound': 'sounds/start.mp3',
+    'test_start_sound': 'sounds/start.mp3',
     'right_answer_sound': 'sounds/right_answer_sound.mp3',
     'wrong_answer_sound': 'sounds/wrong_answer_sound.wav',
 
@@ -38,7 +38,8 @@ settings = {
     'click_circle_time': 1.0,
 
     # First type experiment settings
-    'delay': [1.0, [1.0], 1.0, 0.0, 5.0],
+    'delay': [1.0, [1.0], 1.0, 0.0, 5.0, 0, 0],
+    'barrier_delay': 0.0,
     'session_number': 1,
     'repeat_number': 5,
     'experiment_start': None,
@@ -90,6 +91,7 @@ settings = {
                     'Файл настроек эксперимента'],
     'current_log_header3': None,
 
-    # Settings
+    # Settings files settings
+    'settings_filename': 'data.json',
     'settings_file_name': [None, None, None, None],
 }
