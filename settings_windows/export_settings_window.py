@@ -35,8 +35,12 @@ class ExportSettingsWindow(CTkToplevel):
 
         try:
             data = {}
-            for i, widget in enumerate(self.root.widgets_list.widgets):
-                data[i] = widget.get()
+            for widget in self.root.widgets_list.widgets:
+                data[widget.text] = widget.get()
+
+            if self.root.experiment_type == 1:
+                for widget in self.root.delay_widget_list:
+                    data[widget.text] = widget.get()
 
             with open(filename, 'w') as file:
                 json.dump(data, file)

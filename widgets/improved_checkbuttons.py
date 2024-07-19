@@ -5,8 +5,10 @@ from settings import settings
 
 class ImprovedCheckbuttons:
     def __init__(self, screen, x: int, y: int, text: str, values: list, value_type=int, save_value=None, values_in_row=None):
+        self.text = text
+
         self.label = ctk.CTkLabel(screen, text=text)
-        self.label.grid(row=y, column=x)
+        self.label.grid(row=y, column=x, padx=5, pady=2)
 
         self.values = values
 
@@ -18,7 +20,8 @@ class ImprovedCheckbuttons:
             values_in_row = len(values)
 
         for i in range(len(values)):
-            self.checkbuttons[i].grid(row=y + i // values_in_row, column=x + i % values_in_row + 1)
+            self.checkbuttons[i].grid(row=y + i // values_in_row, column=x + i % values_in_row + 1,
+                                      padx=2, pady=2)
 
         self.value_type = value_type
         self.save_to = save_value

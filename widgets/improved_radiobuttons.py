@@ -4,8 +4,10 @@ from settings import settings
 
 class ImprovedRadiobuttons:
     def __init__(self, screen, x: int, y: int, text, values=('Да', 'Нет'), value_type=int, save_value=None):
+        self.text = text
+
         self.label = CTkLabel(screen, text=text)
-        self.label.grid(row=y, column=x)
+        self.label.grid(row=y, column=x, padx=5, pady=2)
 
         self.values = values
 
@@ -15,7 +17,7 @@ class ImprovedRadiobuttons:
                                     for i in range(len(values))]
 
         for i in range(len(values)):
-            self.radio_button_values[i].grid(row=y, column=x + i + 1)
+            self.radio_button_values[i].grid(row=y, column=x + i + 1, padx=2, pady=5)
 
         self.value_type = value_type
         self.save_to = save_value

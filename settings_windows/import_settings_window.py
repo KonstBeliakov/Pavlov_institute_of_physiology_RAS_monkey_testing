@@ -35,8 +35,13 @@ class ImportSettingsWindow(CTkToplevel):
             with open(filename, "r") as file:
                 data = json.load(file)
 
-            for i, widget in enumerate(self.root.widgets_list.widgets):
-                widget.set_value(data[str(i)])
+            for widget in self.root.widgets_list.widgets:
+                widget.set_value(data[widget.text])
+
+            if self.root.experiment_type == 1:
+                for widget in self.root.delay_widget_list:
+                    widget.set_value(data[widget.text])
+
         except FileNotFoundError:
             self.error_label.configure(text=f'Файл {filename} не найден')
         except Exception as err:

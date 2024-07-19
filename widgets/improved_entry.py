@@ -16,20 +16,16 @@ class ImprovedEntry(CTkEntry):
             if '[' in save_value:
                 index = save_value.find('[')
                 num = int(save_value[index + 1: -1])
-                print(f'settings.settings["delay"] = {settings.settings["delay"]}')
-                print(f'save_value: {save_value}')
-                print(f'index: {index}')
-                print(f'delay[{num}] = {settings.settings['delay'][num]}')
                 value = settings.settings[save_value[:index]][num]
             else:
                 value = settings.settings[save_value]
         self.set_value(value)
 
-        self.grid(row=y, column=x + 1)
+        self.grid(row=y, column=x + 1, padx=5, pady=2)
 
         self.text = text
         self.label = CTkLabel(screen, text=self.text)
-        self.label.grid(row=y, column=x)
+        self.label.grid(row=y, column=x, padx=5, pady=2)
 
         self.value_type = value_type
         self.min_value = min_value
