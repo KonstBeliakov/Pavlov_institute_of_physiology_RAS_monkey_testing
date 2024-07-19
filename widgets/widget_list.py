@@ -2,11 +2,12 @@ from widgets.improved_entry import ImprovedEntry
 from widgets.improved_radiobuttons import ImprovedRadiobuttons
 from widgets.improved_checkbuttons import ImprovedCheckbuttons
 from customtkinter import CTkFrame
+from style import *
 
 
 class WidgetList:
     def __init__(self, screen, x, y, widget_params, vertical=False):
-        self.frame = CTkFrame(screen)
+        self.frame = CTkFrame(screen, fg_color=widget_list_fg_color)
         self.frame.grid(row=y, column=x)
         self.widgets = []
         for i, params in enumerate(widget_params):

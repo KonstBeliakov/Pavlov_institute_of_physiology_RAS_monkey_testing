@@ -1,6 +1,7 @@
 from customtkinter import *
 
 from settings import settings
+from style import *
 from widgets import WidgetList
 from settings_windows.settings_window import SettingsWindow
 
@@ -13,13 +14,13 @@ class ExperimentSettingsWindow1(SettingsWindow):
         self.settingsFrame = CTkFrame(self)
         self.settingsFrame.grid(row=0, column=0)
 
-        self.frame1 = CTkFrame(self.settingsFrame)
+        self.frame1 = CTkFrame(self.settingsFrame, fg_color=frame_fg_color)
         self.frame1.grid(row=0, column=0, padx=5, pady=5, stick='ns')
 
         self.widget_list_frame_header = CTkLabel(master=self.frame1, text='Настройки эксперимента')
         self.widget_list_frame_header.pack()
 
-        self.widget_list_frame = CTkFrame(master=self.frame1)
+        self.widget_list_frame = CTkFrame(master=self.frame1, fg_color=frame_fg_color2)
         self.widget_list_frame.pack(padx=2, pady=2)
 
         self.widgets_list = WidgetList(self.widget_list_frame, 0, 0, [
@@ -53,13 +54,13 @@ class ExperimentSettingsWindow1(SettingsWindow):
              'value_type': str, 'save_value': 'current_log_header1', 'values_in_row': 3},
         ])
 
-        self.frame2 = CTkFrame(self.settingsFrame)
+        self.frame2 = CTkFrame(self.settingsFrame, fg_color=frame_fg_color)
         self.frame2.grid(row=0, column=1, padx=5, pady=5, stick='ns')
 
         self.delay_settings_header = CTkLabel(master=self.frame2, text='Настройки задержек в эксперименте')
         self.delay_settings_header.pack()
 
-        self.delay_widget_list_frame = CTkFrame(master=self.frame2)
+        self.delay_widget_list_frame = CTkFrame(master=self.frame2, fg_color=frame_fg_color2)
         self.delay_widget_list_frame.pack(padx=2, pady=2)
 
         self.delay_widget_list = WidgetList(self.delay_widget_list_frame, 0, 0, [

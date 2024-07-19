@@ -13,7 +13,7 @@ class SettingsWindow(CTkToplevel):
         super().__init__()
         utils.move_to_first_screen(self)
 
-        self.buttonFrame = CTkFrame(self)
+        self.buttonFrame = CTkFrame(self, fg_color='transparent')
         self.buttonFrame.grid(row=1, column=0)
 
         self.btn_confirm = CTkButton(self.buttonFrame, text='Применить', command=self.save_settings)
