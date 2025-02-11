@@ -37,8 +37,8 @@ class RunFrame:
         self.choose_experiment_label.grid(row=1, column=0)
 
         self.choose_experiment_combobox = CTkComboBox(self.run_frame, values=['Запоминание картинки',
-                                                                               'Экстраполяция движения',
-                                                                               'Новая картинка'])
+                                                                              'Экстраполяция движения',
+                                                                              'Новая картинка'])
         self.choose_experiment_combobox.grid(row=2, column=0)
 
         self.btn_settings = CTkButton(self.run_frame, text='Настроить эксперимент',
@@ -116,7 +116,6 @@ class RunFrame:
             else:
                 self.run_error_label.configure(text='Тип эксперимента не выбран')
 
-
     def update_log(self):
         self.frame_log_top = CTkFrame(self.run_frame_top)
         self.frame_log_top.grid(row=0, column=1)
@@ -133,26 +132,23 @@ class RunFrame:
         if log_header is None:
             log_header = ['Номер', 'Время с начала эксперимента', 'Время реакции', 'Ответ', 'Правильный ответ']
 
-        self.log_frames = [CTkFrame(self.frame_log_top) for _ in range(11)]
-        for log_frame in self.log_frames:
-            log_frame.pack(fill=X, pady=2)
+        frame1 = CTkFrame(self.frame_log_top)
+        frame1.pack(fill=X)
 
-        for i in range(11):
-            for j in range(len(log_header)):
-                self.log_frames[i].grid_columnconfigure(j, weight=1)
-
-        self.log_label = [[CTkLabel(self.log_frames[i], text='') for _ in range(len(log_header))] for i in
+        self.log_label = [[CTkLabel(frame1, text='') for _ in range(len(log_header))] for _ in
                           range(11)]
 
-        for i in range(len(self.log_label)):
-            for j in range(len(self.log_label[i])):
-                self.log_label[i][j].grid(row=0, column=j, sticky="ew", padx=5)
+        for i, row in enumerate(self.log_label):
+            for j, label in enumerate(row):
+                label.grid(row=i, column=j, sticky="ew", padx=1)
 
-        for j, text in enumerate(log_header):
-            self.log_label[0][j].configure(text=text)
+        # setting the text in the first row of the table
+        for label, text in zip(self.log_label[0], log_header):
+            label.configure(text=text)
 
         self.generate_canvases()
 
+        # Chaning colors and text in the table
         while True:
             for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 0):]):
                 if line['Ответ'] is None:
@@ -162,10 +158,8 @@ class RunFrame:
                 else:
                     color = '#fbb'
 
-                self.log_frames[i + 1].configure(fg_color=color)
-
                 for j, key in enumerate(log_header):
-                    self.log_label[i + 1][j].configure(text=str(line[key]))
+                    self.log_label[i + 1][j].configure(text=str(line[key]), fg_color=color, text_color="#333")
 
             self.update_graph_data(self.window.log)
             sleep(1)
