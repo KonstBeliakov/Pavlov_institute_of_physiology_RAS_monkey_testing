@@ -4,26 +4,30 @@ import tkinter as tk
 from settings import settings
 from settings_windows import *
 from widgets import WidgetList
-from style import *
 
 
 class SettingsFrame:
     def __init__(self, root, app):
         self.root = root
         self.app = app
+        self.basic_settings_radio_button_frame = CTkFrame(root)
+        self.basic_settings_radio_button_frame.grid(column=0, row=0)
 
-        self.basic_settings_label_frame = CTkFrame(root, fg_color=frame_fg_color)
+        self.sounds_in_experiments_label = CTkLabel(self.basic_settings_radio_button_frame,
+                                                    text='Использовать звуковое подкрепление')
+        self.sounds_in_experiments_label.grid(column=0, row=0)
+        self.sounds_in_experiments = tk.StringVar(value='Да')
+        self.sound_btn_yes = CTkRadioButton(self.basic_settings_radio_button_frame, text='Да', value='Да',
+                                            variable=self.sounds_in_experiments)
+        self.sound_btn_yes.grid(column=1, row=0)
+        self.btn_no = CTkRadioButton(self.basic_settings_radio_button_frame, text='Нет', value='Нет',
+                                     variable=self.sounds_in_experiments)
+        self.btn_no.grid(column=2, row=0)
+
+        self.basic_settings_label_frame = CTkFrame(root)
         self.basic_settings_label_frame.grid(column=0, row=1)
 
-        self.widget_list_header = CTkLabel(self.basic_settings_label_frame, text='Общие настройки для всех экспериментов')
-        self.widget_list_header.pack()
-
-        self.widget_list_frame = CTkFrame(self.basic_settings_label_frame, fg_color=frame_fg_color2)
-        self.widget_list_frame.pack()
-
-        self.widgets_list = WidgetList(self.widget_list_frame, 0, 0, [
-            {'text': 'Использовать звуковое подкрепление', 'widget_type': 'radiobutton','value_type': bool,
-             'save_value': 'using_sound'},
+        self.widgets_list = WidgetList(self.basic_settings_label_frame, 0, 0, [
             {'text': 'Путь до файла звука начала эксперимента\n(оставить пустым если не используется)',
              'value_type': str, 'save_value': 'experiment_start_sound', 'may_be_empty': True},
             {'text': 'Путь до файла звука начала теста\n(оставить пустым если не используется)',
@@ -55,23 +59,24 @@ class SettingsFrame:
              'save_value': 'barrier_working_time'},
         ])
 
-        self.button_frame = CTkFrame(root, fg_color='transparent')
+        self.button_frame = CTkFrame(root)
         self.button_frame.grid(row=2, column=0)
 
         self.button_apply = CTkButton(self.button_frame, text='Применить', command=self.apply_basic_settings)
-        self.button_apply.grid(row=0, column=0, padx=1, pady=5)
+        self.button_apply.grid(row=0, column=0)
+
+        self.error_label = tk.Label(root, text='Настройки не применены', fg='#f00')
+        self.error_label.grid(row=3, column=0)
 
         self.button_export = CTkButton(self.button_frame, text='Экспортировать', command=self.export_settings)
-        self.button_export.grid(row=0, column=1, padx=1, pady=5)
+        self.button_export.grid(row=0, column=1)
 
         self.button_import = CTkButton(self.button_frame, text='Импортировать', command=self.import_settings)
-        self.button_import.grid(row=0, column=2, padx=1, pady=5)
-
-        self.error_label = CTkLabel(root, text='Настройки не применены', text_color='#f00')
-        self.error_label.grid(row=3, column=0)
+        self.button_import.grid(row=0, column=2)
 
     def apply_basic_settings(self):
         if (error_text := self.widgets_list.save_values(check_validity=True)) is None:
+            settings['using_sound'] = (self.sounds_in_experiments.get() == 'Да')
             self.error_label.configure(text='')
         else:
             self.error_label.configure(text=error_text)

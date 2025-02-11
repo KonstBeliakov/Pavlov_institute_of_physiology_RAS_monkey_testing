@@ -9,7 +9,6 @@ import utils
 from frames import *
 from settings import settings
 from screeninfo import get_monitors
-from style import *
 
 
 class App(CTk):
@@ -28,7 +27,7 @@ class App(CTk):
             t = threading.Thread(target=utils.paint_second_monitor)
             t.start()
 
-        self.tabview = CTkTabview(master=self, command=self.tab_changed, fg_color=window_fg_color)
+        self.tabview = CTkTabview(master=self, command=self.tab_changed)
         self.tabview.pack(expand=True, fill=BOTH)
         frame_texts = ['Общие настройки', 'Запуск эксперимента', 'Проверка устройств', 'Экспорт данных',
                        'Информация о приложении']
@@ -54,7 +53,7 @@ class App(CTk):
         self.bind("<Key>", self.key_handler)
 
     def key_handler(self, event):
-        if event.char == settings['escape_key']:
+        if (event.char == settings['escape_key']):
             self.run_frame.close_experiment_window()
 
     def tab_changed(self):
