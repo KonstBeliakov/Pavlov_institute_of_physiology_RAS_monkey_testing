@@ -1,3 +1,5 @@
+APPLICATION_RUNNING = True
+
 settings = {
     'test': None,
 

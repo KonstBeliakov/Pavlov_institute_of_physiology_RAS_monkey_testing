@@ -16,7 +16,7 @@ import pandas as pd
 import openpyxl
 import copy
 
-from settings import settings
+from settings import settings, APPLICATION_RUNNING
 
 pygame.init()
 serial_available = False
@@ -168,7 +168,7 @@ def anable_answer_entry():
 
 
 def read_usb():
-    while True:
+    while APPLICATION_RUNNING:
         if serial_available:
             print(f'received usb message: {ser.readline()}')
         else:
@@ -226,9 +226,12 @@ def save_settings(filename=None):
 
 
 def auto_save(filename=None):
-    while True:
-        save_settings(filename)
-        time.sleep(settings['autosave_period'] * 60)
+    t = time.perf_counter()
+    while APPLICATION_RUNNING:
+        if time.perf_counter() - t > settings['autosave_period'] * 60:
+            t += settings['autosave_period'] * 60
+            save_settings(filename)
+        time.sleep(1)
 
 
 def start_auto_saving(filename=None):

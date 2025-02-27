@@ -3,7 +3,7 @@ from datetime import datetime
 import threading
 from time import perf_counter, sleep
 import os
-from settings import settings
+from settings import settings, APPLICATION_RUNNING
 import utils
 from monkey_windows.monkey_window import MonkeyWindow
 from widgets.canvas_object import CanvasObject
@@ -30,7 +30,7 @@ class MonkeyWindow3(MonkeyWindow):
         t1.start()
 
     def update(self):
-        while True:
+        while APPLICATION_RUNNING:
             table_size_x = min(int(self.canvas_size[0] // settings['image_size3']), settings['grid_size'][0])
             table_size_y = min(int(self.canvas_size[1] // settings['image_size3']), settings['grid_size'][1])
 

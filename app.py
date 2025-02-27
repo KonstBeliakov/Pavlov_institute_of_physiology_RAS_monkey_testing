@@ -1,3 +1,4 @@
+import sys
 import threading
 
 from customtkinter import *
@@ -7,7 +8,7 @@ from os import startfile, path
 
 import utils
 from frames import *
-from settings import settings
+from settings import settings, APPLICATION_RUNNING
 from screeninfo import get_monitors
 
 
@@ -69,7 +70,9 @@ class App(CTk):
 
         if msg.get() == 'Да':
             utils.save_settings()
+            APPLICATION_RUNNING = False
             self.destroy()
+            sys.exit()
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ import utils
 from monkey_windows import *
 from settings_windows import *
 from widgets import *
-from settings import settings
+from settings import settings, APPLICATION_RUNNING
 
 
 class RunFrame:
@@ -149,7 +149,7 @@ class RunFrame:
         self.generate_canvases()
 
         # Chaning colors and text in the table
-        while True:
+        while APPLICATION_RUNNING:
             for i, line in enumerate(self.window.log[max(len(self.window.log) - 10, 0):]):
                 if line['Ответ'] is None:
                     color = '#fbf'

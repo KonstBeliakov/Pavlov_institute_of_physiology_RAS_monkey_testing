@@ -7,7 +7,7 @@ from PIL import Image
 from PIL import ImageTk
 import tkinter as tk
 
-from settings import settings
+from settings import settings, APPLICATION_RUNNING
 
 
 class SecondScreenCopy:
@@ -42,7 +42,7 @@ class SecondScreenCopy:
                     "height": mon["height"],
                     "mon": monitor_number,
                 }
-                while True:
+                while APPLICATION_RUNNING:
                     with mss.mss() as sct:
                         sct_img = sct.grab(monitor)
                         img = Image.frombytes("RGB", sct_img.size, sct_img.bgra, "raw", "BGRX")
